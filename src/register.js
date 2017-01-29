@@ -1,22 +1,15 @@
 import React from 'react';
 import addons from '@kadira/storybook-addons';
-import PanelContainer from './panel/container';
+import initComposer from './panel/composer';
 import { ADDON_ID, PANEL_ID, ADDON_TITLE } from './';
 
 
 addons.register(ADDON_ID, (api) => {
-//    const channel = addons.getChannel();
+    const PanelContainer = initComposer();
+    const getID = () => `pd${Math.round(Math.random() * 100)}`;
     addons.addPanel(PANEL_ID, {
         title: ADDON_TITLE,
-        render: () => <PanelContainer panel={api} initData="Panel"/>,
+        render: () => <PanelContainer api={api} initData="Panel" ID={getID()} />,
     });
 });
 
-function DummyPanel() {
-    return (
-        <div>
-            <p>This is Dummy Panel</p>
-            <code>{'<PanelContainer channel={channel} api={api} />'}</code>
-        </div>
-    )
-}

@@ -10,14 +10,16 @@ export default class PanelComponent extends React.Component {
     }
     componentDidMount() {
         logger.info(`* componentDidMount: ${this.props.initData}`);
-        this.unSubscribe = this.props.onReady();
+        this.stopChannel = this.props.setupChannel();
+        logger.info(`Set Data:`);
+        this.props.setData(this.props.initData)();
     }
     componentWillUnmount() {
         logger.info(`* componentWillUnmount: ${this.props.initData}`);
-        this.unSubscribe();
+        this.stopChannel();
     }
     render() {
-        const { label, index, theme, data, onVote, onLabel, onReady, initData, setData } = this.props;
+        const { label, index, theme, data, onVote, onLabel, initData, setData, debugData } = this.props;
         return (
             <div>
                 <p>initData: <i>{initData}</i>, Data: <i>{data}</i></p>
@@ -27,6 +29,9 @@ export default class PanelComponent extends React.Component {
                 <button onClick={onLabel('Betta', 133)}>Betta</button>
                 <button onClick={setData(initData)}>
                     setData
+                </button>
+                <button onClick={debugData()}>
+                    debugData
                 </button>
             </div>
         );

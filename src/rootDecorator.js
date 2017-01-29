@@ -1,10 +1,9 @@
 import React from 'react';
-// import DecorElement from './decorator/container'; todo: revert
-import DecorElement from './panel/container';
+import  initComposer from './panel/composer'; // todo: revert
 
 import { loggerOn, loggerOff } from './utils/logger'; // eslint-disable-line
 const logger = loggerOff; // note: debug
-
+const loggerRoot = loggerOff; // note: debug
 
 class RootDecorator extends React.Component {
     constructor(props) {
@@ -19,11 +18,12 @@ class RootDecorator extends React.Component {
 
     componentDidMount() {
         this.stop = this.props.remote(this.enable, this.disable); // todo: revert?
+        loggerRoot.info('Root Did Mount! typeof (this.stop) =', typeof (this.stop));
     }
 
     componentWillUnmount() {
-        logger.info('componentWillUnmount');
-        this.stop();
+        loggerRoot.info('Root Will Unmount');
+        if(this.stop) this.stop();
     }
 
     enable() {
@@ -36,12 +36,10 @@ class RootDecorator extends React.Component {
     render() {
         return (
           <div>
-            {this.state.enabled ?
-              <p style={{ backgroundColor: '#41537b', color: 'white' }}>
-                Enabled: {this.state.enabled.toString()}
-              </p> : null
-            }
-            {this.props.children}
+              <p style={{ backgroundColor: this.state.enabled ? '#41537b' : '#525252', color: 'white' }}>
+                {this.state.enabled ? 'Enabled:' : 'Disabled:'}
+              </p>
+            {this.props.children({enabled: this.state.enabled})}
           </div>
         );
     }
@@ -91,14 +89,21 @@ class AddonManager {
     }
 
     getDecor(initData, ID) {
+        const Decorator = initComposer();
         return (storyFn, context) => {
             const getControl = this.regDecor(context, initData, ID);
             return (
               <RootDecorator remote={getControl}>
-                <div style={{ backgroundColor: 'grey', color: 'white' }}>
-                  <DecorElement initData={initData} />
-                  {storyFn()}
-                </div>
+                {
+                  (rootProps) => (
+                    rootProps.enabled || true ? // future: add a feature to disable decorator
+                    <div style={{ backgroundColor: 'grey', color: 'white' }}>
+                      <Decorator initData={initData} rootProps={rootProps} ID={ID} />
+                      {storyFn()}
+                    </div>
+                    : storyFn()
+                  )
+                }
               </RootDecorator>
             );
         };
