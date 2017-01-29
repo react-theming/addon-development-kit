@@ -5,4 +5,7 @@ export default {
     setLabel(poddaStore, name, ind) {
         poddaStore.update(state => ({ index: ind, label: name }));
     },
+    setData(poddaStore, data) {
+        poddaStore.update(state => ({ data }));
+    },
 };

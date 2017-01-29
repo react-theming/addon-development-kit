@@ -27,8 +27,26 @@ reqThemes.keys().forEach((filename) => {
  *  You can pass a single object or an array of themes
  */
 
+// addDecorator(decorator('Global decorator'));
+
+storiesOf('No decorator', module)
+    .add('Example1', () => (
+        <div className="example-component">
+            <p>
+               No local decorator here11122555ss456
+            </p>
+        </div>
+    ))
+    .add('Example2', () => (
+        <div className="example-component">
+            <p>
+               No local decorator here
+            </p>
+        </div>
+    ))
+
 storiesOf('Podda App1', module)
-    .addDecorator(decorator('Podda App 1 init data'))
+    .addDecorator(decorator('Decor111'))
     .add('Example1', () => (
         <div className="example-component">
             <p>
@@ -39,20 +57,21 @@ storiesOf('Podda App1', module)
     .add('Example2', () => (
         <div className="example-component">
             <p>
-               VVV It's an example component inside decorator (111)
+               VVV It's an example component inside decorator (333 dsd sd s s sss)
             </p>
         </div>
     ));
 
 storiesOf('Podda App2', module)
-    .addDecorator(decorator('init data for Podda App 2'))
+    .addDecorator(decorator('Decor222'))
     .add('Example3', () => (
         <div className="example-component">
             <p>
-                It's an example component inside decorator (111)
+                It's an example component inside decorator aaabb
             </p>
         </div>
     ))
+
     .add('Example4', () => (
         <div className="example-component">
             <p>

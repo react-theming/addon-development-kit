@@ -7,7 +7,7 @@ import apiLib from './api';
 import { EVENT_ID_INIT, EVENT_ID_DATA } from '../';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
-const logger = loggerOff; // note: debug
+const logger = loggerOn; // note: debug
 
 const defaults = {
     uiTheme: { canvas: 'white', text: 'black' },
@@ -16,6 +16,7 @@ const defaults = {
 };
 
 const addonStore = new Podda(defaults);
+
 
 addonStore.registerAPI('bypass', (store, data, bypassList) => {
     const fullCallbackList = store.callbacks;

@@ -8,7 +8,7 @@ addons.register(ADDON_ID, (api) => {
 //    const channel = addons.getChannel();
     addons.addPanel(PANEL_ID, {
         title: ADDON_TITLE,
-        render: () => <PanelContainer panel={api}/>,
+        render: () => <PanelContainer panel={api} initData="Panel"/>,
     });
 });
 
