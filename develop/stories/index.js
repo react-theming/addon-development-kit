@@ -27,63 +27,71 @@ reqThemes.keys().forEach((filename) => {
  *  You can pass a single object or an array of themes
  */
 
-storiesOf('Podda App', module)
-    .addDecorator(decorator())
-    .add('Example', () => (
+storiesOf('Podda App1', module)
+    .addDecorator(decorator('Podda App 1 init data'))
+    .add('Example1', () => (
         <div className="example-component">
             <p>
-                It's an example component inside decorator
+               It's an example component inside decorator (111)
             </p>
         </div>
     ))
-
-storiesOf('React App', module)
-    .addDecorator(muiTheme(themesList)) /* [lightTheme, darkTheme, greyTheme]*/
-    .addDecorator(story => (
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '50%', maxWidth: 500, minWidth: 200 }}>
-          {story()}
-          {/* SHOW_SUPPORT ? <SupportProject /> : null*/}
+    .add('Example2', () => (
+        <div className="example-component">
+            <p>
+               VVV It's an example component inside decorator (111)
+            </p>
         </div>
-      </div>
-    ))
-    .addDecorator(withKnobs)
-    .add('App', () => {
-        setOptions({
-            name: 'React Theming',
-            url: 'https://github.com/sm-react/react-theming',
-        });
-        return (<App />);
-    })
-    .addWithInfo('App-header', '<Header />', () => withNote(
-      `
-        Header Component
-
-        source: src/Header.jsx
-        story: src/stories
-        test: src/tests
-      `,
-      <Header
-        title={text('Title', 'Welcome to React-Theming')}
-        subtitle={text('Subtitle', 'Storybook Boilerplate Project')}
-      />,
-    ))
-    .addWithInfo('App-intro', '<Intro />', () => withNote(
-      `
-        Intro Component
-
-        source: src/Intro.jsx
-        story: src/stories
-        test: src/tests
-      `,
-      <Intro />,
-    ))
-    .add('Addons Knobs & Notes', () => (
-      <div>
-        {text('Label1', 'Hello Button')}
-        {withNote(text('Label2', 'Hello Button'))}
-      </div>
     ));
+
+storiesOf('Podda App2', module)
+    .addDecorator(decorator('init data for Podda App 2'))
+    .add('Example3', () => (
+        <div className="example-component">
+            <p>
+                It's an example component inside decorator (111)
+            </p>
+        </div>
+    ))
+    .add('Example4', () => (
+        <div className="example-component">
+            <p>
+                It's an example component inside decorator (111)
+            </p>
+        </div>
+    ));
+
+storiesOf('Knobs1', module)
+    .addDecorator(withKnobs)
+    .add('Knob1', () => (
+        <header>
+            <p>{text('Title1', 'Knob1.Title')}!!!</p>
+            <p>{text('Subtitle1', 'Knob1.SubTitle')}</p>
+        </header>
+    ))
+    .add('Knob2', () => (
+        <header>
+            <p>{text('Title2', 'Knob2.Title')}</p>
+            <p>{text('Subtitle2', 'Knob2.SubTitle')}</p>
+        </header>
+    ));
+
+
+storiesOf('Knobs2', module)
+    .addDecorator(withKnobs)
+    .add('Knob3', () => (
+        <header>
+            <p>{text('Title3', 'Knob1.Title')}</p>
+            <p>{text('Subtitle3', 'Knob1.SubTitle')}</p>
+        </header>
+    ))
+    .add('Knob4', () => (
+        <header>
+            <p>{text('Title4', 'Knob2.Title')}</p>
+            <p>{text('Subtitle4', 'Knob2.SubTitle')}</p>
+        </header>
+    ));
+
 
 
 function withNote(note, child) {

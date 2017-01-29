@@ -1,9 +1,13 @@
-
 import Component from './component';
 import addonStoreCompose from '../store';
 
-function dataLoader(props, onData, { poddaStore, apiMap }) {
+import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
+const logger = loggerOn; // note: debug
+
+function dataLoader(props, onData, { addonStore, apiMap, setupChannel }) {
+    logger.log('dataLoader:', props);
     const sendData = (storeData) => {
+        logger.log('--> sendData:', props);
         const theme = storeData.uiTheme;
         const propsToChild = {
             label: storeData.label,
@@ -11,12 +15,14 @@ function dataLoader(props, onData, { poddaStore, apiMap }) {
             theme,
             onVote: apiMap.incIndex,
             onLabel: apiMap.setLabel,
+            onReady: setupChannel,
+            src: props,
         };
         onData(null, propsToChild);
-    }
-    const stopSubscription = poddaStore.subscribe(sendData);
+    };
+    const stopSubscription = addonStore.subscribe(sendData);
 
-    sendData(poddaStore.getAll());
+    sendData(addonStore.getAll());
 
     return stopSubscription;
 }

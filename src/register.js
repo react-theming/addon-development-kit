@@ -5,10 +5,10 @@ import { ADDON_ID, PANEL_ID, ADDON_TITLE } from './';
 
 
 addons.register(ADDON_ID, (api) => {
-    const channel = addons.getChannel();
+//    const channel = addons.getChannel();
     addons.addPanel(PANEL_ID, {
         title: ADDON_TITLE,
-        render: () => <PanelContainer />,
+        render: () => <PanelContainer panel={api}/>,
     });
 });
 

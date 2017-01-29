@@ -1,18 +1,20 @@
 import React from 'react';
-import DecorElement from './decorator/container';
+// import DecorElement from './decorator/container'; todo: revert
+import DecorElement from './panel/container';
 
 export default function decorator(initData) {
-    return (story) => {
-//        const storyItem = story();
+    console.info('## rooDecorator(initData) ##')
+    return (storyFn, context) => {
+        console.log('Context:', context);
         return (
           <div>
               <header style={{backgroundColor: 'grey', color: 'white' }}>
 
                   {'It\'s Decorator header'}
-                  <DecorElement />
+                  <DecorElement decorator={initData}/>
               </header>
               <div>
-                  {story()}
+                  {storyFn()}
               </div>
           </div>
         );
