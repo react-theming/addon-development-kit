@@ -28,7 +28,7 @@ reqThemes.keys().forEach((filename) => {
  *  You can pass a single object or an array of themes
  */
 
-addDecorator(decorator('Global decorator', 'global'));
+addDecorator(decorator('Global decorator', 'gl'));
 
 storiesOf('No decorator', module)
     .add('Example1', () => (
@@ -54,6 +54,7 @@ storiesOf('Podda App1', module)
             <Button title="Example 2" />
         </div>
     ));
+
 
 storiesOf('Podda App2', module)
     .addDecorator(decorator('Decor222'))

@@ -17,9 +17,9 @@ const defaults = {
     index: 0,
 };
 
-const CHANNEL_MASTER = 'MASTER';
-const CHANNEL_SLAVE = 'SLAVE';
-const CHANNEL_STOP = 'STOP';
+export const CHANNEL_MASTER = 'MASTER';
+export const CHANNEL_SLAVE = 'SLAVE';
+export const CHANNEL_STOP = 'STOP';
 export const ENQ_ASK = 'ASK';
 export const ENQ_SEND = 'SEND';
 
@@ -59,9 +59,9 @@ export default function initStore() {
 
     // setup channel
     function channelInit(storeEnquiry, id) {
-        loggerC.info('channelInit storeEnquiry:', storeEnquiry);
+        loggerC.info('channelInit storeEnquiry:', storeEnquiry, id);
         let channel;
-        let channelRole;
+        let channelRole = CHANNEL_STOP;
         const channelId = id;
         let peerId = null;
         let initCallback = null;
@@ -79,9 +79,9 @@ export default function initStore() {
         };
 
         const onDataChannel = (dataChannel) => {
-            loggerC.log(`onDataChannel (I'm ${channelRole} id:${channelId}):`, `from: ${dataChannel.id} to: ${dataChannel.to}`);
+            loggerC.log(`onDataChannel (I'm ${channelRole} id:${channelId}):`, `from: ${dataChannel.id} to: ${dataChannel.to} myPeer: ${peerId}`);
             if (channelRole === CHANNEL_STOP) return;
-            if (dataChannel.to === channelId) {
+            if (dataChannel.to === channelId && dataChannel.id === peerId) {
                 addonStore.bypass(dataChannel.dataStore, [onStoreChange]);
             }
         };
@@ -91,6 +91,7 @@ export default function initStore() {
                 info: 'wonna be a master',
                 role: CHANNEL_MASTER,
                 id: channelId,
+                to: 'any',
             });
         }
 
@@ -112,35 +113,40 @@ export default function initStore() {
             });*/
         }
 
-        const setChannelMaster = (id) => {
+
+        const setChannelMaster = ({ id, to }) => {
+            if (to !== channelId) {
+                channelRole = CHANNEL_STOP;
+                peerId = null;
+                loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
+                return;
+            }
             peerId = id;
             channelRole = CHANNEL_MASTER;
             loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
-            if (initCallback) {
-                initCallback();
-                initCallback = null;
-            }
+
         };
 
-        const setChannelSlave = (id) => {
+        const setChannelSlave = ({ id }) => {
             peerId = id;
             channelRole = CHANNEL_SLAVE;
             channel.emit(EVENT_ID_INIT, {
                     info: 'so I\'m a slave',
                     role: channelRole,
                     id: channelId,
+                    to: peerId,
                 });
             loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
         };
 
         const onInitChannel = (initData) => {
             if (initData.role === CHANNEL_MASTER) {
-                setChannelSlave(initData.id);
+                setChannelSlave(initData);
 
             }
 
             if (initData.role === CHANNEL_SLAVE) {
-                setChannelMaster(initData.id);
+                setChannelMaster(initData);
             }
 
             if (initData.role === CHANNEL_STOP) {
@@ -150,11 +156,16 @@ export default function initStore() {
                     addonStore.reset();
                 }
 
+            } else {
+                loggerC.log('storeEnquiry:', storeEnquiry)
+                if (storeEnquiry === ENQ_SEND) {
+                    onStoreChange(addonStore.getAll());
+                }
             }
 
-            loggerC.log('storeEnquiry:', storeEnquiry)
-            if (storeEnquiry === ENQ_SEND) {
-                onStoreChange(addonStore.getAll());
+            if (initCallback) {
+                initCallback({channelRole, storeEnquiry, channelId, peerId});
+//                initCallback = null;
             }
 
         };

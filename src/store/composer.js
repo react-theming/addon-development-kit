@@ -9,6 +9,7 @@ export default function initComposer(addonStoreCompose) {
 
     function dataLoader(props, onData, { addonStore, apiMap, channelInit }) {
         logger.log('Composer init:', props.initData, addonStore.getAll());
+        const setupChannel = channelInit(props.rootProps.enquiry, props.rootProps.ID);
 
         const sendData = (storeData) => {
             logger.log('Composer ivoked:', props.rootProps, addonStore.getAll());
@@ -28,7 +29,7 @@ export default function initComposer(addonStoreCompose) {
 //                rootProps: props.rootProps, // remove
                 addonControl: props.addonControl,
 
-                setupChannel: channelInit(props.rootProps.enquiry, props.rootProps.ID),
+                setupChannel,
             };
             onData(null, propsToChild);
         };

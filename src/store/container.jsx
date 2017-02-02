@@ -1,50 +1,10 @@
 import React from 'react';
 
+import { CHANNEL_STOP } from '../store/store';
+
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 const logger = loggerOn; // note: debug
 
-
-class RootDecorator extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            enabled: false,
-        };
-
-        this.enable = this.enable.bind(this);
-        this.disable = this.disable.bind(this);
-    }
-
-    componentDidMount() {
-        this.stop = this.props.remote(this.enable, this.disable); // todo: revert?
-        loggerRoot.info('Root Did Mount! typeof (this.stop) =', typeof (this.stop));
-    }
-
-    componentWillUnmount() {
-        loggerRoot.info('Root Will Unmount');
-        if(this.stop) this.stop();
-    }
-
-    enable() {
-        this.setState({ enabled: true });
-    }
-
-    disable() {
-        this.setState({ enabled: false });
-    }
-
-    render() {
-        loggerRoot.log('Render Root Decorator. enabled = ', this.state.enabled)
-        return (
-          <div>
-              <p style={{ backgroundColor: this.state.enabled ? '#41537b' : '#525252', color: 'white' }}>
-                {this.state.enabled ? 'Enabled:' : 'Disabled:'}
-              </p>
-            {this.props.children({enabled: this.state.enabled})}
-          </div>
-        );
-    }
-}
 
 const propTypes = {
     addonControl: React.PropTypes.shape(),
@@ -81,9 +41,16 @@ export default class RootContainer extends React.Component {
     setMode(enabled) {
         const { /*addonControl,*/ setupChannel, setData } = this.props;
         const { initData } = this.props;
-        logger.info('setMode:', initData , enabled)
+        logger.log('setMode:', initData , enabled);
+
+        const onChannelSetup = (info) => {
+            const enableByChan = (CHANNEL_STOP !== info.channelRole);
+            this.setState({containerEnabled: enableByChan});
+            logger.log('onChannelSetup:', info);
+        }
+
         if (enabled) {
-            this.stopChannel = setupChannel(/*setData(initData)*/); // check: actual data?
+            this.stopChannel = setupChannel(onChannelSetup); // check: actual data?
         } else {
             if (this.stopChannel) this.stopChannel();
             this.stopChannel = null;
@@ -96,6 +63,7 @@ export default class RootContainer extends React.Component {
         /* const { initData, ID} = addonControl.default;*/
         const initData = this.props.initData;
         const enabled = this.state.containerEnabled;
+        logger.info('Render:', initData , enabled);
         return (
             <div>
               <p style={{ backgroundColor: enabled ? '#41537b' : '#525252', color: 'white' }}>

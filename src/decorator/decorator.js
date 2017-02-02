@@ -5,7 +5,7 @@ import { ENQ_ASK, ENQ_SEND } from '../store/store';
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 const logger = loggerOff; // note: debug
 
-const getID = () => `id${Math.round(Math.random() * 100)}`;
+const getID = (keyPref) => `${keyPref}${Math.round(Math.random() * 100)}`;
 
 class AddonManager {
     constructor() {
@@ -43,7 +43,7 @@ function getDecor(initData, keyPref) {
                     initData={initData}
                     rootProps={{
                         enquiry: ENQ_SEND,
-                        ID: getID(),
+                        ID: getID(keyPref),
                     }}
                 />
                 {storyFn()}
@@ -52,8 +52,9 @@ function getDecor(initData, keyPref) {
 }
 
 
-export default function decorator(initData, keyPref) {
-    logger.log('addDecorator');
+export default function decorator(initData, pref) {
+    const keyPref = pref || 'lc';
+    logger.log('addDecorator', keyPref);
      // todo remove inside!!!
     const deco = getDecor(initData, keyPref);
     return deco;
