@@ -46,7 +46,7 @@ storiesOf('Podda App1', module)
     .addDecorator(decorator('Decor111'))
     .add('Example1', () => (
         <div className="example-component">
-            <Button title="Example 1" />
+            <Button title="Example 1aa" />
         </div>
     ))
     .add('Example2', () => (

@@ -3,7 +3,7 @@ import React from 'react';
 import { CHANNEL_STOP } from '../store/store';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
-const logger = loggerOn; // note: debug
+const logger = loggerOff; // note: debug
 
 
 const propTypes = {
@@ -59,12 +59,13 @@ export default class RootContainer extends React.Component {
     }
 
     render() {
-        const { /*addonControl,*/ setData, debugData } = this.props;
+        const { /*addonControl,*/ setData, debugData, story } = this.props;
         /* const { initData, ID} = addonControl.default;*/
         const initData = this.props.initData;
         const enabled = this.state.containerEnabled;
         logger.info('Render:', initData , enabled);
         return (
+            logger.on ?
             <div>
               <p style={{ backgroundColor: enabled ? '#41537b' : '#525252', color: 'white' }}>
                 {enabled ? 'Enabled!' : 'Disabled*'}, <b>{/*ID*/}</b> initData: <i>{initData}</i>
@@ -79,6 +80,7 @@ export default class RootContainer extends React.Component {
               </button>
               <Dummy {...this.props} />
             </div>
+            : <div> {story} </div>
         );
     }
 }
@@ -87,11 +89,13 @@ RootContainer.propTypes = propTypes;
 
 const Dummy = ({ label, index, theme, data, onVote, onLabel}) => {
     return (
+      logger.on ?
       <div>
         <p>Label: <i>{label}</i>, Index: <i>{index}</i>, Data: <i>{data}</i> </p>
         <button onClick={onVote(3)}>Vote</button>
         <button onClick={onLabel('Alpha', 28)}>Alpha</button>
         <button onClick={onLabel('Betta', 133)}>Betta</button>
       </div>
+      : <div> no dummy </div>
     );
 };

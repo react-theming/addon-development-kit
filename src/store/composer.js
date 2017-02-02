@@ -30,6 +30,7 @@ export default function initComposer(addonStoreCompose) {
                 addonControl: props.addonControl,
 
                 setupChannel,
+                story: props.story,
             };
             onData(null, propsToChild);
         };

@@ -45,8 +45,9 @@ function getDecor(initData, keyPref) {
                         enquiry: ENQ_SEND,
                         ID: getID(keyPref),
                     }}
+                    story={storyFn()}
                 />
-                {storyFn()}
+
             </div>);
     };
 }
