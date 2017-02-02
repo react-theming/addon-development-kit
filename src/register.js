@@ -1,6 +1,7 @@
 import React from 'react';
 import addons from '@kadira/storybook-addons';
-import initStore from './store';
+import initStore from './store/store';
+import { ENQ_ASK, ENQ_SEND } from './store/store';
 import initComposer from './store/composer';
 import { ADDON_ID, PANEL_ID, ADDON_TITLE } from './';
 
@@ -22,9 +23,8 @@ addons.register(ADDON_ID, (api) => {
           <PanelContainer
             api={api}
             addonControl={addonControl}
-            ID={getID()}
             initData="Panel"
-            rootProps={{ enabled: true }}
+            rootProps={{enquiry: ENQ_ASK, ID: getID()}}
           />),
     });
 });

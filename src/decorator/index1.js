@@ -59,7 +59,9 @@ class AddonManager {
     getDecor(initData, ID, addonStoreCompose) { // todo: remove
         logger.log('getDecor');
         const Decorator = initComposer(addonStoreCompose); // todo: remove
+
         return (storyFn, context) => {
+            logger.log('invoke Decor');
             const {getControl, decorData} = this.regDecor(context, initData, ID);
 //            const Decorator = initComposer(addonStoreCompose);
 //            const Decorator = decorData.Decorator;

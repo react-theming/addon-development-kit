@@ -59,31 +59,31 @@ export default class RootContainer extends React.Component {
         this.stopChannel = null;
         this.stopControl = null;
         this.state = {
-            containerEnabled: this.props.addonControl.default.enabled,
+            containerEnabled: true, /* this.props.addonControl.default.enabled, */
         }
 
         this.setMode = this.setMode.bind(this);
     }
     componentDidMount() {
-        const { addonControl, setupChannel, setData } = this.props;
-        const { enabled, initData } = addonControl.default;
+        /*const { addonControl, setupChannel, setData } = this.props;
+        const { enabled, initData } = addonControl.default; */
 
-        logger.warn(`* componentDidMount: ${initData} ${enabled}`);
-        this.setMode(enabled);
-        this.stopControl = addonControl.getControl(this.setMode);
+        logger.warn(`* componentDidMount: ${this.props.initData}`);
+        this.setMode(true);
+        /* this.stopControl = addonControl.getControl(this.setMode);*/
     }
     componentWillUnmount() {
-        logger.warn(`* componentWillUnmount: ${this.props.initData} ${this.props.rootProps.enabled}`);
+        logger.warn(`* componentWillUnmount: ${this.props.initData}`);
         this.setMode(false);
-        if (this.stopControl) this.stopControl();
+        /* if (this.stopControl) this.stopControl();*/
     }
 
     setMode(enabled) {
-        const { addonControl, setupChannel, setData } = this.props;
-        const { initData } = addonControl.default;
+        const { /*addonControl,*/ setupChannel, setData } = this.props;
+        const { initData } = this.props;
         logger.info('setMode:', initData , enabled)
         if (enabled) {
-            this.stopChannel = setupChannel(setData(initData));
+            this.stopChannel = setupChannel(/*setData(initData)*/); // check: actual data?
         } else {
             if (this.stopChannel) this.stopChannel();
             this.stopChannel = null;
@@ -92,13 +92,14 @@ export default class RootContainer extends React.Component {
     }
 
     render() {
-        const { addonControl, setData, debugData } = this.props;
-        const { initData, ID} = addonControl.default;
+        const { /*addonControl,*/ setData, debugData } = this.props;
+        /* const { initData, ID} = addonControl.default;*/
+        const initData = this.props.initData;
         const enabled = this.state.containerEnabled;
         return (
             <div>
               <p style={{ backgroundColor: enabled ? '#41537b' : '#525252', color: 'white' }}>
-                {enabled ? 'Enabled!' : 'Disabled*'}, <b>{ID}</b> initData: <i>{initData}</i>
+                {enabled ? 'Enabled!' : 'Disabled*'}, <b>{/*ID*/}</b> initData: <i>{initData}</i>
               </p>
 
 

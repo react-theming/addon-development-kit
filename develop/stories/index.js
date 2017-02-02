@@ -8,11 +8,12 @@ import { muiTheme } from 'storybook-addon-material-ui';
 import { WithNotes } from '@kadira/storybook-addon-notes';
 import { withKnobs, text, boolean, number } from '@kadira/storybook-addon-knobs';
 
-import decorator from '../../src/decorator';
+import decorator from '../../src/decorator/decorator';
 
 import App from '../App';
 import Header from '../Header';
 import Intro from '../Intro';
+import Button from '../button';
 import '../App.css';
 
 const reqThemes = require.context('../.themes/', true, /.json/);
@@ -27,21 +28,17 @@ reqThemes.keys().forEach((filename) => {
  *  You can pass a single object or an array of themes
  */
 
-// addDecorator(decorator('Global decorator'));
+addDecorator(decorator('Global decorator', 'global'));
 
 storiesOf('No decorator', module)
     .add('Example1', () => (
         <div className="example-component">
-            <p>
-               No local decorator here ss ss ss
-            </p>
+            <Button title="no decor 1" />
         </div>
     ))
     .add('Example2', () => (
         <div className="example-component">
-            <p>
-               No local decorator here
-            </p>
+            <Button title="no decor 2" />
         </div>
     ))
 
@@ -49,16 +46,12 @@ storiesOf('Podda App1', module)
     .addDecorator(decorator('Decor111'))
     .add('Example1', () => (
         <div className="example-component">
-            <p>
-               It's an example component inside decorator (111)
-            </p>
+            <Button title="Example 1" />
         </div>
     ))
     .add('Example2', () => (
         <div className="example-component">
-            <p>
-               VVV It's an example component inside decorator (333 dsd sd s s sss)
-            </p>
+            <Button title="Example 2" />
         </div>
     ));
 
@@ -66,17 +59,13 @@ storiesOf('Podda App2', module)
     .addDecorator(decorator('Decor222'))
     .add('Example3', () => (
         <div className="example-component">
-            <p>
-                It's an example component inside decorator kkk jjj
-            </p>
+            <Button title="Example 3" />
         </div>
     ))
 
     .add('Example4', () => (
         <div className="example-component">
-            <p>
-                It's an example component inside decorator (111 sd)
-            </p>
+            <Button title="Example 4" />
         </div>
     ));
 
