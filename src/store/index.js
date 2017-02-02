@@ -1,4 +1,5 @@
 import React from 'react';
+import Immutable from 'immutable';
 import addons from '@kadira/storybook-addons'; // eslint-disable-line
 import { setDefaults } from 'react-komposer';
 import Podda from 'podda';
@@ -7,7 +8,7 @@ import apiLib from './api';
 import { EVENT_ID_INIT, EVENT_ID_DATA } from '../';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
-const loggerC = loggerOn; // note: debug
+const loggerC = loggerOff; // note: debug
 const loggerS = loggerOff; // note: debug
 
 const defaults = {
@@ -31,6 +32,11 @@ export default function initStore() {
         store.callbacks = fullCallbackList;
     });
 
+    addonStore.registerAPI('reset', (store) => {
+        store.data = Immutable.Map(defaults);
+        store.fireSubscriptions();
+    });
+
 
     function createApi(apilist, poddaStore) {
         const keys = Object.keys(apilist);
@@ -48,10 +54,12 @@ export default function initStore() {
     function channelInit(id) {
         const CHANNEL_MASTER = 'MASTER';
         const CHANNEL_SLAVE = 'SLAVE';
+        const CHANNEL_STOP = 'STOP';
         let channel;
         let channelRole;
         const channelId = id;
         let peerId = null;
+        let initCallback = null;
 
         const onStoreChange = (dataStore) => {
             loggerC.info(`Store Changed by ${channelRole}`);
@@ -70,53 +78,82 @@ export default function initStore() {
             }
         };
 
+        const startChannel = () => {
+            channel.emit(EVENT_ID_INIT, {
+                info: 'wonna be a master',
+                role: CHANNEL_MASTER,
+                id: channelId,
+            });
+        }
+
+        const stopChannel = () => {
+            channel.emit(EVENT_ID_INIT, {
+                info: 'stop channel connection',
+                role: CHANNEL_STOP,
+                id: channelId,
+            });
+            channel.emit(EVENT_ID_DATA, {
+                dataStore: {},
+                role: channelRole,
+                id: channelId,
+                to: peerId,
+            });
+        }
+
         const setChannelMaster = (id) => {
             peerId = id;
             channelRole = CHANNEL_MASTER;
-    //        addonStore.bypass({ label: 'Master' }, [onStoreChange]); // todo: remove it
+            loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
+            if (initCallback) {
+                initCallback();
+                initCallback = null;
+            }
         };
 
         const setChannelSlave = (id) => {
             peerId = id;
             channelRole = CHANNEL_SLAVE;
-    //        addonStore.bypass({ label: 'Slave' }, [onStoreChange]); // todo: remove it
+            channel.emit(EVENT_ID_INIT, {
+                    info: 'so I\'m a slave',
+                    role: channelRole,
+                    id: channelId,
+                });
+            loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
         };
 
         const onInitChannel = (initData) => {
             if (initData.role === CHANNEL_MASTER) {
                 setChannelSlave(initData.id);
-                channel.emit(EVENT_ID_INIT, {
-                    info: 'so I\'m a slave',
-                    role: channelRole,
-                    id: channelId,
-                });
+
             }
 
             if (initData.role === CHANNEL_SLAVE) {
                 setChannelMaster(initData.id);
             }
 
-            loggerC.log(`onInitChannel (I'm ${channelRole}):`, initData);
+            if (initData.role === CHANNEL_STOP) {
+                loggerC.log(`Stop Channel: I was a ${channelRole}, id=${channelId}`);
+                addonStore.reset();
+            }
+
         };
 
     /**
       * note: this callback should be invoked
       * in componentDidMount() to init channel connection
       * and the returned callback could be invoked
-      * in componentWillUnmount()
+      * in componentWillUnmount().
+      * initCb() - will be invoked after getting connected
       *
       */
-        return function setupChannel() {
+        return function setupChannel(initCb) {
+            initCallback = initCb;
             channel = addons.getChannel();
             let stopStorySubscription;
 
             try {
                 channel.on(EVENT_ID_INIT, onInitChannel);
-                channel.emit(EVENT_ID_INIT, {
-                    info: 'wonna be a master',
-                    role: CHANNEL_MASTER,
-                    id: channelId,
-                });
+                startChannel();
 
                 stopStorySubscription = addonStore.subscribe(onStoreChange);
 
@@ -127,6 +164,8 @@ export default function initStore() {
             }
 
             return () => {
+                loggerC.info('Channel STOPS');
+                stopChannel();
                 channel.removeListener(EVENT_ID_INIT, onInitChannel);
                 channel.removeListener(EVENT_ID_DATA, onDataChannel);
                 stopStorySubscription();
