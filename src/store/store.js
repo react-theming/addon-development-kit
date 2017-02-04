@@ -25,7 +25,7 @@ export const ENQ_SEND = 'SEND';
 
 export default function initStore() {
     const addonStore = new Podda(defaults);
-    loggerS.warn('*** new Store init ***')
+    loggerS.warn('*** new Store init ***');
 
     addonStore.registerAPI('bypass', (store, data, bypassList) => {
         const fullCallbackList = store.callbacks;
@@ -93,7 +93,7 @@ export default function initStore() {
                 id: channelId,
                 to: 'any',
             });
-        }
+        };
 
         const stopChannel = () => {
             channelRole = CHANNEL_STOP;
@@ -105,13 +105,13 @@ export default function initStore() {
             if (storeEnquiry === ENQ_ASK) {
                 addonStore.reset();
             }
-            /*channel.emit(EVENT_ID_DATA, { // fixme:
+            /* channel.emit(EVENT_ID_DATA, { // fixme:
                 dataStore: {},
                 role: channelRole,
                 id: channelId,
                 to: peerId,
             });*/
-        }
+        };
 
 
         const setChannelMaster = ({ id, to }) => {
@@ -124,25 +124,23 @@ export default function initStore() {
             peerId = id;
             channelRole = CHANNEL_MASTER;
             loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
-
         };
 
         const setChannelSlave = ({ id }) => {
             peerId = id;
             channelRole = CHANNEL_SLAVE;
             channel.emit(EVENT_ID_INIT, {
-                    info: 'so I\'m a slave',
-                    role: channelRole,
-                    id: channelId,
-                    to: peerId,
-                });
+                info: 'so I\'m a slave',
+                role: channelRole,
+                id: channelId,
+                to: peerId,
+            });
             loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
         };
 
         const onInitChannel = (initData) => {
             if (initData.role === CHANNEL_MASTER) {
                 setChannelSlave(initData);
-
             }
 
             if (initData.role === CHANNEL_SLAVE) {
@@ -155,19 +153,17 @@ export default function initStore() {
                 if (storeEnquiry === ENQ_ASK) {
                     addonStore.reset();
                 }
-
             } else {
-                loggerC.log('storeEnquiry:', storeEnquiry)
+                loggerC.log('storeEnquiry:', storeEnquiry);
                 if (storeEnquiry === ENQ_SEND) {
                     onStoreChange(addonStore.getAll());
                 }
             }
 
             if (initCallback) {
-                initCallback({channelRole, storeEnquiry, channelId, peerId});
+                initCallback({ channelRole, storeEnquiry, channelId, peerId });
 //                initCallback = null;
             }
-
         };
 
     /**
@@ -190,8 +186,7 @@ export default function initStore() {
                 stopStorySubscription = addonStore.subscribe(onStoreChange);
 
                 channel.on(EVENT_ID_DATA, onDataChannel);
-            }
-            catch (err) {
+            } catch (err) {
                 loggerC.warn(err);
             }
 

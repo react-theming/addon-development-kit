@@ -1,8 +1,8 @@
 {
-  "name": "react-theming-boilerplate",
-  "version": "0.2.5",
-  "description": "Themable React App based on Storybook",
-  "main": "dist/App.js",
+  "name": "storybook-adk",
+  "version": "0.7.0",
+  "description": "React Storybook Addon Development Kit",
+  "main": "dist/index.js",
   "scripts": {
     "deploy": "node .scripts/deployer",
     "prepublish": "node .scripts/npm-prepublish.js",
@@ -19,32 +19,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sm-react/react-theming"
+    "url": "https://github.com/sm-react/storybook-adk"
   },
   "keywords": [
     "storybook",
     "react",
-    "material",
-    "ui",
-    "material-ui",
     "addon",
     "decorator",
-    "theme",
-    "editor",
     "customization",
-    "dark theme",
-    "light theme",
     "boilerplate",
-    "app",
     "npm",
     "development",
     "addons"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sm-react/react-theming/issues"
+    "url": "https://github.com/sm-react/storybook-adk/issues"
   },
-  "homepage": "https://github.com/sm-react/react-theming",
+  "homepage": "https://github.com/sm-react/storybook-adk",
   "devDependencies": {
     "@kadira/react-storybook-addon-info": "^3.3.0",
     "@kadira/storybook": "^2.33.1",
@@ -85,18 +77,17 @@
     "shelljs": "^0.7.3",
     "sinon": "^1.17.3",
     "storybook-addon-material-ui": "^0.7.4",
-    "style-loader": "^0.13.1"
+    "style-loader": "^0.13.1",
+    "react-theme-provider": "^0.1.3"
   },
   "peerDependencies": {
     "react": "^15.4.1",
-    "react-dom": "^15.4.1"
+    "react-dom": "^15.4.1",
+    "@kadira/storybook": "^2.33.1"
   },
   "dependencies": {
-    "material-ui": "^0.16.4",
+    "@kadira/storybook-addons": "^1.6.1",
     "podda": "^1.2.2",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1",
-    "react-komposer": "2",
-    "react-theme-provider": "^0.1.3"
+    "react-komposer": "2"
   }
 }

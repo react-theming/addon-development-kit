@@ -1,4 +1,4 @@
-import '../src/register';
+import '../setup/register';
 //import 'storybook-addon-material-ui';
 //import '@kadira/storybook-addon-notes/register';
 import '@kadira/storybook-addon-knobs/register'

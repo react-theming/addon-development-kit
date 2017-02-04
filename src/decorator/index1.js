@@ -6,7 +6,6 @@ const logger = loggerOn; // note: debug
 const loggerRoot = loggerOff; // note: debug
 
 
-
 class AddonManager {
     constructor() {
         this.contextMap = {};
@@ -53,7 +52,7 @@ class AddonManager {
             return stopControl;
         };
 
-        return {getControl, decorData};
+        return { getControl, decorData };
     }
 
     getDecor(initData, ID, addonStoreCompose) { // todo: remove
@@ -62,7 +61,7 @@ class AddonManager {
 
         return (storyFn, context) => {
             logger.log('invoke Decor');
-            const {getControl, decorData} = this.regDecor(context, initData, ID);
+            const { getControl, decorData } = this.regDecor(context, initData, ID);
 //            const Decorator = initComposer(addonStoreCompose);
 //            const Decorator = decorData.Decorator;
             const addonControl = {
@@ -75,15 +74,15 @@ class AddonManager {
             };
             return (
               <div style={{ backgroundColor: 'grey', color: 'white' }}>
-                  <Decorator
-                    addonControl={addonControl}
-                    ID={ID}
-                    rootProps={{enabled: true}}
-                    initData={initData}
-                    remote={getControl}
-                  />
-                  {storyFn()}
-                </div>
+                <Decorator
+                  addonControl={addonControl}
+                  ID={ID}
+                  rootProps={{ enabled: true }}
+                  initData={initData}
+                  remote={getControl}
+                />
+                {storyFn()}
+              </div>
             );
         };
     }
