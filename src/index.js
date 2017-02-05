@@ -8,3 +8,4 @@ export const CSS_CLASS = 'addon-context-ui';
 
 // import themeContext from './themeContext';
 // export default themeContext;
+export { decorator, addonManager } from './store/decorator';

@@ -30,7 +30,7 @@ reqThemes.keys().forEach((filename) => {
  */
 
 //globalDecorator('Global decorator');
-addDecorator(globalDecorator('Global decorator'))
+//addDecorator(globalDecorator('Global decorator'))
 
 storiesOf('No decorator', module)
     .add('Example1', () => (
@@ -48,7 +48,7 @@ storiesOf('Podda App1', module)
     .addDecorator(addonDecorator('Decor111'))
     .add('Example1', () => (
         <div className="example-component">
-            <Button title="Example 1aa" />
+            <Button title="Example 1" />
         </div>
     ))
     .add('Example2', () => (

@@ -24,7 +24,7 @@ export default class RootContainer extends React.Component {
 
         this.setMode = this.setMode.bind(this);
     }
-    componentDidMount() {
+    componentWillMount() {
         /* const { addonControl, setupChannel, setData } = this.props;
         const { enabled, initData } = addonControl.default; */
 
@@ -78,6 +78,7 @@ export default class RootContainer extends React.Component {
                   debugData
               </button>
                 <Dummy {...this.props} />
+                <div> {story} </div>
               </div>
             : <div> {story} </div>
         );
