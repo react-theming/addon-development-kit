@@ -1,48 +1,24 @@
-import React from 'react';
-import { addonManager } from './decorator';
-
-
-/**
- * Args:
- * Component - React Component
- * dataLoader(props, onData, { addonStore, apiMap })
- *
- * Return ? addonStoreCompose(dataLoader)(Component);
- *
- * Subcribe:
- * to switch between of set of addonStore's
- *
+export function addonComposer(storeHandler, Component) {
+/** note: addonComposer
+ *  storeHandler(storeData, props, addonApi)
+ *  Component - ReactJS <Component />
+ *  currentStoreCompose - will be attached in decorator
  */
 
-// todo: Обновлять текущее STORE из тех что хранятся в addonManager
-
-
-function initComposer(addonStoreCompose) {
-
-    function dataLoader(props, onData, { addonStore, apiMap }) {
-
-        const sendData = (storeData) => {
-            const propsToChild = {
+    return function composeLinker(currentStoreCompose) {
+        const dataLoader = (props, onData, env) => {
+            const addonStore = env.addonStore;
+            const addonApi = env.apiMap;
+            const sendData = (storeData) => {
+                const handledData = storeHandler(storeData, props, addonApi);
+                onData(null, handledData);
             };
-            onData(null, propsToChild);
+
+            const stopSubscription = addonStore.subscribe(sendData);
+            sendData(addonStore.getAll());
+            return stopSubscription;
         };
 
-        const stopSubscription = addonStore.subscribe(sendData);
-
-        sendData(addonStore.getAll());
-
-        return stopSubscription;
-    }
-
-    return addonStoreCompose(dataLoader)(Component);
-}
-
-export default addonComposer(dataLoader, Component) {
-    let currentStoreCompose;
-    addonManager.subscribe((currentSC) => {
-        currentStoreCompose = currentSC;
-    })
-
-
-    return currentStoreCompose(dataLoader)(Component);
+        return currentStoreCompose(dataLoader)(Component);
+    };
 }

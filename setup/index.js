@@ -1,5 +1,6 @@
 import { addDecorator } from '@kadira/storybook';
-import { decorator, addonManager } from '../src';
+import { buidDecorator, addonManager } from '../src';
+import decorComposer from './containers/addonDecorator';
 import api from './api';
 import config from './config';
 import defaultData from './defaultData';
@@ -9,10 +10,10 @@ addonManager.setAddonApi(api);
 addonManager.setConfig(config);
 
 export function addonDecorator(initData) {
-    return decorator(initData);
+    return buidDecorator(initData, decorComposer, 'lc');
 }
 
 export function globalDecorator(initData) {
-    addDecorator(decorator(initData, 'gl'));
+    addDecorator(buidDecorator(initData, decorComposer, 'gl'));
 }
 

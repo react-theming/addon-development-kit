@@ -8,7 +8,7 @@ import apiLib from './api';
 import { EVENT_ID_INIT, EVENT_ID_DATA } from '../';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
-const loggerC = loggerOn; // note: debug
+const loggerC = loggerOff; // note: debug
 const loggerS = loggerOff; // note: debug
 
 const defaults = {

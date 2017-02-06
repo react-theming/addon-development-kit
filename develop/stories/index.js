@@ -29,7 +29,7 @@ reqThemes.keys().forEach((filename) => {
  *  You can pass a single object or an array of themes
  */
 
-//globalDecorator('Global decorator');
+globalDecorator('Global decorator');
 //addDecorator(globalDecorator('Global decorator'))
 
 storiesOf('No decorator', module)
@@ -48,12 +48,12 @@ storiesOf('Podda App1', module)
     .addDecorator(addonDecorator('Decor111'))
     .add('Example1', () => (
         <div className="example-component">
-            <Button title="Example 1" />
+            <Button title="Example 1 " />
         </div>
     ))
     .add('Example2', () => (
         <div className="example-component">
-            <Button title="Example 2" />
+            <Button title="Example 2 3" />
         </div>
     ));
 
