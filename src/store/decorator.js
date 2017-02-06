@@ -89,33 +89,35 @@ export { addonManager };
 const decorStoresMap = {};
 let isGlobalReload = false;
 
-function getDecor(initData, keyPref, decorComposer) {
+function getDecor(initData, keyPref, decorComposer, keyGen) {
     let key;
     let addonStoreCompose;
     let Decorator;
-    let AddonDecorator;
+    let addonDecorator;
 
-    let isReload = true;
+    let isHotReload = true;
 
     return (storyFn, context) => {
-//        const addonStoreCompose = addonManager.storeCheckout(context, keyPref);
-//        addonManager.storeSave(context, addonStoreCompose, keyPref);
-
-        if (isReload) {
-            if (isGlobalReload) {
-//                loggerHot.warn('Hot reloading');
-            }
-            key = `${keyPref}::${context.kind}`;
-            decorStoresMap[key] = decorStoresMap[key] || addonManager.newStore();
+        key = keyGen(keyPref, context);
+        if(!decorStoresMap[key]) {
+            decorStoresMap[key] = decorStoresMap[key] || addonStoreCompose || addonManager.newStore();
+            loggerHot.info(`Init store for ${key}`, decorStoresMap);
+        }
+        if (isHotReload) {
+            loggerHot.log(`Fetch store for ${key}`, decorStoresMap);
             addonStoreCompose = decorStoresMap[key];
             Decorator = initComposer(addonStoreCompose);
-            AddonDecorator = decorComposer(addonStoreCompose);
-            isReload = false;
+            addonDecorator = decorComposer(addonStoreCompose);
+
+            isHotReload = false;
         }
         isGlobalReload = true;
 
         // передавать функцию routes которая будет в качестве аргумента принимать хранилище.
         // в этой функции разработчик сам прописывает все нужные подписки на хранилище и создает структуру декораторов
+
+        /* addonDecorator={() => <AddonDecorator story={storyFn()}/>} */
+        /* story={storyFn()} */
         return (
           <div>
             <Decorator
@@ -125,10 +127,10 @@ function getDecor(initData, keyPref, decorComposer) {
                   ID: getID(keyPref),
                   context,
               }}
-              story={storyFn()}
-              addonDecorator={() => <AddonDecorator story={storyFn()}/>}
+
+              addonDecorator={addonDecorator(storyFn, initData, 'rootProps')}
             />
-            {/*<AddonDecorator />*/}
+            {/*addonDecorator*/}
           </div>);
     };
 }
@@ -142,7 +144,9 @@ export function decorator(initData, pref) {
     return deco;
 }
 
-export function buidDecorator(initData, decorComposer, keyPref) {
-    const deco = getDecor(initData, keyPref, decorComposer);
+const keyGenDiff = (keyPref, context) => `${keyPref}::${context.kind}`;
+
+export function buidDecorator(initData, decorComposer, keyPref, keyGen = keyGenDiff) {
+    const deco = getDecor(initData, keyPref, decorComposer, keyGen);
     return deco;
 }

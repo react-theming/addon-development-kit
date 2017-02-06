@@ -1,6 +1,8 @@
 import { addDecorator } from '@kadira/storybook';
 import { buidDecorator, addonManager } from '../src';
 import decorComposer from './containers/addonDecorator';
+import routes from './decoratorRoutes';
+
 import api from './api';
 import config from './config';
 import defaultData from './defaultData';
@@ -10,10 +12,13 @@ addonManager.setAddonApi(api);
 addonManager.setConfig(config);
 
 export function addonDecorator(initData) {
-    return buidDecorator(initData, decorComposer, 'lc');
+//    const keyGen = (keyPref, context) => `${keyPref}::${context.kind}`;
+    return buidDecorator(initData, routes, 'lc');
 }
 
 export function globalDecorator(initData) {
-    addDecorator(buidDecorator(initData, decorComposer, 'gl'));
+//    const keyGen = (keyPref, context) => `${keyPref}`;
+//    const keyGen = (keyPref, context) => `${keyPref}::${context.kind}`;
+    addDecorator(buidDecorator(initData, routes, 'gl'));
 }
 

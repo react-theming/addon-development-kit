@@ -6,6 +6,7 @@ function storeHandler(storeData, props, addonApi) {
         label: storeData.label,
         index: storeData.index,
         onClick: addonApi.setLabel,
+        voting: props.voting,
         story: props.story,
     };
 }

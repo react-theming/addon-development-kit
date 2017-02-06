@@ -3,7 +3,8 @@ import React from 'react';
 import { CHANNEL_STOP } from '../store/store';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
-const logger = loggerOn; // note: debug
+const logger = loggerOff; // note: debug
+const loggerR = loggerOn; // note: debug
 
 
 const propTypes = {
@@ -64,7 +65,7 @@ export default class RootContainer extends React.Component {
         const initData = this.props.initData;
         const enabled = this.state.containerEnabled;
         return (
-            logger.on ?
+            loggerR.on ?
               <div>
                 <p style={{ backgroundColor: enabled ? '#41537b' : '#525252', color: 'white' }}>
                   {enabled ? 'Enabled!' : 'Disabled*'}, <b>{/* ID*/}</b> initData: <i>{initData}</i>
@@ -78,7 +79,7 @@ export default class RootContainer extends React.Component {
                   debugData
               </button>
                 {/*<Dummy {...this.props} />*/}
-                <div> {addonDecorator ? addonDecorator() : null} </div>
+                <div> {addonDecorator || null} </div>
               </div>
             : <div> {story} </div>
         );
