@@ -1,6 +1,6 @@
 {
   "name": "storybook-adk",
-  "version": "0.1.0",
+  "version": "0.7.0",
   "description": "React Storybook Addon Development Kit",
   "main": "dist/index.js",
   "scripts": {

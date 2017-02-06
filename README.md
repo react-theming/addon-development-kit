@@ -8,7 +8,7 @@ Based on [React Komposer](https://github.com/arunoda/react-komposer) and [Podda]
 
 1 Keeps synchronous **store** on both sides: addon panel and decorator
 
-2 Possible create components subscribed to this **store**
+2 Easy to create own components subscribed to addon's **store**
 
 3 Each decorator has own **store** instance and init settings, the panel reflects an active decorator
 
