@@ -23,8 +23,16 @@ export const CHANNEL_STOP = 'STOP';
 export const ENQ_ASK = 'ASK';
 export const ENQ_SEND = 'SEND';
 
-export default function initStore() {
-    const addonStore = new Podda(defaults);
+export default function initStore(defaultData = defaults, addonApi = {}, conf) {
+    const config = {
+        ...{
+            EVENT_ID_INIT,
+            EVENT_ID_DATA,
+        },
+        ...conf,
+    };
+
+    const addonStore = new Podda(defaultData);
     loggerS.warn('*** new Store init ***');
 
     addonStore.registerAPI('bypass', (store, data, bypassList) => {
@@ -40,12 +48,12 @@ export default function initStore() {
 
     addonStore.registerAPI('reset', (store) => {
         loggerS.info('Store reset');
-        store.data = Immutable.Map(defaults);
+        store.data = Immutable.Map(defaultData);
         store.fireSubscriptions();
     });
 
 
-    function createApi(apilist, poddaStore) {
+    function createApi(poddaStore, apilist) {
         const keys = Object.keys(apilist);
 
         const apiMap = {};
@@ -70,7 +78,7 @@ export default function initStore() {
         const onStoreChange = (dataStore) => {
             loggerS.log(`Store Changed in ${channelRole}`, dataStore);
             if (channelRole === CHANNEL_STOP) return;
-            channel.emit(EVENT_ID_DATA, {
+            channel.emit(config.EVENT_ID_DATA, {
                 dataStore,
                 role: channelRole,
                 id: channelId,
@@ -87,7 +95,7 @@ export default function initStore() {
         };
 
         const startChannel = () => {
-            channel.emit(EVENT_ID_INIT, {
+            channel.emit(config.EVENT_ID_INIT, {
                 info: 'wonna be a master',
                 role: CHANNEL_MASTER,
                 id: channelId,
@@ -97,7 +105,7 @@ export default function initStore() {
 
         const stopChannel = () => {
             channelRole = CHANNEL_STOP;
-            channel.emit(EVENT_ID_INIT, {
+            channel.emit(config.EVENT_ID_INIT, {
                 info: 'stop channel connection',
                 role: channelRole,
                 id: channelId,
@@ -105,7 +113,7 @@ export default function initStore() {
             if (storeEnquiry === ENQ_ASK) {
                 addonStore.reset();
             }
-            /* channel.emit(EVENT_ID_DATA, { // fixme:
+            /* channel.emit(config.EVENT_ID_DATA, { // fixme:
                 dataStore: {},
                 role: channelRole,
                 id: channelId,
@@ -126,10 +134,10 @@ export default function initStore() {
             loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
         };
 
-        const setChannelSlave = ({ id }) => {
+        const setChannelSlave = ({ id, to }) => {
             peerId = id;
             channelRole = CHANNEL_SLAVE;
-            channel.emit(EVENT_ID_INIT, {
+            channel.emit(config.EVENT_ID_INIT, {
                 info: 'so I\'m a slave',
                 role: channelRole,
                 id: channelId,
@@ -139,6 +147,7 @@ export default function initStore() {
         };
 
         const onInitChannel = (initData) => {
+            loggerC.log('onInitChannel', initData)
             if (initData.role === CHANNEL_MASTER) {
                 setChannelSlave(initData);
             }
@@ -180,12 +189,12 @@ export default function initStore() {
             let stopStorySubscription;
 
             try {
-                channel.on(EVENT_ID_INIT, onInitChannel);
+                channel.on(config.EVENT_ID_INIT, onInitChannel);
                 startChannel();
 
                 stopStorySubscription = addonStore.subscribe(onStoreChange);
 
-                channel.on(EVENT_ID_DATA, onDataChannel);
+                channel.on(config.EVENT_ID_DATA, onDataChannel);
             } catch (err) {
                 loggerC.warn(err);
             }
@@ -193,8 +202,8 @@ export default function initStore() {
             return () => {
                 loggerC.info('Channel STOPS');
                 stopChannel();
-                channel.removeListener(EVENT_ID_INIT, onInitChannel);
-                channel.removeListener(EVENT_ID_DATA, onDataChannel);
+                channel.removeListener(config.EVENT_ID_INIT, onInitChannel);
+                channel.removeListener(config.EVENT_ID_DATA, onDataChannel);
                 stopStorySubscription();
             };
         };
@@ -206,7 +215,7 @@ export default function initStore() {
         loadingHandler: () => (<p>Loading...</p>),
         env: {
             addonStore,
-            apiMap: createApi(apiLib, addonStore),
+            apiMap: createApi(addonStore, {...apiLib, ...addonApi}),
             channelInit,
         },
     });
