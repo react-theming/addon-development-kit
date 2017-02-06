@@ -1,61 +1,17 @@
 ## Changelog
 
-### v0.2.0
-
-* Storybook addons:
-
-- Info
-
-- Notes
-
-- Knobs
-
-* Material-UI example
-
 ### v0.1.0
 
 * Initial project with:
 
-- React Storybook
+- Podda store
 
-- storybook-addon-material-ui
+- React Komposer
 
-- React Theme Provider
+- React Storybook addons
 
+- Readme
 
-* Scripts:
+- Usage example
 
-- npm start
-
-- npm publish
-
-- npm run lint
-
-- npm run lintfix
-
-
-* App structure:
-
-- App.jsx
-
-- Header.jsx
-
-- Intro.jsx
-
-- ThemeSwitcher.jsx
-
-* Themes:
-
-- Light Theme
-
-- Dark Theme
-
-- Gray Theme
-
-- CSSrules
-
-* Readme
-
-* Github Page Live Demo
-
-
+Scaffolded by [Storybook Boilerplate Project](https://github.com/sm-react/react-theming#storybook-boilerplate-project)
