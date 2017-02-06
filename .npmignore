@@ -1,6 +1,7 @@
 node_modules
-.#develop
-example
+develop
+setup
+public
 src
 doc
 .babelrc
