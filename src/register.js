@@ -26,15 +26,15 @@ export default function (addonSettings) {
         addons.addPanel(settings.PANEL_ID, {
             title: settings.ADDON_TITLE,
             render: () => (
-                <div>
-                    <PanelContainer
-                        api={api}
-                        addonControl={null}
-                        initData={settings.initData}
-                        rootProps={{ enquiry: ENQ_ASK, ID: getID() }}
-                    />
-                    {addonPanel()}
-                </div>),
+              <div>
+                <PanelContainer
+                  api={api}
+                  addonControl={null}
+                  initData={settings.initData}
+                  rootProps={{ enquiry: ENQ_ASK, ID: getID() }}
+                />
+                {addonPanel()}
+              </div>),
         });
     });
 }

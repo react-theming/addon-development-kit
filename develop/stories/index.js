@@ -52,7 +52,7 @@ storiesOf('Podda App1', module)
     ))
     .add('Example2', () => (
         <div className="example-component">
-            <Button title="Example 2 asdf" />
+            <Button title="Example 2" />
         </div>
     ));
 

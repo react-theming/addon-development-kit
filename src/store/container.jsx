@@ -3,50 +3,74 @@ import React from 'react';
 import { CHANNEL_STOP } from '../store/store';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
-const logger = loggerOff; // note: debug
+
+const loggerM = loggerOff; // note: debug
 const loggerR = loggerOff; // note: debug
 
 
 const propTypes = {
-    addonControl: React.PropTypes.shape(),
+    story: React.PropTypes.func,
     setupChannel: React.PropTypes.func,
+    addonRender: React.PropTypes.element,
+
+    setData: React.PropTypes.func,
+    debugData: React.PropTypes.func,
+    initData: React.PropTypes.any,
 };
 
 export default class RootContainer extends React.Component {
     constructor(props, ...args) {
         super(props, ...args);
-        logger.warn(`* constructor: ${props.initData}`);
+        loggerM.log(`* constructor: ${props.initData}`);
 
         this.stopChannel = null;
         this.stopControl = null;
         this.state = {
-            containerEnabled: false, //true, /* this.props.addonControl.default.enabled, */
+            containerEnabled: true, /* this.props.addonControl.default.enabled, */
         };
 
         this.setMode = this.setMode.bind(this);
+
+        this.isMount = false; // fixme:
     }
     componentWillMount() {
-        logger.warn(`* componentWillMount: ${this.props.initData}`);
+        loggerM.log(`* componentWillMount: ${this.props.initData}`);
         this.setMode(true);
     }
+
+    componentDidMount() {
+        this.isMount = true;
+        loggerM.log(`* componentDidMount: ${this.props.initData}`);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if ((this.state.containerEnabled === false) && (nextState.containerEnabled === false)) {
+            return false;
+        }
+        if (this.props.initData === 'ADK Panel') return true;
+        loggerM.info(`* shouldComponentUpdate: ${this.props.initData}`, nextProps, nextState);
+        return true;
+    }
+
     componentWillUnmount() {
-        logger.warn(`* componentWillUnmount: ${this.props.initData}`);
+        this.isMount = false;
+        loggerM.log(`* componentWillUnmount: ${this.props.initData}`);
         this.setMode(false);
     }
 
     setMode(enabled) {
-        const { /* addonControl,*/ setupChannel, setData } = this.props;
-        const { initData } = this.props;
-//        logger.log('setMode:', initData, enabled);
+        const { setupChannel } = this.props;
 
         const onChannelSetup = (info) => {
             const enableByChan = (info.channelRole !== CHANNEL_STOP);
-            logger.log('onChannelSetup:', info);
-            // TODO: get rid of setState here
-            // note: :( :(
-            // fixme: aaaaa
-            // todo: aaaaaa
-            this.setState({ containerEnabled: enableByChan });
+
+            // todo: get rid of setState here
+            if (this.isMount) {
+                if (enableByChan !== this.state.containerEnabled) {
+                    loggerM.log('onChannelSetup:', this.isMount, info);
+                    this.setState({ containerEnabled: enableByChan });
+                }
+            }
         };
 
         if (enabled) {
@@ -55,56 +79,46 @@ export default class RootContainer extends React.Component {
             if (this.stopChannel) this.stopChannel();
             this.stopChannel = null;
         }
-        // this.setState({ containerEnabled: enabled });
     }
 
+
     render() {
+        if (this.props.initData !== 'ADK Panel') {
+            loggerM.warn(`* render: ${this.props.initData}`, this.props, this.state);
+        }
         const { /* addonControl,*/ setData, debugData, story, addonRender } = this.props;
         /* const { initData, ID} = addonControl.default;*/
         const initData = this.props.initData;
         const enabled = this.state.containerEnabled;
 
         const debugInfo = loggerR.on ? (
-            <div>
-                <p style={{ backgroundColor: enabled ? '#41537b' : '#525252', color: 'white' }}>
-                    {enabled ? 'Enabled!' : 'Disabled*'}, <b>{/* ID*/}</b> initData: <i>{initData}</i>
-                </p>
-                <button onClick={setData(initData)}>
+          <div>
+            <p style={{ backgroundColor: enabled ? '#41537b' : '#525252', color: 'white' }}>
+              {enabled ? 'Enabled!' : 'Disabled*'}, <b>{/* ID*/}</b> initData: <i>{initData}</i>
+            </p>
+            <button onClick={setData(initData)}>
                     setData
                 </button>
-                <button onClick={debugData()}>
+            <button onClick={debugData()}>
                     debugData
                 </button>
-            </div>
+          </div>
         ) : null;
 
         const enabledAddon = (is) => {
             if (!is) return <div> {story ? story() : null} </div>;
             return (
-                <div> {addonRender || null} </div>
+              <div> {addonRender || null} </div>
             );
         };
 
         return (
-              <div>
-                {debugInfo}
-                {enabledAddon(enabled)}
-              </div>
+          <div>
+            {debugInfo}
+            {enabledAddon(enabled)}
+          </div>
         );
     }
 }
 
 RootContainer.propTypes = propTypes;
-
-const Dummy = ({ label, index, theme, data, onVote, onLabel }) => {
-    return (
-      logger.on ?
-        <div>
-          <p>Label: <i>{label}</i>, Index: <i>{index}</i>, Data: <i>{data}</i> </p>
-          <button onClick={onVote(3)}>Vote</button>
-          <button onClick={onLabel('Alpha', 28)}>Alpha</button>
-          <button onClick={onLabel('Betta', 133)}>Betta</button>
-        </div>
-      : <div> no dummy </div>
-    );
-};

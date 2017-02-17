@@ -1,6 +1,6 @@
 {
   "name": "storybook-adk",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "React Storybook Addon Development Kit",
   "main": "dist/index.js",
   "scripts": {
@@ -87,6 +87,7 @@
   },
   "dependencies": {
     "@kadira/storybook-addons": "^1.6.1",
+    "immutable": "^3.8.1",
     "podda": "^1.2.2",
     "react-komposer": "2"
   }

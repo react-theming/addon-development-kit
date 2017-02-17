@@ -37,17 +37,20 @@ export default function initStore(defaultData = defaults, addonApi = {}, conf) {
 
     addonStore.registerAPI('bypass', (store, data, bypassList) => {
         const fullCallbackList = store.callbacks;
+        // eslint-disable-next-line
         store.callbacks = store.callbacks.filter(val =>
             !(bypassList || []).includes(val),
         );
         store.update(() => (
           { ...data }
         ));
+        // eslint-disable-next-line
         store.callbacks = fullCallbackList;
     });
 
     addonStore.registerAPI('reset', (store) => {
         loggerS.info('Store reset');
+        // eslint-disable-next-line
         store.data = Immutable.Map(defaultData);
         store.fireSubscriptions();
     });
@@ -65,7 +68,18 @@ export default function initStore(defaultData = defaults, addonApi = {}, conf) {
         return apiMap;
     }
 
-    // setup channel
+    /** note: setup channel
+     *
+     *  Need to init channel connection between panel side and stories side
+     *
+     *  setupChannel(initCb) = channelInit(storeEnquiry, id)
+     *  , where:
+     *  id - channel identifier
+     *  storeEnquiry = ENQ_ASK to ask data after init
+     *  storeEnquiry = ENQ_SEND to send data after init
+     *  setupChannel - need to invoke in componentWillMount (see below)
+     *
+     */
     function channelInit(storeEnquiry, id) {
         loggerC.info('channelInit storeEnquiry:', storeEnquiry, id);
         let channel;
@@ -73,7 +87,6 @@ export default function initStore(defaultData = defaults, addonApi = {}, conf) {
         const channelId = id;
         let peerId = null;
         let initCallback = null;
-//        let storeEnquiry = null; /* ENQ_ASK , ENQ_SEND */
 
         const onStoreChange = (dataStore) => {
             loggerS.log(`Store Changed in ${channelRole}`, dataStore);
@@ -87,7 +100,10 @@ export default function initStore(defaultData = defaults, addonApi = {}, conf) {
         };
 
         const onDataChannel = (dataChannel) => {
-            loggerC.log(`onDataChannel (I'm ${channelRole} id:${channelId}):`, `from: ${dataChannel.id} to: ${dataChannel.to} myPeer: ${peerId}`);
+            loggerC.log(
+                `onDataChannel (I'm ${channelRole} id:${channelId}):`,
+                `from: ${dataChannel.id} to: ${dataChannel.to} myPeer: ${peerId}`,
+            );
             if (channelRole === CHANNEL_STOP) return;
             if (dataChannel.to === channelId && dataChannel.id === peerId) {
                 addonStore.bypass(dataChannel.dataStore, [onStoreChange]);
@@ -122,20 +138,24 @@ export default function initStore(defaultData = defaults, addonApi = {}, conf) {
         };
 
 
-        const setChannelMaster = ({ id, to }) => {
-            if (to !== channelId) {
+        const setChannelMaster = (initData) => {
+            if (initData.to !== channelId) {
                 channelRole = CHANNEL_STOP;
                 peerId = null;
-                loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
+                loggerC.log(
+                    `onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`,
+                );
                 return;
             }
-            peerId = id;
+            peerId = initData.id;
             channelRole = CHANNEL_MASTER;
-            loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
+            loggerC.log(
+                    `onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`,
+            );
         };
 
-        const setChannelSlave = ({ id, to }) => {
-            peerId = id;
+        const setChannelSlave = (initData) => {
+            peerId = initData.id;
             channelRole = CHANNEL_SLAVE;
             channel.emit(config.EVENT_ID_INIT, {
                 info: 'so I\'m a slave',
@@ -143,11 +163,13 @@ export default function initStore(defaultData = defaults, addonApi = {}, conf) {
                 id: channelId,
                 to: peerId,
             });
-            loggerC.log(`onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`);
+            loggerC.log(
+                `onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`,
+            );
         };
 
         const onInitChannel = (initData) => {
-            loggerC.log('onInitChannel', initData)
+            loggerC.log('onInitChannel', initData);
             if (initData.role === CHANNEL_MASTER) {
                 setChannelSlave(initData);
             }
@@ -171,13 +193,12 @@ export default function initStore(defaultData = defaults, addonApi = {}, conf) {
 
             if (initCallback) {
                 initCallback({ channelRole, storeEnquiry, channelId, peerId });
-//                initCallback = null;
             }
         };
 
     /**
       * note: this callback should be invoked
-      * in componentDidMount() to init channel connection
+      * in componentWillMount() to init channel connection
       * and the returned callback could be invoked
       * in componentWillUnmount().
       * initCb() - will be invoked after getting connected
@@ -215,7 +236,7 @@ export default function initStore(defaultData = defaults, addonApi = {}, conf) {
         loadingHandler: () => (<p>Loading...</p>),
         env: {
             addonStore,
-            apiMap: createApi(addonStore, {...apiLib, ...addonApi}),
+            apiMap: createApi(addonStore, { ...apiLib, ...addonApi }),
             channelInit,
         },
     });

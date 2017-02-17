@@ -22,3 +22,7 @@ export function addonComposer(storeHandler, Component) {
         return currentStoreCompose(dataLoader)(Component);
     };
 }
+
+export function userComposer() {
+    return null;
+}

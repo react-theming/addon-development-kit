@@ -6,10 +6,10 @@ export default {
         poddaStore.update(state => ({ index: state.index + delta }));
     },
     setLabel(poddaStore, name, ind) {
-        poddaStore.update(state => ({ index: ind, label: name }));
+        poddaStore.update(() => ({ index: ind, label: name }));
     },
     setData(poddaStore, data) {
-        poddaStore.update(state => ({ data }));
+        poddaStore.update(() => ({ data }));
         logger.log('Set Data:', poddaStore.getAll());
     },
     debugData(poddaStore) {

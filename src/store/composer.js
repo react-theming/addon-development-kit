@@ -1,6 +1,4 @@
-import React from 'react';
 import Component from './container';
-//import initStore from './store';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 const logger = loggerOff; // note: debug
@@ -11,7 +9,7 @@ export default function initComposer(addonStoreCompose) {
         const setupChannel = channelInit(props.rootProps.enquiry, props.rootProps.ID);
 
         const sendData = (storeData) => {
-            logger.log('Composer ivoked:', props.rootProps, addonStore.getAll());
+            logger.log('Composer ivoked:', props.initData, props.rootProps, addonStore.getAll());
             const theme = storeData.uiTheme;
             const propsToChild = {
                 label: storeData.label, // remove
