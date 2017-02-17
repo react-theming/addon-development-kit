@@ -4,7 +4,7 @@ import { CHANNEL_STOP } from '../store/store';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 const logger = loggerOff; // note: debug
-const loggerR = loggerOn; // note: debug
+const loggerR = loggerOff; // note: debug
 
 
 const propTypes = {
@@ -20,23 +20,18 @@ export default class RootContainer extends React.Component {
         this.stopChannel = null;
         this.stopControl = null;
         this.state = {
-            containerEnabled: true, /* this.props.addonControl.default.enabled, */
+            containerEnabled: false, //true, /* this.props.addonControl.default.enabled, */
         };
 
         this.setMode = this.setMode.bind(this);
     }
     componentWillMount() {
-        /* const { addonControl, setupChannel, setData } = this.props;
-        const { enabled, initData } = addonControl.default; */
-
-        logger.warn(`* componentDidMount: ${this.props.initData}`);
+        logger.warn(`* componentWillMount: ${this.props.initData}`);
         this.setMode(true);
-        /* this.stopControl = addonControl.getControl(this.setMode);*/
     }
     componentWillUnmount() {
         logger.warn(`* componentWillUnmount: ${this.props.initData}`);
         this.setMode(false);
-        /* if (this.stopControl) this.stopControl();*/
     }
 
     setMode(enabled) {
@@ -45,9 +40,13 @@ export default class RootContainer extends React.Component {
 //        logger.log('setMode:', initData, enabled);
 
         const onChannelSetup = (info) => {
-            const enableByChan = (CHANNEL_STOP !== info.channelRole);
+            const enableByChan = (info.channelRole !== CHANNEL_STOP);
+            logger.log('onChannelSetup:', info);
+            // TODO: get rid of setState here
+            // note: :( :(
+            // fixme: aaaaa
+            // todo: aaaaaa
             this.setState({ containerEnabled: enableByChan });
-//            logger.log('onChannelSetup:', info);
         };
 
         if (enabled) {
@@ -56,32 +55,41 @@ export default class RootContainer extends React.Component {
             if (this.stopChannel) this.stopChannel();
             this.stopChannel = null;
         }
-        this.setState({ containerEnabled: enabled });
+        // this.setState({ containerEnabled: enabled });
     }
 
     render() {
-        const { /* addonControl,*/ setData, debugData, story, addonDecorator } = this.props;
+        const { /* addonControl,*/ setData, debugData, story, addonRender } = this.props;
         /* const { initData, ID} = addonControl.default;*/
         const initData = this.props.initData;
         const enabled = this.state.containerEnabled;
-        return (
-            loggerR.on ?
-              <div>
+
+        const debugInfo = loggerR.on ? (
+            <div>
                 <p style={{ backgroundColor: enabled ? '#41537b' : '#525252', color: 'white' }}>
-                  {enabled ? 'Enabled!' : 'Disabled*'}, <b>{/* ID*/}</b> initData: <i>{initData}</i>
+                    {enabled ? 'Enabled!' : 'Disabled*'}, <b>{/* ID*/}</b> initData: <i>{initData}</i>
                 </p>
-
-
                 <button onClick={setData(initData)}>
-                  setData
-              </button>
+                    setData
+                </button>
                 <button onClick={debugData()}>
-                  debugData
-              </button>
-                {/*<Dummy {...this.props} />*/}
-                <div> {addonDecorator || null} </div>
+                    debugData
+                </button>
+            </div>
+        ) : null;
+
+        const enabledAddon = (is) => {
+            if (!is) return <div> {story ? story() : null} </div>;
+            return (
+                <div> {addonRender || null} </div>
+            );
+        };
+
+        return (
+              <div>
+                {debugInfo}
+                {enabledAddon(enabled)}
               </div>
-            : <div> {story} </div>
         );
     }
 }

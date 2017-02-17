@@ -1,4 +1,6 @@
 // note: addons, panels and events get unique names using a prefix
+import register from './register';
+
 export const ADDON_ID = 'sm/storybook-addon-context';
 export const ADDON_TITLE = 'PODDA';
 export const PANEL_ID = `${ADDON_ID}/context-panel`;
@@ -10,3 +12,4 @@ export const CSS_CLASS = 'addon-context-ui';
 // export default themeContext;
 export { decorator, buidDecorator, addonManager } from './store/decorator';
 export { addonComposer } from './store/addonComposer';
+export { register };

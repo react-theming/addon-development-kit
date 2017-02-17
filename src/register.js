@@ -12,37 +12,29 @@ const defaults = {
     ADDON_ID,
     PANEL_ID,
     ADDON_TITLE,
-}
+};
 
 export default function (addonSettings) {
-    const settings = {...defaults, ...addonSettings};
+    const settings = { ...defaults, ...addonSettings };
 
     addons.register(settings.ADDON_ID, (api) => {
         const addonStoreCompose = initStore(settings.defaultData, settings.api);
         const PanelContainer = initComposer(addonStoreCompose);
         const getID = () => `pd${Math.round(Math.random() * 100)}`;
-//        const addonControl = {
-//            getControl: () => {},
-//            default: {
-//                enabled: true,
-//                initData: 'Addon panel',
-//            },
-//        };
+        const addonPanel = settings.render(addonStoreCompose);
+
         addons.addPanel(settings.PANEL_ID, {
             title: settings.ADDON_TITLE,
-    //        render: initComposer(addonStoreCompose, {
-    //            api,
-    //            addonControl,
-    //            rootProps: { enquiry: ENQ_ASK, ID: getID() },
-    //            initData: "Panel",
-    //        }),
             render: () => (
-              <PanelContainer
-                api={api}
-                addonControl={null /*addonControl*/}
-                initData={settings.initData}
-                rootProps={{ enquiry: ENQ_ASK, ID: getID() }}
-              />),
+                <div>
+                    <PanelContainer
+                        api={api}
+                        addonControl={null}
+                        initData={settings.initData}
+                        rootProps={{ enquiry: ENQ_ASK, ID: getID() }}
+                    />
+                    {addonPanel()}
+                </div>),
         });
     });
 }

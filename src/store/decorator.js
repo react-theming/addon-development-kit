@@ -5,7 +5,7 @@ import initStore, { ENQ_ASK, ENQ_SEND } from '../store/store';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 const logger = loggerOff; // note: debug
-const loggerHot = loggerOn; // note: debug
+const loggerHot = loggerOff; // note: debug
 
 const getID = keyPref => `${keyPref}${Math.round(Math.random() * 100)}`;
 
@@ -127,8 +127,8 @@ function getDecor(initData, keyPref, decorComposer, keyGen) {
                   ID: getID(keyPref),
                   context,
               }}
-
-              addonDecorator={addonDecorator(storyFn, initData, 'rootProps')}
+              story={storyFn}
+              addonRender={addonDecorator(storyFn, initData, 'rootProps')}
             />
             {/*addonDecorator*/}
           </div>);

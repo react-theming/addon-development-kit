@@ -30,7 +30,7 @@ export default function initComposer(addonStoreCompose) {
 
                 setupChannel,
                 story: props.story,
-                addonDecorator: props.addonDecorator,
+                addonRender: props.addonRender,
             };
             onData(null, propsToChild);
         };

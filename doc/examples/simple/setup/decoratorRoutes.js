@@ -8,13 +8,14 @@ export default function routes(currentStoreCompose) {
 
     return function attach(story, ...props) {
         return (
-          <div>
-            <AddonDecor
-                voting={() => <Voting />}
-                story={story}
-            />
+            <div>
+               <AddonDecor
+                   voting={() => <Voting />}
+                   story={ story }
 
-          </div>
+                />
+
+            </div>
         );
-    };
+    }
 }

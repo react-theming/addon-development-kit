@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-filename-extension */
 
 import React from 'react';
-import { storiesOf, action, addDecorator } from '@kadira/storybook';
+import { storiesOf } from '@kadira/storybook';
 import { setOptions } from '@kadira/storybook-addon-options';
 import { muiTheme } from 'storybook-addon-material-ui';
 import { WithNotes } from '@kadira/storybook-addon-notes';
@@ -11,11 +11,8 @@ import { withKnobs, text, boolean, number } from '@kadira/storybook-addon-knobs'
 //import decorator from '../../src/store/decorator';
 import { addonDecorator, globalDecorator } from '../../setup/';
 
-import App from '../App';
-import Header from '../Header';
-import Intro from '../Intro';
-import Button from '../button';
 import '../App.css';
+import Button from '../button';
 
 const reqThemes = require.context('../.themes/', true, /.json/);
 const themesList = [];
@@ -30,6 +27,7 @@ reqThemes.keys().forEach((filename) => {
  */
 
 globalDecorator('Global decorator');
+// addDecorator(globalDecorator('Global decorator'))
 
 storiesOf('No decorator', module)
     .add('Example1', () => (
@@ -52,7 +50,7 @@ storiesOf('Podda App1', module)
     ))
     .add('Example2', () => (
         <div className="example-component">
-            <Button title="Example 2 asdf" />
+            <Button title="Example 2" />
         </div>
     ));
 

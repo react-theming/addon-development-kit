@@ -160,7 +160,7 @@ export default function initStore(defaultData = defaults, addonApi = {}, conf) {
                 loggerC.log(`Stop Channel: I was a ${channelRole}, id=${channelId}`);
                 channelRole = CHANNEL_STOP;
                 if (storeEnquiry === ENQ_ASK) {
-                    addonStore.reset();
+                    // addonStore.reset();
                 }
             } else {
                 loggerC.log('storeEnquiry:', storeEnquiry);
