@@ -89,6 +89,6 @@
     "@kadira/storybook-addons": "^1.6.1",
     "podda": "^1.2.2",
     "react-komposer": "2",
-    "storybook-adk": "^0.7.0"
+    "storybook-adk": "^0.7.1"
   }
 }

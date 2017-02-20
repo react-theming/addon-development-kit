@@ -16,6 +16,9 @@ const propTypes = {
     setData: React.PropTypes.func,
     debugData: React.PropTypes.func,
     initData: React.PropTypes.any,
+
+    className: React.PropTypes.string,
+    style: React.PropTypes.shape(),
 };
 
 export default class RootContainer extends React.Component {
@@ -86,7 +89,7 @@ export default class RootContainer extends React.Component {
         if (this.props.initData !== 'ADK Panel') {
             loggerM.warn(`* render: ${this.props.initData}`, this.props, this.state);
         }
-        const { /* addonControl,*/ setData, debugData, story, addonRender } = this.props;
+        const { style, className, setData, debugData, story, addonRender } = this.props;
         /* const { initData, ID} = addonControl.default;*/
         const initData = this.props.initData;
         const enabled = this.state.containerEnabled;
@@ -113,7 +116,7 @@ export default class RootContainer extends React.Component {
         };
 
         return (
-          <div>
+          <div style={style} className={`${className}-${enabled ? 'enabled' : 'disabled'}`}>
             {debugInfo}
             {enabledAddon(enabled)}
           </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import addons from '@kadira/storybook-addons';
 import initStore, { ENQ_ASK } from './store/store';
 import initComposer from './store/composer';
-import { ADDON_ID, PANEL_ID, ADDON_TITLE } from './';
+import { ADDON_ID, PANEL_ID, ADDON_TITLE, CSS_CLASS } from './';
 
 const defaults = {
     initData: 'Panel',
@@ -12,6 +12,7 @@ const defaults = {
     ADDON_ID,
     PANEL_ID,
     ADDON_TITLE,
+    CSS_CLASS
 };
 
 export default function (addonSettings) {
@@ -26,15 +27,15 @@ export default function (addonSettings) {
         addons.addPanel(settings.PANEL_ID, {
             title: settings.ADDON_TITLE,
             render: () => (
-              <div>
                 <PanelContainer
                   api={api}
                   addonControl={null}
                   initData={settings.initData}
                   rootProps={{ enquiry: ENQ_ASK, ID: getID() }}
-                />
-                {addonPanel()}
-              </div>),
+                  addonRender={addonPanel()}
+                  style={{ width: '100%' }}
+                  className={`${settings.CSS_CLASS}-panel`}
+                />),
         });
     });
 }
