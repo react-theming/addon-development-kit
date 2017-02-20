@@ -6,7 +6,9 @@ const logger = loggerOff; // note: debug
 export default function initComposer(addonStoreCompose) {
     function dataLoader(props, onData, { addonStore, apiMap, channelInit }) {
         logger.log('Composer init:', props.initData, addonStore.getAll());
+
         const setupChannel = channelInit(props.rootProps.enquiry, props.rootProps.ID);
+        addonStore.set('initData', props.initData);
 
         const sendData = (storeData) => {
             logger.log('Composer ivoked:', props.initData, props.rootProps, addonStore.getAll());

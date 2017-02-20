@@ -8,6 +8,6 @@ export const EVENT_ID_INIT = `${ADDON_ID}/adk-event/init`;
 export const EVENT_ID_DATA = `${ADDON_ID}/adk-event/data`;
 export const CSS_CLASS = 'adk-ui';
 
-export { decorator, buidDecorator, addonManager } from './store/decorator.jsx';
+export { decorator, buidDecorator, addonManager } from './store/decorator'; // fixme:
 export { addonComposer } from './store/addonComposer';
 export { register };
