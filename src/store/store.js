@@ -11,29 +11,56 @@ import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 const loggerC = loggerOff; // note: debug
 const loggerS = loggerOff; // note: debug
 
-const defaults = {
-    uiTheme: { canvas: 'white', text: 'black' },
-    label: 'init',
-    index: 0,
-};
-
 export const CHANNEL_MASTER = 'MASTER';
 export const CHANNEL_SLAVE = 'SLAVE';
 export const CHANNEL_STOP = 'STOP';
 export const ENQ_ASK = 'ASK';
 export const ENQ_SEND = 'SEND';
 
-export default function initStore(defaultData = defaults, addonApi = {}, conf) {
+const defaults = {
+    uiTheme: { canvas: 'white', text: 'black' },
+    label: 'init',
+    index: 0,
+//    queryParams: {
+//
+//    }
+};
+
+const storeDefaultSettings = {
+    defaultData: defaults,
+    addonApi: {},
+    config: {
+        EVENT_ID_INIT,
+        EVENT_ID_DATA,
+    },
+    queryParams: {
+        label: 'init',
+        index: 0,
+    },
+};
+
+// todo: refact to initStore(storeConfig, storybookApi)
+/* defaultData = defaults, addonApi = {}, conf,*/
+export default function initStore(storeSettings, storybookApi) {
     const config = {
-        ...{
-            EVENT_ID_INIT,
-            EVENT_ID_DATA,
-        },
-        ...conf,
+        ...storeDefaultSettings.config,
+        ...storeSettings.config,
     };
+
+    const addonApi = {
+        ...storeDefaultSettings.addonApi,
+        ...storeSettings.addonApi,
+    };
+
+    const defaultData = storeSettings.defaultData || storeDefaultSettings.defaultData;
+
+    const queryParams = null;
 
     const addonStore = new Podda(defaultData);
     loggerS.warn('*** new Store init ***');
+//    loggerS.log('config', config);
+//    loggerS.log('storeSettings', storeSettings);
+//    loggerS.log('storeDefaultSettings', storeDefaultSettings);
 
     addonStore.registerAPI('bypass', (store, data, bypassList) => {
         const fullCallbackList = store.callbacks;

@@ -9,6 +9,20 @@ const loggerHot = loggerOff; // note: debug
 
 const getID = keyPref => `${keyPref}${Math.round(Math.random() * 100)}`;
 
+const storeSettings = {};
+
+export function setDefaultData(data) {
+    storeSettings.defaultData = data;
+}
+
+export function setAddonApi(api) {
+    storeSettings.addonApi = api;
+}
+
+export function setConfig(conf) {
+    storeSettings.config = conf;
+}
+
 class AddonManager {
     constructor() {
         logger.warn('##### AddonManager ######');
@@ -18,10 +32,10 @@ class AddonManager {
         this.storesMap = {};
         this.subscribers = [];
 
-        this.setDefaultData = this.setDefaultData.bind(this);
-        this.setAddonApi = this.setAddonApi.bind(this);
-        this.setConfig = this.setConfig.bind(this);
-        this.newStore = this.newStore.bind(this);
+//        this.setDefaultData = this.setDefaultData.bind(this);
+//        this.setAddonApi = this.setAddonApi.bind(this);
+//        this.setConfig = this.setConfig.bind(this);
+//        this.newStore = this.newStore.bind(this);
     }
 
     setDefaultData(data) {
@@ -61,32 +75,30 @@ class AddonManager {
         this.storesMap[key] = store;
     }
 
-    storeCheckout(context, keyPref) {
-        const key = `${keyPref}::${context.kind}`;
-        const currentStore = this.storesMap[key] || initStore(
-            this.defaultData,
-            this.addonApi,
-            this.setConfig,
-        );
-        this.fireSubscriptions(currentStore);
-        return currentStore;
-    }
+//    storeCheckout(context, keyPref) {
+//        const key = `${keyPref}::${context.kind}`;
+//        const currentStore = this.storesMap[key] || initStore(
+//            this.defaultData,
+//            this.addonApi,
+//            this.setConfig,
+//        );
+//        this.fireSubscriptions(currentStore);
+//        return currentStore;
+//    }
 
-    newStore() {
-        return initStore(
-            this.defaultData,
-            this.addonApi,
-            this.setConfig,
-        );
-    }
+
 
 }
 
-const addonManager = new AddonManager();
-
-export { addonManager };
+//const addonManager = new AddonManager();
+//
+//export { addonManager };
 
 const decorStoresMap = {};
+
+function newStore() {
+    return initStore(storeSettings);
+}
 
 function getDecor(initData, keyPref, decorComposer, keyGen) {
     let key;
@@ -101,7 +113,7 @@ function getDecor(initData, keyPref, decorComposer, keyGen) {
         if (!decorStoresMap[key]) {
             decorStoresMap[key] = decorStoresMap[key]
                 || addonStoreCompose
-                || addonManager.newStore();
+                || newStore();
 
             loggerHot.info(`Init store for ${key}`, decorStoresMap);
         }
