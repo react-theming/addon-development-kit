@@ -31,6 +31,7 @@ export default function initComposer(addonStoreCompose) {
                 setupChannel,
                 story: props.story,
                 addonRender: props.addonRender,
+                addonRenderDisabled: props.addonRenderDisabled || null,
 
                 style: props.style,
                 className: props.className,

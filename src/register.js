@@ -26,6 +26,7 @@ export default function (addonSettings) {
         const PanelContainer = initComposer(addonStoreCompose);
         const getID = () => `pd${Math.round(Math.random() * 100)}`;
         const addonPanel = addonSettings.render(addonStoreCompose);
+        const addonDisabled = addonSettings.disabled ? addonSettings.disabled(addonStoreCompose) : () => {};
 
         addons.addPanel(settings.PANEL_ID, {
             title: settings.ADDON_TITLE,
@@ -36,6 +37,7 @@ export default function (addonSettings) {
                 initData={addonSettings.initData}
                 rootProps={{ enquiry: ENQ_ASK, ID: getID() }}
                 addonRender={addonPanel()}
+                addonRenderDisabled={addonDisabled()}
                 style={{ width: '100%' }}
                 className={`${settings.CSS_CLASS}-panel`}
               />),

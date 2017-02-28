@@ -15,7 +15,8 @@
     "test-storybook": "storyshots",
     "status": "node .scripts/npm-status.js && node .scripts/lint.js -f json && node .scripts/run_tests -R min",
     "storybook": "start-storybook -p 9010 && npm run test-watch",
-    "start": "start-storybook -p 9001"
+    "start": "start-storybook -p 9001",
+    "watch": "nodemon -w ./src -e .js,.jsx -x \"npm run prepublish\""
   },
   "repository": {
     "type": "git",

@@ -5,13 +5,14 @@ import { CHANNEL_STOP } from '../store/store';
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 
 const loggerM = loggerOff; // note: debug
-const loggerR = loggerOn; // note: debug
+const loggerR = loggerOff; // note: debug
 
 
 const propTypes = {
     story: React.PropTypes.func,
     setupChannel: React.PropTypes.func,
     addonRender: React.PropTypes.element,
+    addonRenderDisabled: React.PropTypes.element,
 
     setData: React.PropTypes.func,
     debugData: React.PropTypes.func,
@@ -19,6 +20,10 @@ const propTypes = {
 
     className: React.PropTypes.string,
     style: React.PropTypes.shape(),
+};
+
+const defaultProps = {
+    addonRenderDisabled: <p>Disabled</p>,
 };
 
 export default class RootContainer extends React.Component {
@@ -29,7 +34,7 @@ export default class RootContainer extends React.Component {
         this.stopChannel = null;
         this.stopControl = null;
         this.state = {
-            containerEnabled: true, /* this.props.addonControl.default.enabled, */
+            containerEnabled: false, /* this.props.addonControl.default.enabled, */
         };
 
         this.setMode = this.setMode.bind(this);
@@ -89,7 +94,7 @@ export default class RootContainer extends React.Component {
         if (this.props.initData !== 'ADK Panel') {
             loggerM.warn(`* render: ${this.props.initData}`, this.props, this.state);
         }
-        const { style, className, setData, debugData, story, addonRender } = this.props;
+        const { style, className, setData, debugData, story, addonRender, addonRenderDisabled } = this.props;
         /* const { initData, ID} = addonControl.default;*/
         const initData = this.props.initData;
         const enabled = this.state.containerEnabled;
@@ -109,7 +114,14 @@ export default class RootContainer extends React.Component {
         ) : null;
 
         const enabledAddon = (is) => {
-            if (!is) return <div> {story ? story() : null} </div>;
+            if (!is) {
+                return (
+                  <div>
+                    {addonRenderDisabled || null}
+                    {story ? story() : null}
+                  </div>
+                );
+            }
             return (
               <div> {addonRender || null} </div>
             );
@@ -125,3 +137,4 @@ export default class RootContainer extends React.Component {
 }
 
 RootContainer.propTypes = propTypes;
+RootContainer.defaultProps = defaultProps;

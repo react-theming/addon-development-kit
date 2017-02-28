@@ -104,7 +104,7 @@ function newStore() {
     return initStore(storeSettings);
 }
 
-function getDecor(initData, keyPref, decorComposer, keyGen) {
+function getDecor(initData, keyPref, decorComposer, decorComposerDisabled, keyGen) {
     let key;
     let addonStoreCompose;
     let Decorator;
@@ -141,6 +141,7 @@ function getDecor(initData, keyPref, decorComposer, keyGen) {
               }}
               story={storyFn}
               addonRender={addonDecorator(storyFn, initData, 'rootProps')}
+              addonRenderDisabled={decorComposerDisabled}
               style={{ width: '100%' }}
               className={`${CSS_CLASS}-decorator-${keyPref}`}
             />
@@ -158,7 +159,8 @@ export function decorator(initData, pref) {
 
 const keyGenDiff = (keyPref, context) => `${keyPref}::${context.kind}`;
 
-export function buidDecorator(initData, decorComposer, keyPref, keyGen = keyGenDiff) {
-    const deco = getDecor(initData, keyPref, decorComposer, keyGen);
+export function buidDecorator(initData, decorComposer, keyPref,
+    keyGen = keyGenDiff, decorComposerDisabled = null) {
+    const deco = getDecor(initData, keyPref, decorComposer, decorComposerDisabled, keyGen);
     return deco;
 }
