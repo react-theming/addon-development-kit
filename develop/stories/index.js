@@ -29,7 +29,7 @@ reqThemes.keys().forEach((filename) => {
  *  You can pass a single object or an array of themes
  */
 
-//globalDecorator('Global decorator');
+globalDecorator('Global decorator');
 
 storiesOf('No decorator', module)
     .add('Example1', () => (

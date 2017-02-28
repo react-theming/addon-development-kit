@@ -11,7 +11,7 @@ import { queryFetch, querySet } from '../utils/query';
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 const loggerC = loggerOff; // note: debug
 const loggerS = loggerOff; // note: debug
-const loggerQ = loggerOn; // note: debug
+const loggerQ = loggerOff; // note: debug
 
 export const CHANNEL_MASTER = 'MASTER';
 export const CHANNEL_SLAVE = 'SLAVE';
