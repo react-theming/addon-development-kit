@@ -17,11 +17,10 @@ import { ADDON_ID, PANEL_ID, ADDON_TITLE, CSS_CLASS } from './';
 
 export default function (addonSettings) {
     const settings = addonSettings.config;
-    const { defaultData, addonApi, config } = addonSettings;
-    console.log(addonSettings)
+//    const { defaultData, addonApi, config } = addonSettings;
     addons.register(settings.ADDON_ID, (api) => {
         const addonStoreCompose = initStore(
-          { defaultData, addonApi, config },
+          addonSettings,
           api,
         );
         const PanelContainer = initComposer(addonStoreCompose);

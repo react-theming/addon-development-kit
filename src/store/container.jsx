@@ -5,7 +5,7 @@ import { CHANNEL_STOP } from '../store/store';
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 
 const loggerM = loggerOff; // note: debug
-const loggerR = loggerOff; // note: debug
+const loggerR = loggerOn; // note: debug
 
 
 const propTypes = {

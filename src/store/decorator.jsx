@@ -9,7 +9,11 @@ const loggerHot = loggerOff; // note: debug
 
 const getID = keyPref => `${keyPref}${Math.round(Math.random() * 100)}`;
 
-const storeSettings = {};
+let storeSettings = {};
+
+export function setStoreSettings(initData) {
+    storeSettings = initData;
+}
 
 export function setDefaultData(data) {
     storeSettings.defaultData = data;

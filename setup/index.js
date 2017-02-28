@@ -3,13 +3,22 @@ import { addonManager } from '../src';
 import decorComposer from './containers/addonDecorator';
 import routes from './decoratorRoutes';
 
-import api from './api';
+import addonApi from './api';
 import config from './config';
 import defaultData from './defaultData';
 
-addonManager.setDefaultData(defaultData);
-addonManager.setAddonApi(api);
-addonManager.setConfig(config);
+//addonManager.setDefaultData(defaultData);
+//addonManager.setAddonApi(api);
+//addonManager.setConfig(config);
+addonManager.setStoreSettings({
+    defaultData,
+    addonApi,
+    config,
+//    queryParams: {
+//        label: 'init',
+//        index: 0,
+//    },
+});
 
 export function addonDecorator(initData) {
 //    const keyGen = (keyPref, context) => `${keyPref}::${context.kind}`;

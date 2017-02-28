@@ -21,4 +21,9 @@ export default {
     debugData(poddaStore) {
         logger.log('Addon Store:', poddaStore.getAll());
     },
+    queryFetch_(poddaStore, queryInitData) {
+        return {
+            queryData: queryInitData,
+        };
+    },
 };

@@ -6,10 +6,12 @@ import Podda from 'podda';
 
 import apiLib from './api';
 import { EVENT_ID_INIT, EVENT_ID_DATA } from '../';
+import { queryFetch, querySet } from '../utils/query';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 const loggerC = loggerOff; // note: debug
 const loggerS = loggerOff; // note: debug
+const loggerQ = loggerOn; // note: debug
 
 export const CHANNEL_MASTER = 'MASTER';
 export const CHANNEL_SLAVE = 'SLAVE';
@@ -34,13 +36,11 @@ const storeDefaultSettings = {
         EVENT_ID_DATA,
     },
     queryParams: {
-        label: 'init',
-        index: 0,
+//        label: 'init',
+//        index: 0,
     },
 };
 
-// todo: refact to initStore(storeConfig, storybookApi)
-/* defaultData = defaults, addonApi = {}, conf,*/
 export default function initStore(storeSettings, storybookApi) {
     const config = {
         ...storeDefaultSettings.config,
@@ -53,12 +53,11 @@ export default function initStore(storeSettings, storybookApi) {
     };
 
     const defaultData = storeSettings.defaultData || storeDefaultSettings.defaultData;
+    const queryParams = storeSettings.queryParams || storeDefaultSettings.queryParams;
 
-    const queryParams = null;
-
+    let queryInitData = null;
     const addonStore = new Podda(defaultData);
     loggerS.warn('*** new Store init ***');
-//    loggerS.log('config', config);
 //    loggerS.log('storeSettings', storeSettings);
 //    loggerS.log('storeDefaultSettings', storeDefaultSettings);
 
@@ -133,6 +132,10 @@ export default function initStore(storeSettings, storybookApi) {
             );
             if (channelRole === CHANNEL_STOP) return;
             if (dataChannel.to === channelId && dataChannel.id === peerId) {
+                if (dataChannel.dataStore.queryData) {
+                    // todo: разобраться с инициализацией queryData
+                    watchQuery(dataChannel.dataStore.queryData);
+                }
                 addonStore.bypass(dataChannel.dataStore, [onStoreChange]);
             }
         };
@@ -143,6 +146,7 @@ export default function initStore(storeSettings, storybookApi) {
                 role: CHANNEL_MASTER,
                 id: channelId,
                 to: 'any',
+                query: queryInitData,
             });
         };
 
@@ -189,20 +193,43 @@ export default function initStore(storeSettings, storybookApi) {
                 role: channelRole,
                 id: channelId,
                 to: peerId,
+                query: queryInitData,
             });
             loggerC.log(
                 `onInitChannel: I'm a ${channelRole} now, id=${channelId} peerId=${peerId}`,
             );
         };
 
+        const watchQuery = (queryData) => {
+            loggerQ.log(`queryData (id:${channelId}):`, queryData);
+            // todo: here add api for query manage (queryData => addonStore)
+            querySet(queryData, storybookApi);
+            queryInitData = queryData;
+        };
+
+        const storeQueryData = (queryData) => {
+//            addonStore.set('queryData', queryData);
+            let data = { queryData };
+            if (addonApi.queryFetch_) {
+                data = addonApi.queryFetch_(addonStore, queryData);
+            }
+            watchQuery(queryData);
+            addonStore.bypass(data, [onStoreChange]);
+        }
+
         const onInitChannel = (initData) => {
             loggerC.log('onInitChannel', initData);
+
             if (initData.role === CHANNEL_MASTER) {
                 setChannelSlave(initData);
             }
 
             if (initData.role === CHANNEL_SLAVE) {
                 setChannelMaster(initData);
+            }
+
+            if (initData.queryInit) {
+                queryInitData;
             }
 
             if (initData.role === CHANNEL_STOP) {
@@ -213,6 +240,7 @@ export default function initStore(storeSettings, storybookApi) {
                 }
             } else {
                 loggerC.log('storeEnquiry:', storeEnquiry);
+                if (initData.query) storeQueryData(initData.query)
                 if (storeEnquiry === ENQ_SEND) {
                     onStoreChange(addonStore.getAll());
                 }
@@ -236,9 +264,18 @@ export default function initStore(storeSettings, storybookApi) {
             channel = addons.getChannel();
             let stopStorySubscription;
 
+            const stopQuerySubscription = addonStore.watch(
+                'queryData', watchQuery);
+
             try {
+                queryInitData = queryFetch(queryParams, storybookApi);
+                if (queryInitData) {
+                    loggerQ.log('queryFetch:', queryInitData);
+                    storeQueryData(queryInitData)
+                }
+
                 channel.on(config.EVENT_ID_INIT, onInitChannel);
-                startChannel();
+                startChannel(queryInitData);
 
                 stopStorySubscription = addonStore.subscribe(onStoreChange);
 
@@ -252,6 +289,7 @@ export default function initStore(storeSettings, storybookApi) {
                 stopChannel();
                 channel.removeListener(config.EVENT_ID_INIT, onInitChannel);
                 channel.removeListener(config.EVENT_ID_DATA, onDataChannel);
+                stopQuerySubscription();
                 stopStorySubscription();
             };
         };
