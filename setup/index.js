@@ -14,10 +14,10 @@ addonManager.setStoreSettings({
     defaultData,
     addonApi,
     config,
-//    queryParams: {
-//        label: 'init',
-//        index: 0,
-//    },
+    queryParams: {
+        label: 'init',
+        index: 0,
+    },
 });
 
 export function addonDecorator(initData) {
