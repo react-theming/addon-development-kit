@@ -114,6 +114,13 @@ export default function initStore(storeSettings, storybookApi) {
         let peerId = null;
         let initCallback = null;
 
+        const watchQuery = (queryData) => {
+            loggerQ.log(`queryData (id:${channelId}):`, queryData);
+            // todo: here add api for query manage (queryData => addonStore)
+            querySet(queryData, storybookApi);
+            queryInitData = queryData;
+        };
+
         const onStoreChange = (dataStore) => {
             loggerS.log(`Store Changed in ${channelRole}`, dataStore);
             if (channelRole === CHANNEL_STOP) return;
@@ -133,7 +140,6 @@ export default function initStore(storeSettings, storybookApi) {
             if (channelRole === CHANNEL_STOP) return;
             if (dataChannel.to === channelId && dataChannel.id === peerId) {
                 if (dataChannel.dataStore.queryData) {
-                    // todo: разобраться с инициализацией queryData
                     watchQuery(dataChannel.dataStore.queryData);
                 }
                 addonStore.bypass(dataChannel.dataStore, [onStoreChange]);
@@ -200,22 +206,14 @@ export default function initStore(storeSettings, storybookApi) {
             );
         };
 
-        const watchQuery = (queryData) => {
-            loggerQ.log(`queryData (id:${channelId}):`, queryData);
-            // todo: here add api for query manage (queryData => addonStore)
-            querySet(queryData, storybookApi);
-            queryInitData = queryData;
-        };
-
         const storeQueryData = (queryData) => {
-//            addonStore.set('queryData', queryData);
             let data = { queryData };
-            if (addonApi.queryFetch_) {
-                data = addonApi.queryFetch_(addonStore, queryData);
+            if (addonApi.$queryFetch) {
+                data = addonApi.$queryFetch(addonStore, queryData);
             }
             watchQuery(queryData);
             addonStore.bypass(data, [onStoreChange]);
-        }
+        };
 
         const onInitChannel = (initData) => {
             loggerC.log('onInitChannel', initData);
@@ -228,9 +226,9 @@ export default function initStore(storeSettings, storybookApi) {
                 setChannelMaster(initData);
             }
 
-            if (initData.queryInit) {
-                queryInitData;
-            }
+//            if (initData.queryInit) {
+//                queryInitData;
+//            }
 
             if (initData.role === CHANNEL_STOP) {
                 loggerC.log(`Stop Channel: I was a ${channelRole}, id=${channelId}`);
@@ -240,7 +238,7 @@ export default function initStore(storeSettings, storybookApi) {
                 }
             } else {
                 loggerC.log('storeEnquiry:', storeEnquiry);
-                if (initData.query) storeQueryData(initData.query)
+                if (initData.query && !queryInitData) storeQueryData(initData.query);
                 if (storeEnquiry === ENQ_SEND) {
                     onStoreChange(addonStore.getAll());
                 }
@@ -268,10 +266,10 @@ export default function initStore(storeSettings, storybookApi) {
                 'queryData', watchQuery);
 
             try {
-                queryInitData = queryFetch(queryParams, storybookApi);
+                queryInitData = queryFetch(queryParams, storybookApi) || queryInitData;
                 if (queryInitData) {
                     loggerQ.log('queryFetch:', queryInitData);
-                    storeQueryData(queryInitData)
+                    storeQueryData(queryInitData);
                 }
 
                 channel.on(config.EVENT_ID_INIT, onInitChannel);

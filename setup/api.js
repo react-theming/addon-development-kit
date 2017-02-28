@@ -14,7 +14,7 @@ export default {
     setLabel(poddaStore, name, ind) {
         poddaStore.update(state => ({ index: ind, label: `now it's ${name}-${ind}` }));
     },
-    queryFetch_(poddaStore, queryInitData) {
+    $queryFetch(poddaStore, queryInitData) {
         const data = poddaStore.getAll();
         const isInit = data.index !== 100;
         return {

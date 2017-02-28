@@ -10,10 +10,10 @@ const panelSettings = {
     addonApi,
     render: panelRoutes,
     config,
-    queryParams: {
-        votes: 'init',
-        index: 0,
-    },
+//    queryParams: {
+//        votes: 'init',
+//        index: 0,
+//    },
 };
 
 register(panelSettings);

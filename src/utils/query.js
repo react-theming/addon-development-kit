@@ -1,4 +1,5 @@
 export function queryFetch(data, api) {
+    return null;
     if (!api || !data) return null;
     const keys = Object.keys(data);
     const fetchedData = {};
@@ -14,6 +15,7 @@ export function queryFetch(data, api) {
 }
 
 export function querySet(data, api) {
+    return null;
     if (!api || !data) return null;
     api.setQueryParams(data);
     return true;
