@@ -97,7 +97,7 @@ export default class RootContainer extends React.Component {
         const debugInfo = loggerR.on ? (
           <div>
             <p style={{ backgroundColor: enabled ? '#41537b' : '#525252', color: 'white' }}>
-              {enabled ? 'Enabled!' : 'Disabled*'}, <b>{/* ID*/}</b> initData: <i>{initData}</i>
+              {enabled ? 'Enabled!' : 'Disabled*'}, <b>{/* ID*/}</b> initData: <i>{initData.toString()}</i>
             </p>
             <button onClick={setData(initData)}>
                     setData

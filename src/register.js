@@ -33,7 +33,7 @@ export default function (addonSettings) {
               <PanelContainer
                 api={api}
                 addonControl={null}
-                initData={settings.initData}
+                initData={addonSettings.initData}
                 rootProps={{ enquiry: ENQ_ASK, ID: getID() }}
                 addonRender={addonPanel()}
                 style={{ width: '100%' }}

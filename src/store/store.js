@@ -8,7 +8,7 @@ import apiLib from './api';
 import { EVENT_ID_INIT, EVENT_ID_DATA } from '../';
 import { queryFetch, querySet } from '../utils/query';
 
-import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
+import logger, { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 const loggerC = loggerOff; // note: debug
 const loggerS = loggerOff; // note: debug
 const loggerQ = loggerOff; // note: debug
@@ -88,8 +88,19 @@ export default function initStore(storeSettings, storybookApi) {
         const apiMap = {};
         keys.forEach((val) => {
             apiMap[val] = function (...props) {
-                return () => apilist[val](poddaStore, ...props);
-            };
+                return () => {
+                    try {
+                        return apilist[val](poddaStore, ...props);
+                    } catch (err) {
+                        logger.groupCollapsed(`${err.name} in ${val} API: ${err.message}`);
+                        logger.log('store settings:', storeSettings);
+                        logger.log('store data:', addonStore.getAll());
+                        logger.log(err);
+                        logger.groupEnd(`${err.name} in ${val} API: ${err.message}`);
+                        return null;
+                    }
+                };
+            };  
         });
         return apiMap;
     }
