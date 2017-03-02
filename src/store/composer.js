@@ -7,8 +7,12 @@ export default function initComposer(addonStoreCompose) {
     function dataLoader(props, onData, { addonStore, apiMap, channelInit }) {
         logger.log('Composer init:', props.initData, addonStore.getAll());
 
-        const setupChannel = channelInit(props.rootProps.enquiry, props.rootProps.ID);
-        apiMap.dataInit(props.initData)();
+        const setupChannel = channelInit(
+            props.rootProps.enquiry,
+            props.rootProps.ID,
+            props.onChannelInit,
+        );
+        apiMap.$dataInit(props.initData)();
 
         const sendData = (storeData) => {
             logger.log('Composer ivoked:', props.initData, props.rootProps, addonStore.getAll());

@@ -9,7 +9,7 @@ export default {
 //        poddaStore.update(() => ({ index: ind, label: name }));
 //    },
 
-    dataInit(poddaStore, data) {
+    $dataInit(poddaStore, data) {
         logger.log('dataInit:', data);
         poddaStore.set('initData', data);
     },

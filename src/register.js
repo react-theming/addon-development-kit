@@ -40,6 +40,7 @@ export default function (addonSettings) {
                 addonRenderDisabled={addonDisabled()}
                 style={{ width: '100%' }}
                 className={`${settings.CSS_CLASS}-panel`}
+                onChannelInit={addonSettings.onChannelInit || null}
               />),
         });
     });

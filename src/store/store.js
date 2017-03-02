@@ -100,7 +100,7 @@ export default function initStore(storeSettings, storybookApi) {
                         return null;
                     }
                 };
-            };  
+            };
         });
         return apiMap;
     }
@@ -117,7 +117,7 @@ export default function initStore(storeSettings, storybookApi) {
      *  setupChannel - need to invoke in componentWillMount (see below)
      *
      */
-    function channelInit(storeEnquiry, id) {
+    function channelInit(storeEnquiry, id, onInit) {
         loggerC.info('channelInit storeEnquiry:', storeEnquiry, id);
         let channel;
         let channelRole = CHANNEL_STOP;
@@ -259,6 +259,10 @@ export default function initStore(storeSettings, storybookApi) {
                 initCallback({ channelRole, storeEnquiry, channelId, peerId });
             }
         };
+
+        if (typeof (onInit) === 'function') {
+            onInit(addonStore, storybookApi);
+        }
 
     /**
       * note: this callback should be invoked
