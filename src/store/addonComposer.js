@@ -9,8 +9,14 @@ export function addonComposer(storeHandler, Component) {
         const dataLoader = (props, onData, env) => {
             const addonStore = env.addonStore;
             const addonApi = env.apiMap;
+            const storybookApi = env.storybookApi;
             const sendData = (storeData) => {
-                const handledData = storeHandler(storeData, props, addonApi);
+                const handledData = storeHandler(
+                    storeData,
+                    props,
+                    addonApi,
+                    storybookApi,
+                );
                 onData(null, handledData);
             };
 

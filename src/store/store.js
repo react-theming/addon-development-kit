@@ -312,6 +312,7 @@ export default function initStore(storeSettings, storybookApi) {
             addonStore,
             apiMap: createApi(addonStore, { ...apiLib, ...addonApi }),
             channelInit,
+            storybookApi,
         },
     });
 
