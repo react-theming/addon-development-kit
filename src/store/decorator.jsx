@@ -106,7 +106,7 @@ function newStore() {
 
 function getDecor(initData, keyPref, decorComposer, decorComposerDisabled, keyGen) {
     let key;
-    let addonStoreCompose;
+    let addonStoreEnv;
     let Decorator;
     let addonDecorator;
 
@@ -116,16 +116,16 @@ function getDecor(initData, keyPref, decorComposer, decorComposerDisabled, keyGe
         key = keyGen(keyPref, context);
         if (!decorStoresMap[key]) {
             decorStoresMap[key] = decorStoresMap[key]
-                || addonStoreCompose
+                || addonStoreEnv
                 || newStore();
 
             loggerHot.info(`Init store for ${key}`, decorStoresMap);
         }
         if (isHotReload) {
             loggerHot.log(`Fetch store for ${key}`, decorStoresMap);
-            addonStoreCompose = decorStoresMap[key];
-            Decorator = initComposer(addonStoreCompose);
-            addonDecorator = decorComposer(addonStoreCompose);
+            addonStoreEnv = decorStoresMap[key];
+            Decorator = initComposer(addonStoreEnv);
+            addonDecorator = decorComposer(addonStoreEnv);
 
             isHotReload = false;
         }

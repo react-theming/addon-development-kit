@@ -19,14 +19,14 @@ export default function (addonSettings) {
     const settings = addonSettings.config;
 //    const { defaultData, addonApi, config } = addonSettings;
     addons.register(settings.ADDON_ID, (api) => {
-        const addonStoreCompose = initStore(
+        const addonStoreEnv = initStore(
           addonSettings,
           api,
         );
-        const PanelContainer = initComposer(addonStoreCompose);
+        const PanelContainer = initComposer(addonStoreEnv);
         const getID = () => `pd${Math.round(Math.random() * 100)}`;
-        const addonPanel = addonSettings.render ? addonSettings.render(addonStoreCompose) : null;
-        const addonDisabled = addonSettings.renderDisabled ? addonSettings.renderDisabled(addonStoreCompose) : null;
+        const addonPanel = addonSettings.render ? addonSettings.render(addonStoreEnv) : null;
+        const addonDisabled = addonSettings.renderDisabled ? addonSettings.renderDisabled(addonStoreEnv) : null;
         const addonRender = addonPanel || addonDisabled || null;
         
         if (addonRender) {
