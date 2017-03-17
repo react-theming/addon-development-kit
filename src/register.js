@@ -25,23 +25,26 @@ export default function (addonSettings) {
         );
         const PanelContainer = initComposer(addonStoreCompose);
         const getID = () => `pd${Math.round(Math.random() * 100)}`;
-        const addonPanel = addonSettings.render(addonStoreCompose);
-        const addonDisabled = addonSettings.renderDisabled ? addonSettings.renderDisabled(addonStoreCompose) : () => {};
-
-        addons.addPanel(settings.PANEL_ID, {
-            title: settings.ADDON_TITLE,
-            render: () => (
-              <PanelContainer
-                api={api}
-                addonControl={null}
-                initData={addonSettings.initData}
-                rootProps={{ enquiry: ENQ_ASK, ID: getID() }}
-                addonRender={addonPanel()}
-                addonRenderDisabled={addonDisabled()}
-                style={{ width: '100%' }}
-                className={`${settings.CSS_CLASS}-panel`}
-                onChannelInit={addonSettings.onChannelInit || null}
-              />),
-        });
+        const addonPanel = addonSettings.render ? addonSettings.render(addonStoreCompose) : null;
+        const addonDisabled = addonSettings.renderDisabled ? addonSettings.renderDisabled(addonStoreCompose) : null;
+        const addonRender = addonPanel || addonDisabled || null;
+        
+        if (addonRender) {
+            addons.addPanel(settings.PANEL_ID, {
+                title: settings.ADDON_TITLE,
+                render: () => (
+                  <PanelContainer
+                    api={api}
+                    addonControl={null}
+                    initData={addonSettings.initData}
+                    rootProps={{ enquiry: ENQ_ASK, ID: getID() }}
+                    addonRender={addonPanel()}
+                    addonRenderDisabled={addonDisabled ? addonDisabled() : () => {}}
+                    style={{ width: '100%' }}
+                    className={`${settings.CSS_CLASS}-panel`}
+                    onChannelInit={addonSettings.onChannelInit || null}
+                  />),
+            });
+        }
     });
 }
