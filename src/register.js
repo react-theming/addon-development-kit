@@ -15,7 +15,7 @@ import { ADDON_ID, PANEL_ID, ADDON_TITLE, CSS_CLASS } from './';
 //    CSS_CLASS,
 //};
 
-export default function (addonSettings) {
+export default function (addonSettings, onRegister) {
     const settings = addonSettings.config;
 //    const { defaultData, addonApi, config } = addonSettings;
     addons.register(settings.ADDON_ID, (api) => {
@@ -46,5 +46,17 @@ export default function (addonSettings) {
                   />),
             });
         }
+//        else {
+//            addons.addPanel('no', {
+//                title: 'no',
+//                render: () => {
+//                    if (onRegister) onRegister(addonStoreEnv);
+//                    return null
+//                }
+//            });                
+//        }
+
+        if (onRegister) onRegister(addonStoreEnv);
+                            
     });
 }

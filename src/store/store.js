@@ -205,6 +205,7 @@ export default function initStore(storeSettings, storybookApi) {
         const setChannelSlave = (initData) => {
             peerId = initData.id;
             channelRole = CHANNEL_SLAVE;
+            queryInitData = queryInitData || queryFetch(queryParams, storybookApi);
             channel.emit(config.EVENT_ID_INIT, {
                 info: 'so I\'m a slave',
                 role: channelRole,
@@ -279,6 +280,8 @@ export default function initStore(storeSettings, storybookApi) {
 
             const stopQuerySubscription = addonStore.watch(
                 'queryData', watchQuery);
+
+            loggerC.info('setupChannel:');
 
             try {
                 queryInitData = queryFetch(queryParams, storybookApi) || queryInitData;
