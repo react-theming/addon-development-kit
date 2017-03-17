@@ -1,3 +1,5 @@
+import { getStoreCompose } from './store';
+
 export function addonComposer(storeHandler, Component) {
 /** note: addonComposer
  *  storeHandler(storeData, props, addonApi)
@@ -5,7 +7,9 @@ export function addonComposer(storeHandler, Component) {
  *  currentStoreCompose - will be attached in decorator
  */
 
-    return function composeLinker(currentStoreCompose) {
+    return function composeLinker(env) {
+        const currentStoreCompose = getStoreCompose(env);
+        
         const dataLoader = (props, onData, env) => {
             const addonStore = env.addonStore;
             const addonApi = env.apiMap;

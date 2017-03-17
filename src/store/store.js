@@ -308,18 +308,43 @@ export default function initStore(storeSettings, storybookApi) {
         };
     }
 
-    const addonStoreCompose = setDefaults({
-    //    pure: true,
-        propsToWatch: [],
-        loadingHandler: () => (<p>Loading...</p>),
-        env: {
-            addonStore,
-            apiMap: createApi(addonStore, { ...apiLib, ...addonApi }),
-            channelInit,
-            storybookApi,
-        },
-    });
+    // changes: refactoring. addonStoreCompose goes to composer.js
 
+    /*
+        const addonStoreCompose = setDefaults({
+        //    pure: true,
+            propsToWatch: [],
+            loadingHandler: () => (<p>Loading...</p>),
+            env: {
+                addonStore,
+                apiMap: createApi(addonStore, { ...apiLib, ...addonApi }),
+                channelInit,
+                storybookApi,
+            },
+        });
+
+
+        return addonStoreCompose;
+    */
+
+
+    const env = {
+        addonStore,
+        apiMap: createApi(addonStore, { ...apiLib, ...addonApi }),
+        channelInit,
+        storybookApi,
+    };
     loggerS.log('Store created:', addonStore.getAll());
-    return addonStoreCompose;
+    return env;
+}
+
+const defaultHandler = () => (<p>Loading...</p>);
+
+export function getStoreCompose(environment, loadingHandler = defaultHandler, propsToWatch = []) {
+    return setDefaults({
+        // pure: true,
+        propsToWatch,
+        loadingHandler,
+        env: environment,
+    });
 }

@@ -1,9 +1,12 @@
+import { getStoreCompose } from './store';
 import Component from './container';
 
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
 const logger = loggerOff; // note: debug
 
-export default function initComposer(addonStoreCompose) {
+export default function initComposer(env) {
+    const addonStoreCompose = getStoreCompose(env);
+
     function dataLoader(props, onData, { addonStore, apiMap, channelInit }) {
         logger.log('Composer init:', props.initData, addonStore.getAll());
 
