@@ -4,7 +4,7 @@ import initStore, { ENQ_ASK } from './store/store';
 import initComposer from './store/composer';
 import { ADDON_ID, PANEL_ID, ADDON_TITLE, CSS_CLASS } from './';
 
-//const defaults = {
+// const defaults = {
 //    initData: 'Panel',
 //    defaultData: {},
 //    api: {},
@@ -13,7 +13,7 @@ import { ADDON_ID, PANEL_ID, ADDON_TITLE, CSS_CLASS } from './';
 //    PANEL_ID,
 //    ADDON_TITLE,
 //    CSS_CLASS,
-//};
+// };
 
 export default function (addonSettings, onRegister) {
     const settings = addonSettings.config;
@@ -26,9 +26,10 @@ export default function (addonSettings, onRegister) {
         const PanelContainer = initComposer(addonStoreEnv);
         const getID = () => `pd${Math.round(Math.random() * 100)}`;
         const addonPanel = addonSettings.render ? addonSettings.render(addonStoreEnv) : null;
-        const addonDisabled = addonSettings.renderDisabled ? addonSettings.renderDisabled(addonStoreEnv) : null;
+        const addonDisabled = addonSettings.renderDisabled ?
+              addonSettings.renderDisabled(addonStoreEnv) : null;
         const addonRender = addonPanel || addonDisabled || null;
-        
+
         if (addonRender) {
             addons.addPanel(settings.PANEL_ID, {
                 title: settings.ADDON_TITLE,
@@ -39,24 +40,14 @@ export default function (addonSettings, onRegister) {
                     initData={addonSettings.initData}
                     rootProps={{ enquiry: ENQ_ASK, ID: getID() }}
                     addonRender={addonPanel()}
-                    addonRenderDisabled={addonDisabled ? addonDisabled() : () => {}}
+                    addonRenderDisabled={addonDisabled ? addonDisabled() : null}
                     style={{ width: '100%' }}
                     className={`${settings.CSS_CLASS}-panel`}
                     onChannelInit={addonSettings.onChannelInit || null}
                   />),
             });
         }
-//        else {
-//            addons.addPanel('no', {
-//                title: 'no',
-//                render: () => {
-//                    if (onRegister) onRegister(addonStoreEnv);
-//                    return null
-//                }
-//            });                
-//        }
 
         if (onRegister) onRegister(addonStoreEnv);
-                            
     });
 }

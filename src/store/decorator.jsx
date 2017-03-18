@@ -79,24 +79,7 @@ class AddonManager {
         this.storesMap[key] = store;
     }
 
-//    storeCheckout(context, keyPref) {
-//        const key = `${keyPref}::${context.kind}`;
-//        const currentStore = this.storesMap[key] || initStore(
-//            this.defaultData,
-//            this.addonApi,
-//            this.setConfig,
-//        );
-//        this.fireSubscriptions(currentStore);
-//        return currentStore;
-//    }
-
-
-
 }
-
-//const addonManager = new AddonManager();
-//
-//export { addonManager };
 
 const decorStoresMap = {};
 
