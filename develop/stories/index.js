@@ -8,9 +8,6 @@ import { muiTheme } from 'storybook-addon-material-ui';
 import { WithNotes } from '@kadira/storybook-addon-notes';
 import { withKnobs, text, boolean, number } from '@kadira/storybook-addon-knobs';
 
-//import decorator from '../../src/store/decorator';
-import { addonDecorator, globalDecorator } from '../../setup/';
-
 import App from '../App';
 import Header from '../Header';
 import Intro from '../Intro';
@@ -29,7 +26,6 @@ reqThemes.keys().forEach((filename) => {
  *  You can pass a single object or an array of themes
  */
 
-globalDecorator('Global decorator');
 
 storiesOf('No decorator', module)
     .add('Example1', () => (
@@ -42,9 +38,10 @@ storiesOf('No decorator', module)
             <Button title="no decor 2" />
         </div>
     ))
+    .querry()
+
 
 storiesOf('Podda App1', module)
-    .addDecorator(addonDecorator('Decor111'))
     .add('Example1', () => (
         <div className="example-component">
             <Button title="Example 1" />
@@ -57,7 +54,6 @@ storiesOf('Podda App1', module)
     ));
 
 storiesOf('Podda App2', module)
-    .addDecorator(addonDecorator('Decor222'))
     .add('Example3', () => (
         <div className="example-component">
             <Button title="Example 3" />
