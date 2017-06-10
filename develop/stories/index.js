@@ -2,11 +2,11 @@
 /* eslint-disable react/jsx-filename-extension */
 
 import React from 'react';
-import { storiesOf, action, addDecorator } from '@kadira/storybook';
-import { setOptions } from '@kadira/storybook-addon-options';
+import { storiesOf, action, addDecorator } from '@storybook/react';
+import { setOptions } from '@storybook/addon-options';
 import { muiTheme } from 'storybook-addon-material-ui';
-import { WithNotes } from '@kadira/storybook-addon-notes';
-import { withKnobs, text, boolean, number } from '@kadira/storybook-addon-knobs';
+import { WithNotes } from '@storybook/addon-notes';
+import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
 
 import App from '../App';
 import Header from '../Header';

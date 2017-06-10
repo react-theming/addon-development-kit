@@ -1,6 +1,6 @@
 import React from 'react';
 import Immutable from 'immutable';
-import addons from '@kadira/storybook-addons'; // eslint-disable-line
+import addons from '@storybook/addons'; // eslint-disable-line
 import { setDefaults } from 'react-komposer';
 import Podda from 'podda';
 

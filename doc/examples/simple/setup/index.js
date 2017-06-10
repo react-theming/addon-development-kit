@@ -1,4 +1,4 @@
-import { addDecorator } from '@kadira/storybook';
+import { addDecorator } from '@storybook/react';
 import { buidDecorator, addonManager } from 'storybook-adk';
 import decorComposer from './containers/addonDecorator';
 import routes from './decoratorRoutes';

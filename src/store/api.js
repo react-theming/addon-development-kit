@@ -1,5 +1,5 @@
 import { loggerOn, loggerOff } from '../utils/logger'; // eslint-disable-line
-const logger = loggerOn; // note: debug
+const logger = loggerOff; // note: debug
 
 export default {
 //    incIndex(poddaStore, delta) {

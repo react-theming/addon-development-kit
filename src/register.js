@@ -1,5 +1,5 @@
 import React from 'react';
-import addons from '@kadira/storybook-addons';
+import addons from '@storybook/addons';
 import initStore, { ENQ_ASK } from './store/store';
 import initComposer from './store/composer';
 import { ADDON_ID, PANEL_ID, ADDON_TITLE, CSS_CLASS } from './';

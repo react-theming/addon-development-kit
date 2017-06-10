@@ -7,7 +7,6 @@ import config from './config';
 
 
 register(config, (env) => {
-    console.log(env);
     const setupChannel = env.channelInit(ENQ_SEND, 'qq01');
     const stopChannel = setupChannel();
 });
