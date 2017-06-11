@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { CHANNEL_STOP } from '../store/store';
 
@@ -9,17 +10,17 @@ const loggerR = loggerOff; // note: debug
 
 
 const propTypes = {
-    story: React.PropTypes.func,
-    setupChannel: React.PropTypes.func,
-    addonRender: React.PropTypes.element,
-    addonRenderDisabled: React.PropTypes.element,
+    story: PropTypes.func,
+    setupChannel: PropTypes.func,
+    addonRender: PropTypes.element,
+    addonRenderDisabled: PropTypes.element,
 
-    setData: React.PropTypes.func,
-    debugData: React.PropTypes.func,
-    initData: React.PropTypes.any,
+    setData: PropTypes.func,
+    debugData: PropTypes.func,
+    initData: PropTypes.any,
 
-    className: React.PropTypes.string,
-    style: React.PropTypes.shape(),
+    className: PropTypes.string,
+    style: PropTypes.shape(),
 };
 
 const defaultProps = {
