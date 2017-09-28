@@ -1,4 +1,4 @@
-# React Storybook Addon Development Kit
+# Storybook Addon Development Kit
 
 Based on [React Komposer](https://github.com/arunoda/react-komposer) and [Podda](https://github.com/arunoda/podda) addon core which solves the problem of communication between addons panel side and decorators side. It provides an ability to create story decorators controlled from the addon panel.
 
