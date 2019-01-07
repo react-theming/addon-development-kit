@@ -17,10 +17,14 @@ export default class ChannelStore {
 
     this.connect = () => {
       this.channel.on(EVENT_ID_INIT, this.onInitChannel);
-      this.channel.on(isPanel ? EVENT_ID_DATA : EVENT_ID_BACK, this.onDataChannel);
+      this.channel.on(
+        isPanel ? EVENT_ID_DATA : EVENT_ID_BACK,
+        this.onDataChannel
+      );
       this.onConnectedFn();
     };
-    this.emit = data => this.channel.emit(isPanel ? EVENT_ID_BACK : EVENT_ID_DATA, data);
+    this.emit = data =>
+      this.channel.emit(isPanel ? EVENT_ID_BACK : EVENT_ID_DATA, data);
     this.init = data => this.channel.emit(EVENT_ID_INIT, data);
     this.removeInit = () =>
       this.channel.removeListener(EVENT_ID_INIT, this.onInitChannel);
@@ -36,7 +40,7 @@ export default class ChannelStore {
   onDataChannel = updData => {
     this.store = {
       ...this.store,
-      ...updData
+      ...updData,
     };
     this.subscriber(this.store);
   };
@@ -52,7 +56,7 @@ export default class ChannelStore {
   send = data => {
     this.store = {
       ...this.store,
-      ...data
+      ...data,
     };
     this.emit(this.store);
     this.subscriber(this.store);

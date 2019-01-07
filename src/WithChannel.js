@@ -10,13 +10,13 @@ const withChannel = ({
   EVENT_ID_DATA,
   EVENT_ID_BACK,
   initData,
-  panel
+  panel,
 }) => WrappedComponent =>
   class extends React.Component {
     static displayName = `WithChannel(${getDisplayName(WrappedComponent)})`;
 
     state = {
-      data: initData || this.props.initData
+      data: initData || this.props.initData,
     };
 
     store = new ChannelStore({
@@ -25,7 +25,7 @@ const withChannel = ({
       EVENT_ID_BACK,
       name: this.props.pointName,
       initData: initData || this.props.initData,
-      isPanel: panel || this.props.panel
+      isPanel: panel || this.props.panel,
     });
 
     componentDidMount() {

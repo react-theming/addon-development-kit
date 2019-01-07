@@ -8,10 +8,12 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "start": "start-storybook -p 9001",
+    "start": "yarn prepare-dev && start-storybook -p 9001",
     "build-storybook": "build-storybook -s public",
-    "prepare_": "node .scripts/npm-prepare.js",
-    "postpublish_": "node .scripts/npm-postpublish.js"
+    "dev": "node .scripts/npm-prepare.js --watch",
+    "prepare-dev": "babel dev --out-dir dev-dist --verbose",
+    "prepare": "node .scripts/npm-prepare.js",
+    "postpublish": "node .scripts/npm-postpublish.js"
   },
   "dependencies": {
     "@storybook/addons": "^4.1.4",
