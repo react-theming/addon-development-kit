@@ -15,6 +15,11 @@ HOC that adds your PanelComponent to the addons panel. It will register it and p
 - **api**, manager API
 - **data**, current channel data (associated with selected story)
 - **setData**, callback to set data
+- **rect**, geometric dimensions of the addon area,
+- **Layout**, Helper Component with `display: flex` to make addon's markup to fit in portrait or landscape mode by switching `flex-direction`. Could be used alone or together with Blocks.
+- **Block**, Helper Block to use inside Layout and provides flex items behavior in portrait and landscape mode
+
+>see how works Layout and Blocks in the Live Demo
 
 example:
 
@@ -34,7 +39,6 @@ const AddonPanel = ({ api, data, setData, kind, story }) => (
 );
 
 register(AddonPanel);
-
 ```
 
 Then users can add your addon to Storybook like this:
@@ -43,7 +47,6 @@ Then users can add your addon to Storybook like this:
 // user's .storybook/addons.js
 
 import 'your-addon/register';
-
 ```
 
 ## Develop

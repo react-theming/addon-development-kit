@@ -8,7 +8,8 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "start": "yarn prepare-dev && start-storybook -p 9001",
+    "start-storybook": "yarn prepare-dev && yarn prepare && start-storybook -p 9001 --ci",
+    "start": "nodemon --exec yarn start-storybook",
     "build-storybook": "build-storybook -s public",
     "dev": "node .scripts/npm-prepare.js --watch",
     "prepare-dev": "babel dev --out-dir dev-dist --verbose",
@@ -16,6 +17,7 @@
     "postpublish": "node .scripts/npm-postpublish.js"
   },
   "dependencies": {
+    "@reach/rect": "^0.1.1",
     "@storybook/addons": "^4.1.4",
     "prop-types": "^15.6.2"
   },
@@ -32,6 +34,7 @@
     "babel-eslint": "^8.2.6",
     "babel-jest": "^23.4.2",
     "babel-loader": "^8.0.2",
+    "nodemon": "^1.18.9",
     "react": "16.7.0-alpha.2",
     "react-dom": "16.7.0-alpha.2",
     "react-scripts": "2.1.3"
