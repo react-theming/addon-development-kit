@@ -24,8 +24,8 @@ const withChannel = ({
       EVENT_ID_DATA,
       EVENT_ID_BACK,
       name: this.props.pointName,
-      initData: initData || this.props.initData,
-      isPanel: panel || this.props.panel,
+      initData: this.props.initData || initData,
+      isPanel: this.props.panel || panel,
     });
 
     componentDidMount() {

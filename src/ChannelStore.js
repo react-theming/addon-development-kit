@@ -23,11 +23,15 @@ export default class ChannelStore {
       );
       this.onConnectedFn();
     };
+
     this.emit = data =>
       this.channel.emit(isPanel ? EVENT_ID_BACK : EVENT_ID_DATA, data);
+
     this.init = data => this.channel.emit(EVENT_ID_INIT, data);
+
     this.removeInit = () =>
       this.channel.removeListener(EVENT_ID_INIT, this.onInitChannel);
+
     this.removeData = () =>
       this.channel.removeListener(EVENT_ID_DATA, this.onDataChannel);
   }

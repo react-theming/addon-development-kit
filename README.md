@@ -53,16 +53,20 @@ import 'your-addon/register';
 
 scripts:
 
-`yarn prepare` - compiles `src` to the `dist` folder by babel
+`yarn start` - compiles everything, starts Storybook and watches for changes
 
-`yarn dev` - watches for changes in `src`
+`yarn prepare` - compiles `src` to the `dist` folder by babel
 
 `yarn prepare-dev` - compiles `dev` to the `dev-dist` folder by babel
 
-`yarn start` - starts Storybook
 
 folders:
 
 `src` - source of the addon
 
-`dev` - addon usage example
+`dev` - addon usage
+
+
+how to develop:
+
+`yarn start` and edit files in `src` folder. To test API see `dev` folder.
