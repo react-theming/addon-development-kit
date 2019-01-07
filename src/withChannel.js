@@ -48,8 +48,9 @@ const withChannel = ({
       return (
         <WrappedComponent
           data={this.state.data}
-          sendData={this.store.send}
+          setData={this.store.send}
           store={this.store}
+          active={active}
           {...props}
         />
       );

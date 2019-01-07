@@ -2,6 +2,20 @@
 
 Keeps in sync addon's data through the channel
 
+## API
+
+### Addons Panel (Manager)
+
+**register(PanelComponent)**
+
+HOC that adds your PanelComponent to the addons panel. It will register it and provides follow props:
+
+- **kind**, a selected story kind name
+- **story**, a selected story name
+- **api**, manager API
+- **data**, current channel data (associated with selected story)
+- **setData**, callback to set data
+
 ## Develop
 
 scripts:
