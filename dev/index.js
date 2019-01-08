@@ -17,6 +17,6 @@ export default withChannel({
   EVENT_ID_INIT,
   EVENT_ID_DATA,
   EVENT_ID_BACK,
-  initData: { info: 'data1' },
+  // initData: { info: 'data1' },
   panel: false,
 })(DataInfo);

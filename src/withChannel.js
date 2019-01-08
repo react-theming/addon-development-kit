@@ -16,7 +16,7 @@ const withChannel = ({
     static displayName = `WithChannel(${getDisplayName(WrappedComponent)})`;
 
     state = {
-      data: initData || this.props.initData,
+      data: this.props.initData || initData,
     };
 
     store = new ChannelStore({
@@ -29,21 +29,37 @@ const withChannel = ({
     });
 
     componentDidMount() {
+      this.debugLog('componentDidMount');
       this.store.onData(this.onData);
-      if (this.state.data) {
-        this.store.onConnected(() => this.store.send(this.state.data));
+      if (this.state.data && !this.state.isPanel) {
+        this.store.onConnected(() => this.store.sendInit(this.state.data));
       }
       this.store.connect();
     }
 
     componentWillUnmount() {
+      this.debugLog('componentWillUnmount');
       this.store.disconnect();
     }
+
+    debug = true;
+
+    debugLog = message => {
+      if (!this.debug) {
+        return;
+      }
+      console.log(
+        this.store.isPanel ? 'Panel:\n' : 'Preview:\n',
+        message,
+        this.store.store
+      );
+    };
 
     onData = data => this.setState({ data });
 
     render() {
       const { pointName, initData, active, ...props } = this.props;
+      console.log('​extends -> render -> this.state.data', this.state.data);
       if (active === false) return null;
       return (
         <WrappedComponent

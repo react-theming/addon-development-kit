@@ -115,7 +115,7 @@ const WithChannel = withChannel({
   EVENT_ID_INIT,
   EVENT_ID_DATA,
   EVENT_ID_BACK,
-  initData: { foo: 'foo' },
+  initData: { panel: 'foo' },
   panel: true,
 })(PanelHOC);
 

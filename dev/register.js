@@ -18,14 +18,14 @@ const AddonPanel = ({
   Block,
 }) => {
   return (
-    <Layout style={{ padding: 0 }} onClick={console.log}>
+    <Layout style={{ padding: 0 }}>
       <Block style={{ ...blockStyle, minWidth: 200 }}>kind: {kind}</Block>
       <Block style={blockStyle}>story: {story}</Block>
       <Block style={blockStyle} size={200}>
         data ({JSON.stringify(data)})
       </Block>
       <Block style={blockStyle}>
-        <button onClick={() => setData({ foo: 'bar' })}>setData</button>
+        <button onClick={() => setData({ panel: 'bar' })}>setData</button>
       </Block>
       <Block style={blockStyle}>data ({JSON.stringify(rect, null, 2)})</Block>
     </Layout>

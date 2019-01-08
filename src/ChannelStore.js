@@ -11,6 +11,7 @@ export default class ChannelStore {
   }) {
     this.store = initData;
     this.name = name;
+    this.isPanel = isPanel;
     this.subscriber = () => {};
     this.onConnectedFn = () => {};
     this.channel = addons.getChannel();
@@ -37,6 +38,7 @@ export default class ChannelStore {
   }
 
   onInitChannel = initData => {
+		console.log("​onInitChannel", initData)
     this.store = initData;
     this.subscriber(this.store);
   };
