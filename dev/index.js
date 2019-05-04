@@ -26,7 +26,7 @@ export const keepInfo = initData => {
     current: initData,
   };
   const onData = val => {
-    console.log('onData (story)', data);
+    // console.log('onData (story)', data);
     data.current = val;
   };
   return <RenderInfo initData={data.current} onData={onData} />;

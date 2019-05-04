@@ -116,6 +116,7 @@ const WithChannel = withChannel({
   EVENT_ID_INIT,
   EVENT_ID_DATA,
   EVENT_ID_BACK,
+  ADDON_ID,
   initData: { panel: 'foo' },
   panel: true,
 })(PanelHOC);
@@ -131,8 +132,6 @@ export const register = (Panel, type = addonTypes.PANEL) =>
           key={key}
           api={api}
           active={active}
-          ADDON_ID={ADDON_ID}
-          PANEL_ID={PANEL_ID}
           PANEL_Title={PANEL_Title}
           component={Panel}
         />

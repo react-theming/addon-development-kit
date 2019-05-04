@@ -20,7 +20,7 @@ const AddonPanel = ({
   return (
     <Layout style={{ padding: 0 }}>
       <Block style={{ ...blockStyle, minWidth: 200 }}>kind: {kind}</Block>
-      <Block style={blockStyle}>story: {story}</Block>
+      <Block style={blockStyle}>{JSON.stringify(api.getCurrentStoryData())}</Block>
       <Block style={blockStyle} size={200}>
         data ({JSON.stringify(data)})
       </Block>

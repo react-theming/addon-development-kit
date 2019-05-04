@@ -5,10 +5,18 @@ import ChannelStore from './ChannelStore';
 const getDisplayName = WrappedComponent =>
   WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
+/* It return nothing on init */
+const getInitDataFromParameters = (api, addonId) => {
+  const storyData = api.getCurrentStoryData()
+	console.log("TCL: getInitDataFromParameters -> storyData", storyData)
+  return api.getParameters();
+};
+
 const withChannel = ({
   EVENT_ID_INIT,
   EVENT_ID_DATA,
   EVENT_ID_BACK,
+  ADDON_ID,
   initData,
   panel,
 }) => WrappedComponent =>
@@ -16,7 +24,11 @@ const withChannel = ({
     static displayName = `WithChannel(${getDisplayName(WrappedComponent)})`;
 
     state = {
-      data: this.props.initData || initData,
+      data: {
+        ...initData,
+        ...this.props.initData,
+        ...getInitDataFromParameters(this.props.api, ADDON_ID),
+      },
     };
 
     store = new ChannelStore({
@@ -24,7 +36,7 @@ const withChannel = ({
       EVENT_ID_DATA,
       EVENT_ID_BACK,
       name: this.props.pointName,
-      initData: this.props.initData || initData,
+      initData: this.state.data,
       isPanel: this.props.panel || panel,
     });
 
@@ -42,7 +54,8 @@ const withChannel = ({
       this.store.disconnect();
     }
 
-    debug = true;
+    // debug = true;
+    debug = false;
 
     debugLog = message => {
       if (!this.debug) {
@@ -62,7 +75,7 @@ const withChannel = ({
 
     render() {
       const { pointName, initData, active, onData, ...props } = this.props;
-      console.log('​extends -> render -> this.state.data', this.state.data);
+      // console.log('​extends -> render -> this.state.data', this.state.data);
       if (active === false) return null;
       return (
         <WrappedComponent
