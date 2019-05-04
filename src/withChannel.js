@@ -55,10 +55,13 @@ const withChannel = ({
       );
     };
 
-    onData = data => this.setState({ data });
+    onData = data => {
+      // this.props.onData(data);
+      this.setState({ data });
+    };
 
     render() {
-      const { pointName, initData, active, ...props } = this.props;
+      const { pointName, initData, active, onData, ...props } = this.props;
       console.log('​extends -> render -> this.state.data', this.state.data);
       if (active === false) return null;
       return (

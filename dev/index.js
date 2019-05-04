@@ -13,10 +13,21 @@ const DataInfo = ({ data, setData }) => {
   return <div>{JSON.stringify(data, null, 2)}</div>;
 };
 
-export default withChannel({
+const RenderInfo = withChannel({
   EVENT_ID_INIT,
   EVENT_ID_DATA,
   EVENT_ID_BACK,
   // initData: { info: 'data1' },
   panel: false,
 })(DataInfo);
+
+export const keepInfo = initData => {
+  const data = {
+    current: initData,
+  };
+  const onData = val => {
+    console.log('onData (story)', data);
+    data.current = val;
+  };
+  return <RenderInfo initData={data.current} onData={onData} />;
+};
