@@ -8,7 +8,8 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "start-storybook": "yarn prepare-dev && yarn prepare && start-storybook -p 9001 --ci",
+    "prepare-storybook": "yarn prepare-dev && yarn prepare && start-storybook -p 9001 --ci",
+    "start-storybook": "start-storybook -p 9001 --ci",
     "start": "nodemon --exec yarn start-storybook",
     "build-storybook": "build-storybook -s public",
     "dev": "node .scripts/npm-prepare.js --watch",
@@ -19,6 +20,7 @@
   "dependencies": {
     "@reach/rect": "^0.2.1",
     "@storybook/addons": "^5.0.11",
+    "@storybook/core-events": "^5.0.11",
     "prop-types": "^15.6.2"
   },
   "devDependencies": {
@@ -69,8 +71,8 @@
   },
   "homepage": "https://github.com/sm-react/storybook-adk",
   "peerDependencies": {
-    "@storybook/addons": "^3.0.0 || ^4.0.0 || ^5.0.0",
-    "@storybook/react": "^3.0.0 || ^4.0.0 || ^5.0.0",
+    "@storybook/addons": "^5.0.0",
+    "@storybook/react": "^5.0.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
   }

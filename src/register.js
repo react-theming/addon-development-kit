@@ -1,5 +1,6 @@
 import React from 'react';
-import addons from '@storybook/addons';
+import addons, { types as addonTypes } from '@storybook/addons';
+import { STORY_CHANGED } from '@storybook/core-events';
 import Rect from '@reach/rect';
 
 import {
@@ -72,7 +73,7 @@ class PanelHOC extends React.Component {
     this.state = {
       ...urlState,
     };
-    props.api.onStory((kind, story) => this.setState({ kind, story }));
+    props.api.on(STORY_CHANGED, (kind, story) => this.setState({ kind, story }));
   }
   render() {
     const Panel = this.props.component;
@@ -119,12 +120,15 @@ const WithChannel = withChannel({
   panel: true,
 })(PanelHOC);
 
-export const register = Panel =>
+export const register = (Panel, type = addonTypes.PANEL) =>
   addons.register(ADDON_ID, api => {
-    addons.addPanel(PANEL_ID, {
+    addons.add(PANEL_ID, {
       title: PANEL_Title,
-      render: ({ active } = {}) => (
+      type,
+      id: PANEL_ID,
+      render: ({ active, key } = {}) => (
         <WithChannel
+          key={key}
           api={api}
           active={active}
           ADDON_ID={ADDON_ID}
@@ -134,4 +138,5 @@ export const register = Panel =>
         />
       ),
     });
+
   });

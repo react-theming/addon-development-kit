@@ -1,2 +1,2 @@
-import '../dev-dist/register';
+import '../dev/register';
 import '@storybook/addon-actions/register';

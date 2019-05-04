@@ -1,6 +1,5 @@
 import React from 'react';
-import addons from '@storybook/addons';
-// import { register } from '../dist/register';
+import { register } from '../src/register';
 
 const blockStyle = {
   margin: 2,
@@ -33,13 +32,4 @@ const AddonPanel = ({
   );
 };
 
-// register(AddonPanel);
-
-addons.register('ZZZ123', api => {
-  addons.addPanel('ZZZ123-P', {
-    title: 'ZZZZZ',
-    render: ({ active, key } = {}) => (
-      active && <p key={key}>ZZZZZ Panel</p>
-    ),
-  });
-})
+register(AddonPanel);

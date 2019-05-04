@@ -1,7 +1,8 @@
 {
   "watch": [
     "./src/",
-    "./dev/"
+    "./dev/",
+    "./.storybook"
   ],
   "ext": "js"
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { storiesOf, addDecorator } from '@storybook/react';
 
-import { keepInfo } from '../dev-dist/index';
+import { keepInfo } from '../dev/index';
 
 
 
