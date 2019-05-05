@@ -1,11 +1,9 @@
 import React from 'react';
 import withChannel from './withChannel';
 
-import {
-  getConfig,
-} from './config';
+import { getConfig } from './config';
 
-export const createDecorator = Component => initData => (getStory, context) => {
+export const createDecorator = (Component, { isGlobal } = {}) => initData => (getStory, context) => {
   const {
     ADDON_ID,
     EVENT_ID_INIT,
@@ -13,6 +11,10 @@ export const createDecorator = Component => initData => (getStory, context) => {
     EVENT_ID_BACK,
     PARAM_Key,
   } = getConfig();
+
+  const parameters = context.parameters && context.parameters[PARAM_Key];
+  const storyId = isGlobal ? null : context.id;
+
   const WithChannel = withChannel({
     EVENT_ID_INIT,
     EVENT_ID_DATA,
@@ -20,17 +22,11 @@ export const createDecorator = Component => initData => (getStory, context) => {
     ADDON_ID,
     initData,
     panel: false,
+    parameters,
+    storyId,
   })(Component);
 
-  const parameters = context.parameters[PARAM_Key];
-
-  return (
-    <WithChannel
-      getStory={getStory}
-      context={context}
-      parameters={parameters}
-    />
-  );
+  return <WithChannel getStory={getStory} context={context} />;
 };
 
 export const setParameters = () => {

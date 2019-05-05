@@ -5,14 +5,6 @@ import ChannelStore from './ChannelStore';
 const getDisplayName = WrappedComponent =>
   WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
-/* It return nothing on init */
-const getInitDataFromParameters = (api, addonId) => {
-  if (!api) return null
-  const storyData = api.getCurrentStoryData()
-	console.log("TCL: getInitDataFromParameters -> storyData", storyData)
-  return api.getParameters();
-};
-
 const withChannel = ({
   EVENT_ID_INIT,
   EVENT_ID_DATA,
@@ -20,6 +12,8 @@ const withChannel = ({
   ADDON_ID,
   initData,
   panel,
+  parameters,
+  storyId,
 }) => WrappedComponent =>
   class extends React.Component {
     static displayName = `WithChannel(${getDisplayName(WrappedComponent)})`;
@@ -28,11 +22,11 @@ const withChannel = ({
       data: {
         ...initData,
         ...this.props.initData,
-        ...getInitDataFromParameters(this.props.api, ADDON_ID),
+        ...parameters,
       },
     };
 
-    isPanel = this.props.panel || panel
+    isPanel = this.props.panel || panel;
     store = new ChannelStore({
       EVENT_ID_INIT,
       EVENT_ID_DATA,
@@ -40,6 +34,7 @@ const withChannel = ({
       name: this.props.pointName,
       initData: this.state.data,
       isPanel: this.isPanel,
+      storyId,
     });
 
     componentDidMount() {
@@ -85,6 +80,7 @@ const withChannel = ({
           setData={this.store.send}
           store={this.store}
           active={active}
+          parameters={parameters}
           {...props}
         />
       );

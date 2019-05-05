@@ -1,5 +1,7 @@
 import addons from '@storybook/addons';
 
+const GLOBAL = 'global';
+
 export default class ChannelStore {
   constructor({
     EVENT_ID_INIT,
@@ -9,6 +11,7 @@ export default class ChannelStore {
     name = 'store',
     initData = {},
     isPanel = false,
+    storyId,
   }) {
     this.EVENT_ID_INIT = EVENT_ID_INIT;
     this.EVENT_ID_DATA = EVENT_ID_DATA;
@@ -16,17 +19,20 @@ export default class ChannelStore {
     this.name = name;
     this.initData = initData;
     this.isPanel = isPanel;
+    this.id = storyId;
 
-
-
-    console.log(`New Store Created for ${isPanel ? 'Panel' : 'Preview'}`,
-    EVENT_ID_INIT,
-    EVENT_ID_DATA,
-    EVENT_ID_BACK,
+    console.log(
+      `New Store Created for ${isPanel ? 'Panel' : 'Preview'}`,
+      EVENT_ID_INIT,
+      EVENT_ID_DATA,
+      EVENT_ID_BACK
     );
   }
 
-  store = this.initData;
+  store = {
+    [GLOBAL]: { init: this.initData || {}, over: {} },
+  };
+  selectorId = null;
 
   subscriber = () => {};
   onConnectedFn = () => {};
@@ -44,12 +50,12 @@ export default class ChannelStore {
   };
 
   emit = data =>
-    this.channel.emit(
-      this.isPanel ? this.EVENT_ID_BACK : this.EVENT_ID_DATA,
-      data
-    );
+    this.channel.emit(this.isPanel ? this.EVENT_ID_BACK : this.EVENT_ID_DATA, {
+      data,
+      id: this.id,
+    });
 
-  init = data => this.channel.emit(this.EVENT_ID_INIT, data);
+  init = data => this.channel.emit(this.EVENT_ID_INIT, { data, id: this.id });
 
   removeInit = () =>
     this.channel.removeListener(this.EVENT_ID_INIT, this.onInitChannel);
@@ -61,40 +67,77 @@ export default class ChannelStore {
     );
 
   onInitChannel = initData => {
-    console.log(
-      `Channel Store (${
-        this.isPanel ? 'Panel' : 'Decorator'
-      }) Received Init Data`,
-      initData
-    );
-    this.store = initData;
-    this.subscriber(this.store);
+    const { data, id } = initData;
+    const selectorId = id || GLOBAL;
+    const selectedData = this.store[selectorId];
+    selectedData.init = data;
+    selectedData.over = selectedData.over || {};
+    this.selectorId = selectorId;
+    this.subscriber();
   };
 
   onDataChannel = updData => {
-    this.store = {
-      ...this.store,
-      ...updData,
+    const { data, id } = updData;
+    if (this.isPanel) {
+      const selectorId = id || GLOBAL;
+      const selectedData = this.store[selectorId];
+      selectedData.over = data;
+      this.selectorId = selectorId;
+    } else {
+      this.store = updData;
+    }
+
+    this.subscriber();
+  };
+
+  selectData = () => {
+    const id = this.isPanel ? this.selectorId : this.id;
+
+    const { global } = this.store;
+    const local = this.store[id];
+
+    const finalData = {
+      ...global.init,
+      ...local.init,
+      ...global.over,
+      ...local.over,
     };
-    this.subscriber(this.store);
+
+    return finalData;
   };
 
   onData = subscriberFn => {
-    this.subscriber = subscriberFn;
+    this.subscriber = () => {
+      const data = this.selectData();
+      subscriberFn(data);
+    };
   };
 
   onConnected = onConnectedFn => {
     this.onConnectedFn = onConnectedFn;
   };
 
-  send = data => {
-    this.store = {
-      ...this.store,
-      ...data,
-    };
+  send = () => {
     this.emit(this.store);
-    this.subscriber(this.store);
   };
+
+  defaultReducer = (store, payload) => ({
+    ...store,
+    ...payload,
+  });
+
+  _createAction = (reducer = this.defaultReducer, subId) => {
+    return payload => {
+      const subData = this.store[subId];
+      subData.over = reducer(global.over, payload);
+      this.send();
+      this.subscriber();
+    };
+  };
+
+  createGlobalAction = reducer => this._createAction(reducer, GLOBAL);
+  createLocalAction = reducer =>
+    this._createAction(reducer, this.selectedId || this.id);
 
   sendInit = data => {
     this.init(data);
