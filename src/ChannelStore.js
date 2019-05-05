@@ -5,6 +5,7 @@ export default class ChannelStore {
     EVENT_ID_INIT,
     EVENT_ID_DATA,
     EVENT_ID_BACK,
+
     name = 'store',
     initData = {},
     isPanel = false,
@@ -16,7 +17,13 @@ export default class ChannelStore {
     this.initData = initData;
     this.isPanel = isPanel;
 
-    // console.log(`New Store Created for ${isPanel ? 'Panel' : 'Preview'}`);
+
+
+    console.log(`New Store Created for ${isPanel ? 'Panel' : 'Preview'}`,
+    EVENT_ID_INIT,
+    EVENT_ID_DATA,
+    EVENT_ID_BACK,
+    );
   }
 
   store = this.initData;

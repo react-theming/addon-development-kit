@@ -2,14 +2,17 @@ import React from 'react';
 import withChannel from './withChannel';
 
 import {
-  ADDON_ID,
-  EVENT_ID_INIT,
-  EVENT_ID_DATA,
-  EVENT_ID_BACK,
-  PARAM_Key,
+  getConfig,
 } from './config';
 
 export const createDecorator = Component => initData => (getStory, context) => {
+  const {
+    ADDON_ID,
+    EVENT_ID_INIT,
+    EVENT_ID_DATA,
+    EVENT_ID_BACK,
+    PARAM_Key,
+  } = getConfig();
   const WithChannel = withChannel({
     EVENT_ID_INIT,
     EVENT_ID_DATA,
@@ -30,6 +33,9 @@ export const createDecorator = Component => initData => (getStory, context) => {
   );
 };
 
-export const setParameters = params => ({
-  [PARAM_Key]: params,
-});
+export const setParameters = () => {
+  const { PARAM_Key } = getConfig();
+  return params => ({
+    [PARAM_Key]: params,
+  });
+};

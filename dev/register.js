@@ -1,5 +1,6 @@
 import React from 'react';
 import { register } from '../src/register';
+import './config'
 
 const blockStyle = {
   margin: 2,

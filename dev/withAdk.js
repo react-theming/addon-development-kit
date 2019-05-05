@@ -1,5 +1,6 @@
 import React from 'react';
 import { createDecorator, setParameters } from '../src/decorator';
+import './config'
 
 const DecoratorUI = ({ context, getStory, data, parameters }) => (
   <div>
@@ -17,4 +18,4 @@ const DecoratorUI = ({ context, getStory, data, parameters }) => (
 );
 
 export const withAdk = createDecorator(DecoratorUI);
-export const adkParams = setParameters
+export const adkParams = setParameters()
