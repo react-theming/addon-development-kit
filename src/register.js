@@ -89,6 +89,7 @@ class PanelHOC extends React.Component {
           return (
             <div ref={ref} name="addon-holder" style={{ height: '100%' }}>
               <Panel
+                {...this.props.actions}
                 api={api}
                 active={active}
                 data={data}
@@ -110,7 +111,7 @@ class PanelHOC extends React.Component {
   }
 }
 
-export const register = (Panel, { type = addonTypes.PANEL, initData } = {}) => {
+export const register = createActions => (Panel, { type = addonTypes.PANEL, initData } = {}) => {
   const config = getConfig();
   const {
     EVENT_ID_INIT,
@@ -128,6 +129,7 @@ export const register = (Panel, { type = addonTypes.PANEL, initData } = {}) => {
     ADDON_ID,
     initData,
     panel: true,
+    createActions,
   })(PanelHOC);
 
   addons.register(ADDON_ID, api => {

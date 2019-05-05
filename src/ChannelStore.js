@@ -84,7 +84,7 @@ export default class ChannelStore {
       selectedData.over = data;
       this.selectorId = selectorId;
     } else {
-      this.store = updData;
+      this.store = data;
     }
 
     this.subscriber();
@@ -93,8 +93,8 @@ export default class ChannelStore {
   selectData = () => {
     const id = this.isPanel ? this.selectorId : this.id;
 
-    const { global } = this.store;
-    const local = this.store[id];
+    const { global = {} } = this.store;
+    const local = this.store[id] || {};
 
     const finalData = {
       ...global.init,

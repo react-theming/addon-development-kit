@@ -14,6 +14,7 @@ const withChannel = ({
   panel,
   parameters,
   storyId,
+  createActions = {},
 }) => WrappedComponent =>
   class extends React.Component {
     static displayName = `WithChannel(${getDisplayName(WrappedComponent)})`;
@@ -36,6 +37,22 @@ const withChannel = ({
       isPanel: this.isPanel,
       storyId,
     });
+
+
+    prepareActions = () => {
+      const {
+        createGlobalAction: global,
+        createLocalAction: local,
+      } = this.store;
+      const isFn = typeof createActions === 'function';
+      const actions = isFn
+        ? createActions({ global, local })
+        : Object.entries(createActions)
+            .map(([name, reducer]) => ({ [name]: global(reducer) }))
+            .reduce((acc, cur) => ({ ...acc, ...cur }), {});
+      return actions;
+    };
+    actions = this.prepareActions();
 
     componentDidMount() {
       this.debugLog('componentDidMount');
@@ -81,6 +98,7 @@ const withChannel = ({
           store={this.store}
           active={active}
           parameters={parameters}
+          actions = {this.actions}
           {...props}
         />
       );
