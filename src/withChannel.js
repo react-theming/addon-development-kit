@@ -7,6 +7,7 @@ const getDisplayName = WrappedComponent =>
 
 /* It return nothing on init */
 const getInitDataFromParameters = (api, addonId) => {
+  if (!api) return null
   const storyData = api.getCurrentStoryData()
 	console.log("TCL: getInitDataFromParameters -> storyData", storyData)
   return api.getParameters();
@@ -31,19 +32,20 @@ const withChannel = ({
       },
     };
 
+    isPanel = this.props.panel || panel
     store = new ChannelStore({
       EVENT_ID_INIT,
       EVENT_ID_DATA,
       EVENT_ID_BACK,
       name: this.props.pointName,
       initData: this.state.data,
-      isPanel: this.props.panel || panel,
+      isPanel: this.isPanel,
     });
 
     componentDidMount() {
       this.debugLog('componentDidMount');
       this.store.onData(this.onData);
-      if (this.state.data && !this.state.isPanel) {
+      if (this.state.data && !this.isPanel) {
         this.store.onConnected(() => this.store.sendInit(this.state.data));
       }
       this.store.connect();

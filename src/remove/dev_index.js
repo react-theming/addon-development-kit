@@ -1,5 +1,5 @@
 import React from 'react';
-import withChannel from '../src/withChannel';
+import withChannel from '../withChannel';
 import {
   ADDON_ID,
   PANEL_ID,
@@ -7,7 +7,7 @@ import {
   EVENT_ID_INIT,
   EVENT_ID_DATA,
   EVENT_ID_BACK,
-} from '../src/config';
+} from '../config';
 
 const DataInfo = ({ data, setData }) => {
   return <div>{JSON.stringify(data, null, 2)}</div>;

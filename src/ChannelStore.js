@@ -9,36 +9,57 @@ export default class ChannelStore {
     initData = {},
     isPanel = false,
   }) {
-    this.store = initData;
+    this.EVENT_ID_INIT = EVENT_ID_INIT;
+    this.EVENT_ID_DATA = EVENT_ID_DATA;
+    this.EVENT_ID_BACK = EVENT_ID_BACK;
     this.name = name;
+    this.initData = initData;
     this.isPanel = isPanel;
-    this.subscriber = () => {};
-    this.onConnectedFn = () => {};
-    this.channel = addons.getChannel();
 
-    this.connect = () => {
-      this.channel.on(EVENT_ID_INIT, this.onInitChannel);
-      this.channel.on(
-        isPanel ? EVENT_ID_DATA : EVENT_ID_BACK,
-        this.onDataChannel
-      );
-      this.onConnectedFn();
-    };
-
-    this.emit = data =>
-      this.channel.emit(isPanel ? EVENT_ID_BACK : EVENT_ID_DATA, data);
-
-    this.init = data => this.channel.emit(EVENT_ID_INIT, data);
-
-    this.removeInit = () =>
-      this.channel.removeListener(EVENT_ID_INIT, this.onInitChannel);
-
-    this.removeData = () =>
-      this.channel.removeListener(EVENT_ID_DATA, this.onDataChannel);
+    // console.log(`New Store Created for ${isPanel ? 'Panel' : 'Preview'}`);
   }
 
+  store = this.initData;
+
+  subscriber = () => {};
+  onConnectedFn = () => {};
+
+  channel = addons.getChannel();
+
+  connect = () => {
+    if (this.isPanel) {
+      this.channel.on(this.EVENT_ID_INIT, this.onInitChannel);
+      this.channel.on(this.EVENT_ID_DATA, this.onDataChannel);
+    } else {
+      this.channel.on(this.EVENT_ID_BACK, this.onDataChannel);
+    }
+    this.onConnectedFn();
+  };
+
+  emit = data =>
+    this.channel.emit(
+      this.isPanel ? this.EVENT_ID_BACK : this.EVENT_ID_DATA,
+      data
+    );
+
+  init = data => this.channel.emit(this.EVENT_ID_INIT, data);
+
+  removeInit = () =>
+    this.channel.removeListener(this.EVENT_ID_INIT, this.onInitChannel);
+
+  removeData = () =>
+    this.channel.removeListener(
+      this.isPanel ? this.EVENT_ID_DATA : this.EVENT_ID_BACK,
+      this.onDataChannel
+    );
+
   onInitChannel = initData => {
-		console.log("​onInitChannel", initData)
+    console.log(
+      `Channel Store (${
+        this.isPanel ? 'Panel' : 'Decorator'
+      }) Received Init Data`,
+      initData
+    );
     this.store = initData;
     this.subscriber(this.store);
   };

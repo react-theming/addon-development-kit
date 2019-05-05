@@ -3,7 +3,7 @@ import React from 'react';
 import { storiesOf, addDecorator, addParameters } from '@storybook/react';
 import addons, { makeDecorator } from '@storybook/addons';
 
-import { keepInfo } from '../dev/index';
+import { withAdk, adkParams } from '../dev/withAdk';
 
 /**
  * todo:
@@ -13,32 +13,29 @@ import { keepInfo } from '../dev/index';
  * 4. Keep current theme in url
  *
  */
-const withAdk = initData => (getStory, context) => {
-  return (
-    <div>
-      ADK: <br />
-      <p>{JSON.stringify(context, null, 2)}</p>
-      Params: <br />
-      <p>{JSON.stringify(context.parameters.themes_id, null, 2)}</p>
-      {getStory(context)}
-    </div>
-  );
-};
 
-addParameters({themes_id: ['theme1', 'theme2']})
+addParameters(adkParams({ themes: ['theme1', 'theme2'], currentTheme: 0 }));
 
 storiesOf('Storybook Addon Development Kit', module)
   .addDecorator(withAdk({ mainColor: 'green' }))
-  .add('Stories', () => (
-    <div>
-      <button>Button 1</button>
-    </div>
-  ))
-  .add('Stories2', () => (
-    <div>
-      <button>Button 2</button>
-    </div>
-  ));
+  .add(
+    'Stories',
+    () => (
+      <div>
+        <button>Button 1</button>
+      </div>
+    ),
+    adkParams({ currentTheme: 32 })
+  )
+  .add(
+    'Stories2',
+    () => (
+      <div>
+        <button>Button 2</button>
+      </div>
+    ),
+    adkParams({ currentTheme: 12 })
+  );
 //   .add('Details', () => (
 //     <div>
 //       <DataInfo initData={{ preview: 'story2' }} />

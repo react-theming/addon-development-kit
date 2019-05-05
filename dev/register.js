@@ -20,9 +20,9 @@ const AddonPanel = ({
   return (
     <Layout style={{ padding: 0 }}>
       <Block style={{ ...blockStyle, minWidth: 200 }}>kind: {kind}</Block>
-      <Block style={blockStyle}>{JSON.stringify(api.getCurrentStoryData())}</Block>
+      <Block style={blockStyle}><small>{JSON.stringify(api.getCurrentStoryData())}</small></Block>
       <Block style={blockStyle} size={200}>
-        data ({JSON.stringify(data)})
+        channel store data: <br/> ({JSON.stringify(data)})
       </Block>
       <Block style={blockStyle}>
         <button onClick={() => setData({ panel: 'bar' })}>setData</button>
