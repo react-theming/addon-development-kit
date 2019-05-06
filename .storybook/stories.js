@@ -20,20 +20,26 @@ storiesOf('Storybook Addon Development Kit', module)
   .addDecorator(withAdk({ mainColor: 'green' }))
   .add(
     'Stories',
-    () => (
-      <div>
-        <button>Button 1</button>
-      </div>
-    ),
+    () => {
+      console.log('Render Button 1');
+      return (
+        <div>
+          <button>Button 1</button>
+        </div>
+      );
+    },
     adkParams({ currentTheme: 32 })
   )
   .add(
     'Stories2',
-    () => (
-      <div>
-        <button>Button 2</button>
-      </div>
-    ),
+    () => {
+      console.log('Render Button 2');
+      return (
+        <div>
+          <button>Button 2</button>
+        </div>
+      );
+    },
     adkParams({ currentTheme: 12 })
   );
 //   .add('Details', () => (

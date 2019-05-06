@@ -20,13 +20,6 @@ export default class ChannelStore {
     this.initData = initData;
     this.isPanel = isPanel;
     this.id = storyId;
-
-    console.log(
-      `New Store Created for ${isPanel ? 'Panel' : 'Preview'}`,
-      EVENT_ID_INIT,
-      EVENT_ID_DATA,
-      EVENT_ID_BACK
-    );
   }
 
   store = {
@@ -74,6 +67,7 @@ export default class ChannelStore {
     selectedData.over = selectedData.over || {};
     this.selectorId = selectorId;
     this.subscriber();
+    this.send();
   };
 
   onDataChannel = updData => {

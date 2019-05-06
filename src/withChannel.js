@@ -25,6 +25,7 @@ const withChannel = ({
         ...this.props.initData,
         ...parameters,
       },
+      isReceived: false,
     };
 
     isPanel = this.props.panel || panel;
@@ -37,7 +38,6 @@ const withChannel = ({
       isPanel: this.isPanel,
       storyId,
     });
-
 
     prepareActions = () => {
       const {
@@ -83,22 +83,24 @@ const withChannel = ({
     };
 
     onData = data => {
-      // this.props.onData(data);
-      this.setState({ data });
+      this.setState({ data, isReceived: true });
     };
 
     render() {
       const { pointName, initData, active, onData, ...props } = this.props;
-      // console.log('​extends -> render -> this.state.data', this.state.data);
+      const { data, isReceived } = this.state;
+
       if (active === false) return null;
+      if (!isReceived) return null;
+
       return (
         <WrappedComponent
-          data={this.state.data}
+          data={data}
           setData={this.store.send}
           store={this.store}
           active={active}
           parameters={parameters}
-          actions = {this.actions}
+          actions={this.actions}
           {...props}
         />
       );
