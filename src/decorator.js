@@ -3,7 +3,7 @@ import withChannel from './withChannel';
 
 import { getConfig } from './config';
 
-export const createDecorator = (Component, { isGlobal } = {}) => initData => (getStory, context) => {
+export const createDecorator = (Component, { isGlobal = true } = {}) => initData => (getStory, context) => {
   const {
     ADDON_ID,
     EVENT_ID_INIT,

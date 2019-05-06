@@ -62,9 +62,11 @@ export default class ChannelStore {
   onInitChannel = initData => {
     const { data, id } = initData;
     const selectorId = id || GLOBAL;
-    const selectedData = this.store[selectorId];
+    console.log('TCL: ChannelStore -> onConnectedFn -> selectorId', selectorId);
+    const selectedData = { ...(this.store[selectorId] || {}) };
     selectedData.init = data;
     selectedData.over = selectedData.over || {};
+    this.store[selectorId] = selectedData;
     this.selectorId = selectorId;
     this.subscriber();
     this.send();
@@ -120,20 +122,31 @@ export default class ChannelStore {
     ...payload,
   });
 
-  _createAction = (reducer = this.defaultReducer, subId) => {
+  _createAction = (reducer, getSubId) => {
     return payload => {
+      const subId = getSubId();
       const subData = this.store[subId];
-      subData.over = reducer(global.over, payload);
+      console.log('TCL: ChannelStore -> _createAction -> subId', subId);
+      console.log('TCL: ChannelStore -> _createAction -> subData', subData);
+      const current = {
+        ...subData.init,
+        ...subData.over,
+      };
+      const over = (reducer || this.defaultReducer)(current, payload);
+      subData.over = over;
+
       this.send();
       this.subscriber();
     };
   };
 
-  createGlobalAction = reducer => this._createAction(reducer, GLOBAL);
+  createGlobalAction = reducer => this._createAction(reducer, () => GLOBAL);
   createLocalAction = reducer =>
-    this._createAction(reducer, this.selectedId || this.id);
+    this._createAction(reducer, () => this.selectorId || this.id);
 
   sendInit = data => {
+    console.log('TCL: ChannelStore -> onConnectedFn -> id', this.id);
+
     this.init(data);
   };
 

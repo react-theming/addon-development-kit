@@ -17,14 +17,19 @@ const AddonPanel = ({
   rect,
   Layout,
   Block,
-  selectInd
+  nextInd,
+  update,
 }) => {
   return (
     <Layout style={{ padding: 0 }}>
       <Block style={{ ...blockStyle, minWidth: 50 }} size={200}>
         kind: {kind}
         <br />
-        <button onClick={() => selectInd(3)}>setData</button>
+        <button onClick={() => nextInd()}>setData</button>
+        <br />
+        <button onClick={() => update({ themes: ['T1', 'T2', 'T3'] })}>
+          Update
+        </button>
       </Block>
       {/* <Block style={blockStyle}>
         <small>{JSON.stringify(api.getCurrentStoryData())}</small>
@@ -38,5 +43,13 @@ const AddonPanel = ({
 };
 
 register(({ global, local }) => ({
-  selectInd: global((store, ind) => ({ store, currentTheme: ind })),
+  nextInd: local((store) => ({
+    currentTheme: store.currentTheme + 1,
+  })),
+  update: global(),
 }))(AddonPanel);
+
+// register({
+//   nextInd: (store) => ({ ...store, currentTheme: store.currentTheme + 1 }),
+//   update: null, // <-- it works :)
+// })(AddonPanel);
