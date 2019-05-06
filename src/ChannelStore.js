@@ -62,7 +62,6 @@ export default class ChannelStore {
   onInitChannel = initData => {
     const { data, id } = initData;
     const selectorId = id || GLOBAL;
-    console.log('TCL: ChannelStore -> onConnectedFn -> selectorId', selectorId);
     const selectedData = { ...(this.store[selectorId] || {}) };
     selectedData.init = data;
     selectedData.over = selectedData.over || {};
@@ -126,8 +125,6 @@ export default class ChannelStore {
     return payload => {
       const subId = getSubId();
       const subData = this.store[subId];
-      console.log('TCL: ChannelStore -> _createAction -> subId', subId);
-      console.log('TCL: ChannelStore -> _createAction -> subData', subData);
       const current = {
         ...subData.init,
         ...subData.over,
@@ -145,8 +142,6 @@ export default class ChannelStore {
     this._createAction(reducer, () => this.selectorId || this.id);
 
   sendInit = data => {
-    console.log('TCL: ChannelStore -> onConnectedFn -> id', this.id);
-
     this.init(data);
   };
 

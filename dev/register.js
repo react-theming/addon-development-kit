@@ -42,14 +42,24 @@ const AddonPanel = ({
   );
 };
 
-register(({ global, local }) => ({
-  nextInd: local((store) => ({
-    currentTheme: store.currentTheme + 1,
-  })),
-  update: global(),
-}))(AddonPanel);
+register(
+  {
+    themeInd: store => store.currentTheme,
+    themeList: store => store.themes,
+  },
+  ({ global, local }) => ({
+    nextInd: local(store => ({
+      currentTheme: store.currentTheme + 1,
+    })),
+    update: global(),
+  })
+)(AddonPanel);
 
-// register({
-//   nextInd: (store) => ({ ...store, currentTheme: store.currentTheme + 1 }),
-//   update: null, // <-- it works :)
-// })(AddonPanel);
+/* Plain object example
+
+register({
+  nextInd: (store) => ({ ...store, currentTheme: store.currentTheme + 1 }),
+  update: null,
+})(AddonPanel);
+
+*/

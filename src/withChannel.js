@@ -5,6 +5,15 @@ import ChannelStore from './ChannelStore';
 const getDisplayName = WrappedComponent =>
   WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
+const tryToSelect = fn => store => {
+  try {
+    return fn(store);
+  } catch (err) {
+    console.warn(err);
+    return undefined;
+  }
+};
+
 const withChannel = ({
   EVENT_ID_INIT,
   EVENT_ID_DATA,
@@ -14,30 +23,48 @@ const withChannel = ({
   panel,
   parameters,
   storyId,
+  storeSelectors = {},
   createActions = {},
 }) => WrappedComponent =>
   class extends React.Component {
     static displayName = `WithChannel(${getDisplayName(WrappedComponent)})`;
 
-    state = {
-      data: {
+    constructor(props, ...args) {
+      super(props, ...args);
+      const initStateData = {
         ...initData,
-        ...this.props.initData,
+        ...props.initData,
         ...parameters,
-      },
-      isReceived: false,
-    };
+      };
+
+      this.state = {
+        data: initStateData,
+        selectors: this.prepareSelectors(initStateData),
+        isReceived: false,
+      };
+
+      this.store = new ChannelStore({
+        EVENT_ID_INIT,
+        EVENT_ID_DATA,
+        EVENT_ID_BACK,
+        name: props.pointName,
+        initData: this.state.data,
+        isPanel: this.isPanel,
+        storyId,
+      });
+
+      this.actions = this.prepareActions();
+    }
 
     isPanel = this.props.panel || panel;
-    store = new ChannelStore({
-      EVENT_ID_INIT,
-      EVENT_ID_DATA,
-      EVENT_ID_BACK,
-      name: this.props.pointName,
-      initData: this.state.data,
-      isPanel: this.isPanel,
-      storyId,
-    });
+
+    prepareSelectors = store => {
+      return Object.entries(storeSelectors)
+        .map(([name, selector]) => ({
+          [name]: tryToSelect(selector)(store),
+        }))
+        .reduce((akk, cur) => ({ ...akk, ...cur }), {});
+    };
 
     prepareActions = () => {
       const {
@@ -52,7 +79,6 @@ const withChannel = ({
             .reduce((acc, cur) => ({ ...acc, ...cur }), {});
       return actions;
     };
-    actions = this.prepareActions();
 
     componentDidMount() {
       this.debugLog('componentDidMount');
@@ -83,12 +109,16 @@ const withChannel = ({
     };
 
     onData = data => {
-      this.setState({ data, isReceived: true });
+      this.setState({
+        data,
+        isReceived: true,
+        selectors: this.prepareSelectors(data),
+      });
     };
 
     render() {
       const { pointName, initData, active, onData, ...props } = this.props;
-      const { data, isReceived } = this.state;
+      const { data, isReceived, selectors } = this.state;
 
       if (active === false) return null;
       if (!isReceived) return null;
@@ -100,6 +130,7 @@ const withChannel = ({
           store={this.store}
           active={active}
           parameters={parameters}
+          selectors={selectors}
           actions={this.actions}
           {...props}
         />

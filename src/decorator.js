@@ -3,7 +3,7 @@ import withChannel from './withChannel';
 
 import { getConfig } from './config';
 
-export const createDecorator = (Component, { isGlobal = true } = {}) => initData => (getStory, context) => {
+export const createDecorator = (selectors, createActions) => (Component, { isGlobal = true } = {}) => initData => (getStory, context) => {
   const {
     ADDON_ID,
     EVENT_ID_INIT,
@@ -24,6 +24,7 @@ export const createDecorator = (Component, { isGlobal = true } = {}) => initData
     panel: false,
     parameters,
     storyId,
+    createActions,
   })(Component);
 
   return <WithChannel getStory={getStory} context={context} />;

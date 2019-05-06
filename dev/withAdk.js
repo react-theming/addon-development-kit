@@ -17,5 +17,5 @@ const DecoratorUI = ({ context, getStory, data, parameters }) => (
   </div>
 );
 
-export const withAdk = createDecorator(DecoratorUI, {isGlobal: false});
+export const withAdk = createDecorator()(DecoratorUI, {isGlobal: false});
 export const adkParams = setParameters()
