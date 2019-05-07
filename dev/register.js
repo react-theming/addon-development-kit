@@ -17,7 +17,8 @@ const AddonPanel = ({
   rect,
   Layout,
   Block,
-  nextInd,
+  indInc,
+  indDec,
   update,
 }) => {
   return (
@@ -25,7 +26,8 @@ const AddonPanel = ({
       <Block style={{ ...blockStyle, minWidth: 50 }} size={200}>
         kind: {kind}
         <br />
-        <button onClick={() => nextInd()}>setData</button>
+        <button onClick={() => indInc()}> + </button>
+        <button onClick={() => indDec()}> - </button>
         <br />
         <button onClick={() => update({ themes: ['T1', 'T2', 'T3'] })}>
           Update
@@ -46,10 +48,16 @@ register(
   {
     themeInd: store => store.currentTheme,
     themeList: store => store.themes,
+    theme: store => store.themes[store.currentTheme]
   },
   ({ global, local }) => ({
-    nextInd: local(store => ({
+    indInc: global(store => ({
+      ...store,
       currentTheme: store.currentTheme + 1,
+    })),
+    indDec: global(store => ({
+      ...store,
+      currentTheme: store.currentTheme - 1,
     })),
     update: global(),
   })

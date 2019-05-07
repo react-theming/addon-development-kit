@@ -28,7 +28,7 @@ storiesOf('Storybook Addon Development Kit', module)
         </div>
       );
     },
-    adkParams({ currentTheme: 32 })
+    adkParams({ currentTheme: 1 })
   )
   .add(
     'Stories2',
@@ -40,7 +40,7 @@ storiesOf('Storybook Addon Development Kit', module)
         </div>
       );
     },
-    adkParams({ currentTheme: 12 })
+    adkParams({ currentTheme: 0 })
   );
 //   .add('Details', () => (
 //     <div>

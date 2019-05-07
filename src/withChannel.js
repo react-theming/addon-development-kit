@@ -37,10 +37,12 @@ const withChannel = ({
         ...parameters,
       };
 
+      const isReceived = false;
+
       this.state = {
         data: initStateData,
-        selectors: this.prepareSelectors(initStateData),
-        isReceived: false,
+        selectors: isReceived ? this.prepareSelectors(initStateData) : {},
+        isReceived,
       };
 
       this.store = new ChannelStore({
