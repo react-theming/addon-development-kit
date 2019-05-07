@@ -8,6 +8,7 @@ import {
 } from './config';
 import withChannel from './withChannel';
 
+// todo: remove
 const panelDimesions = rect =>
   rect
     ? {
