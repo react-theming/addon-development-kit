@@ -3,10 +3,9 @@ import addons, { types as addonTypes } from '@storybook/addons';
 import { STORY_CHANGED } from '@storybook/core-events';
 import Rect from '@reach/rect';
 
-import {
-  getConfig,
-} from './config';
+import { getConfig } from './config';
 import withChannel from './withChannel';
+import { LayoutProvider } from './Layout';
 
 // todo: remove
 const panelDimesions = rect =>
@@ -76,7 +75,7 @@ class PanelHOC extends React.Component {
   render() {
     const Panel = this.props.component;
     const { api, active, data, setData, config } = this.props;
-    const {ADDON_ID, PANEL_ID, PANEL_Title} = config;
+    const { ADDON_ID, PANEL_ID, PANEL_Title } = config;
     const { kind, story } = this.state;
 
     if (!active) return null;
@@ -89,22 +88,24 @@ class PanelHOC extends React.Component {
           const Block = addonBlock(dim.isLandscape);
           return (
             <div ref={ref} name="addon-holder" style={{ height: '100%' }}>
-              <Panel
-                {...this.props.actions}
-                {...this.props.selectors}
-                api={api}
-                active={active}
-                data={data}
-                setData={setData}
-                kind={kind}
-                story={story}
-                ADDON_ID={ADDON_ID}
-                PANEL_ID={PANEL_ID}
-                PANEL_Title={PANEL_Title}
-                rect={dim}
-                Layout={Layout}
-                Block={Block}
-              />
+              <LayoutProvider>
+                <Panel
+                  {...this.props.actions}
+                  {...this.props.selectors}
+                  api={api}
+                  active={active}
+                  data={data}
+                  setData={setData}
+                  kind={kind}
+                  story={story}
+                  ADDON_ID={ADDON_ID}
+                  PANEL_ID={PANEL_ID}
+                  PANEL_Title={PANEL_Title}
+                  rect={dim}
+                  Layout={Layout}
+                  Block={Block}
+                />
+              </LayoutProvider>
             </div>
           );
         }}
@@ -113,7 +114,10 @@ class PanelHOC extends React.Component {
   }
 }
 
-export const register = (storeSelectors, createActions) => (Panel, { type = addonTypes.PANEL, initData } = {}) => {
+export const register = (storeSelectors, createActions) => (
+  Panel,
+  { type = addonTypes.PANEL, initData } = {}
+) => {
   const config = getConfig();
   const {
     EVENT_ID_INIT,

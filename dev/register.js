@@ -1,29 +1,36 @@
 import React from 'react';
+import { styled } from '@storybook/theming';
 import { register } from '../src/register';
+import { Layout, Block } from '../src/Layout';
 import './config';
 
-const blockStyle = {
-  margin: 2,
-  padding: 4,
-  border: '2px solid gray',
-};
+
+const LayoutBlock = styled(Layout)`
+  padding: 0px;
+  border: red 1px solid;
+  label: layout-with-styles;
+`
+
+const AddonBlock = styled(Block)`
+  margin: 2px;
+  padding: 4px;
+  border: 2px solid gray;
+  font-size: 14px;
+  background-color: pink;
+  label: block-with-styles;
+`
 
 const AddonPanel = ({
   api,
   data,
-  setData,
   kind,
-  story,
-  rect,
-  Layout,
-  Block,
   indInc,
   indDec,
   update,
 }) => {
   return (
-    <Layout style={{ padding: 0 }}>
-      <Block style={{ ...blockStyle, minWidth: 50 }} size={200}>
+    <LayoutBlock style={{ padding: 0 }}>
+      <AddonBlock size={200}>
         kind: {kind}
         <br />
         <button onClick={() => indInc()}> + </button>
@@ -32,15 +39,15 @@ const AddonPanel = ({
         <button onClick={() => update({ themes: ['T1', 'T2', 'T3'] })}>
           Update
         </button>
-      </Block>
+      </AddonBlock>
       {/* <Block style={blockStyle}>
         <small>{JSON.stringify(api.getCurrentStoryData())}</small>
       </Block> */}
-      <Block style={blockStyle}>
+      <AddonBlock>
         channel store data: <br /> ({JSON.stringify(data)})
-      </Block>
+      </AddonBlock>
       {/* <Block style={blockStyle}>data ({JSON.stringify(rect, null, 2)})</Block> */}
-    </Layout>
+    </LayoutBlock>
   );
 };
 

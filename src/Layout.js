@@ -1,6 +1,6 @@
 import React from 'react';
 import Rect from '@reach/rect';
-import { styled, css } from '@storybook/theming';
+import { styled, cx, css } from '@storybook/theming';
 
 const layout = React.createContext({});
 
@@ -14,7 +14,7 @@ const panelDimensions = rect =>
     : {};
 
 const AddonHolder = styled('div')`
-  height: 100;
+  height: 100%;
   label: addon-holder;
 `;
 
@@ -31,7 +31,21 @@ export const LayoutProvider = ({ children }) => (
   </Rect>
 );
 
-const StyledLayout = styled('div')`
+
+const StyledOverridden = ({
+  className,
+  overrides,
+  children,
+  isLandscape,
+  size,
+  ...props
+}) => (
+  <div className={`${className} ${overrides}`} {...props}>
+    {children}
+  </div>
+);
+
+const StyledLayout = styled(StyledOverridden)`
   display: flex;
   flex-direction: ${({ isLandscape }) => (isLandscape ? 'row' : 'column')};
   justify-content: space-between;
@@ -40,30 +54,28 @@ const StyledLayout = styled('div')`
   label: addon-layout;
 `;
 
-export const Layout = ({ children }) => (
+export const Layout = ({ className, children }) => (
   <layout.Consumer>
     {({ isLandscape }) => (
-      <StyledLayout isLandscape={isLandscape}>{children}</StyledLayout>
+      <StyledLayout isLandscape={isLandscape} overrides={className}>{children}</StyledLayout>
     )}
   </layout.Consumer>
 );
 
-const StyledBlock = styled.div(({ isLandscape, size }) => ({
-  flexGrow: 1,
-  ...(size
-    ? {
-        ...(isLandscape ? { width: size } : { height: size }),
-        flexGrow: undefined,
-      }
-    : {
-        ...(isLandscape ? { width: 2 } : { height: 2 }),
-      }),
-}));
 
-export const Block = ({ size, children }) => (
+const px = v => `${v}px`;
+
+const StyledBlock = styled(StyledOverridden)`
+  ${({ isLandscape }) => (isLandscape ? 'width' : 'height')}: ${({ size }) =>
+    size ? px(size) : '2px'};
+  ${({ size }) => (size ? '' : 'flex-grow: 1;')}
+  label: addon-block;
+`;
+
+export const Block = ({ size, children, className }) => (
   <layout.Consumer>
     {({ isLandscape }) => (
-      <StyledBlock size={size} isLandscape={isLandscape}>
+      <StyledBlock size={size} isLandscape={isLandscape} overrides={className}>
         {children}
       </StyledBlock>
     )}
