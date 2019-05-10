@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ChannelStore from './ChannelStore';
+import { getSingleStore } from './ChannelStore';
 
 const getDisplayName = WrappedComponent =>
   WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -45,7 +45,7 @@ const withChannel = ({
         isReceived,
       };
 
-      this.store = new ChannelStore({
+      this.store = getSingleStore({
         EVENT_ID_INIT,
         EVENT_ID_DATA,
         EVENT_ID_BACK,

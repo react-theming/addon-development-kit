@@ -150,3 +150,10 @@ export default class ChannelStore {
     this.removeData();
   };
 }
+
+let singleStore;
+
+export const getSingleStore = (...args) => {
+  singleStore = singleStore || new ChannelStore(...args)
+  return singleStore;
+};
