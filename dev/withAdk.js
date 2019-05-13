@@ -1,8 +1,8 @@
 import React from 'react';
 import { createDecorator, setParameters } from '../src/decorator';
-import './config'
+import './config';
 
-const DecoratorUI = ({ context, getStory, data, parameters, theme }) => (
+const DecoratorUI = ({ context, getStory, theme }) => (
   <div>
     Theme: {theme} <br />
     {getStory(context)}
@@ -10,6 +10,6 @@ const DecoratorUI = ({ context, getStory, data, parameters, theme }) => (
 );
 
 export const withAdk = createDecorator({
-  theme: store => store.themes[store.currentTheme]
-})(DecoratorUI, {isGlobal: true});
-export const adkParams = setParameters()
+  theme: store => store.themes[store.currentTheme],
+})(DecoratorUI, { isGlobal: true });
+export const adkParams = setParameters();

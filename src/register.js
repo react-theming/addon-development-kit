@@ -94,7 +94,7 @@ class PanelHOC extends React.Component {
                   {...this.props.selectors}
                   api={api}
                   active={active}
-                  data={data}
+                  store={data}
                   setData={setData}
                   kind={kind}
                   story={story}
