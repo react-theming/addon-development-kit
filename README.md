@@ -53,7 +53,7 @@ register(
 
 ```
 
-where `selectors` is an object on functions like:
+where `selectors` is an object with functions like:
 
 ```js
 {
@@ -177,6 +177,7 @@ When `isGlobal = true` decorator will consider all passing data as global
 ### Pass parameters to addon
 
 Creates functions for passing parameters to your addon
+
 See usage above
 
 ```js
@@ -202,7 +203,7 @@ setConfig({
 ```
 You should run it **before** using `register`, `setParameters` and `createDecorator`
 
->Note: don't remember to use setConfig both in on manager and preview sides with the same parameters
+>Note: don't forget to use setConfig both in on manager and preview sides with the same parameters
 
 
 ### Addon panel UI components
@@ -240,13 +241,13 @@ register()(AddonPanel)
 
 ```
 
-<Layout> has `display: flex` with `flex-direction: row` when bottom and `flex-direction: column` in right side.
+`<Layout>` has `display: flex` with `flex-direction: row` when bottom and `flex-direction: column` in right side.
 
-You can specify the size of <Block>. In case of horizontal layout it will be the width, in case of vertical - height of element.
+You can specify the size of `<Block>`. In case of horizontal layout it will be the width, in case of vertical - height of element.
 
 Otherwise it will have `flex-grow: 1`
 
 ## Credits
 
-<div align="left" style="height: 16px;">Created with ❤︎ to <b>React</b> and <b>Storybook</b> by <a href="https://twitter.com/UsulPro">@usulpro</a>  [<a href="https://github.com/react-theming">React Theming</a>]
+<div align="left" style="height: 16px;">Created with ❤︎ to <b>React</b> and <b>Storybook</b> by <a href="https://twitter.com/UsulPro">Oleg Proskurin</a>  [<a href="https://github.com/react-theming">React Theming</a>]
 </div>
