@@ -1,24 +1,9 @@
-import * as storybook from '@storybook/react';
-import { setOptions } from '@storybook/addon-options';
-import infoAddon from '@storybook/addon-info';
-import querryAddon from '../setAddon';
+/* eslint-disable import/no-extraneous-dependencies, import/no-unresolved, import/extensions */
 
-storybook.setAddon(infoAddon);
-storybook.setAddon(querryAddon);
+import { configure } from '@storybook/react';
 
-setOptions({
-    name: 'React Theming',
-    url: 'https://github.com/sm-react/react-theming',
-    goFullScreen: false,
-    showLeftPanel: true,
-    showDownPanel: true,
-    showSearchBox: false,
-    downPanelInRight: false,
-});
+function loadStories() {
+  require('./stories');
+}
 
-storybook.configure(
-    () => {
-      require('../develop/stories');
-    },
-    module
-);
+configure(loadStories, module);

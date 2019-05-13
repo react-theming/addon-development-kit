@@ -1,140 +1,252 @@
 # Storybook Addon Development Kit
 
-Based on [React Komposer](https://github.com/arunoda/react-komposer) and [Podda](https://github.com/arunoda/podda) addon core which solves the problem of communication between addons panel side and decorators side. It provides an ability to create story decorators controlled from the addon panel.
+Simplifies the addons creation. Keeps in sync addon's data through the channel. Provides intelligent blocks for creating addon UI. Offer simple API for registering addons and creating decorators. It's a base to quickly build your custom brand new awesome addon
 
-> Since it's in the early stages some things could be changed
+## Features
 
-## Features 💫
-
-1 Keeps synchronous **store** on both sides: addon panel and decorator
-
-2 Easy to create own components subscribed to addon's **store**
-
-3 Each decorator has own **store** instance and init settings, the panel reflects an active decorator
-
-4 Decorators keep the **store** during `Hot Module Replacement`
-
-5 Possible to set **api**, **default store data** and **React Components** to decorators and panel
-
-6 Story decorators can **override** the global ones. So it's possible to use them together
-
-## Install
-
-if you building own Storybook addon:
-
-`npm i storybook-adk --save`
-
-if just using Storybook as a development tool:
-
-`npm i storybook-adk --save-dev`
+- Hides under the hood all the complex issues of communication through the channel and data synchronization while switching stories.
+- Connects your addon components to your addon store via HOCs and updates it only when data changes
+- Divides addon store data to global and local. Tracks story surfing in order to switch appropriate local data both on manager and preview sides simultaneously
+- Keeps immutable init data and overridable data which you mutate via actions
+- Provides redux like approach to deal with your addon store via selectors and actions (but don't worry, the default action just simply override your data)
+- Allows to connect any amount of pannels, buttons and any other addon types to the single addon store
+- Offers UI container which automatically reflects the aspect ratio of addon panel. Extremely useful to create addon UI responsive for vertical and horizontal panel positions
 
 ## Usage
 
-_soon_
-
-## Contribution guide:
-
 ```shell
-git clone https://github.com/sm-react/storybook-adk.git
-cd storybook-adk
-yarn
-yarn start
+npm i --save @storybook/addon-devkit
 ```
-
-when it outputs like:
-
-
-```shell
-React Storybook started on => http://localhost:9001/
-
-webpack built f2e66101efa945043d60 in 21615ms
-```
-
-open http://localhost:9001/
-
-
-#### Store and channel
-
-`src/store/store.js`
-
-We using [Podda](https://github.com/arunoda/podda) as a simple data store. Panel and decorators need to use a channel for communication. Any changes of store are sent via channel, that's why both stores always synchronized. Root components (of panel or decorators) subscribe to store changes so they shows an actual data. Each side can initiate the connection at any time, but only one (the last) connection is enabled. That's why we can select another Story kind with own decorator which initiate a new connection when `componentWillMount` so panel will follow it. When a decorator `componentWillUnmount`, it stops the channel communication and panel reflects it. This principle works even when we use nested decorators: the innder decorator will override the global one.
-
-#### Decorators
-
-`src/store/decorator.js`
-
-We pass `initData` to decorators when create them and keep decorator's store in module closure (own for each Story kind). So it's availible after HMR. The decorator root component solves all tasks about channel interaction and enabling/disabling nested decorators. It will render the addon decorator component as a child which you can pass in oder to customize your own decorator.
-
-#### Composer
-
-`src/store/composer.js`
-
-Here we use [React Komposer](https://github.com/arunoda/react-komposer) to subscribe to store changes. It allows the root component `src/store/container.js` (Panel and decorator) to keep the actual state of current store. We pass some API to this component from store.
-
-#### Container
-
-`src/store/container.js`
-
-It's a root component using both for panel and decorator. It takes props from composer `src/store/composer.js`. Wraps and reders custom addon component.
-
-#### API
-
-`src/store/api.js`
-
-It's possible to add an API to interact with the addon store. API function takes a `poddaStore` as a first argument and any number custom arguments. E.g.
 
 ```js
-setLabel(poddaStore, name, ind) {
-    poddaStore.update(state => ({ index: ind, label: name }));
-}
+import {
+  register,
+  createDecorator,
+  setParameters,
+  setConfig,
+  Layout,
+  Block,
+} from '@storybook/addon-devkit'
+
 ```
 
-To use it in your component you need to pass it via composer:
+## API
+
+### Register manager side Addon panel
+
+HOC to register addon UI and connect it to the addon store.
 
 ```js
-function dataLoader(props, onData, { addonStore, apiMap }) {
+// in your addon `register.js`
+import { register } from '@storybook/addon-devkit'
 
-    const sendData = (storeData) => {
-        const propsToChild = {
-            label: storeData.label,
-            index: storeData.index,
-            onLabel: apiMap.setLabel, 
-        };
-        onData(null, propsToChild);
-    };
+register(
+  {
+    ...selectors,
+  },
+  ({ global, local }) => ({
+    ...globalActions,
+    ...localActions,
+  })
+)(AddonPanelUI);
 
-    const stopSubscription = addonStore.subscribe(sendData);
 
-    sendData(addonStore.getAll());
+```
 
-    return stopSubscription;
+where `selectors` is an object on functions like:
+
+```js
+{
+  deepData: store => store.path.to.deep.store.data,
 }
-```
-
-then you can use it this way:
 
 ```
-const { label, index, onLabel } = props;
-return (
-<div>
-    <p>Label: <i>{label}</i>, Index: <i>{index}</i></p>
-    <button onClick={onLabel('Alpha', 28)}>Alpha</button>
-</div>);
+
+and `actions` could be "global" and "local". Global actions affects on the global part of store, while local only on the data related to the current story.
+
+```js
+
+({ global, local }) => ({
+    // action to manipulate with common data
+    increase: global(store => ({
+      ...store,
+      index: store.index + 1,
+    })),
+    // action to manipulate with current story data
+    // usage: setBackground('#ff66cc')
+    setBackground: local((store, color) => ({
+      ...store,
+      backgroundColor: color,
+    })),
+    // action to override data
+    // usage: update({...newData})
+    update: global(),
+  })
+
 ```
 
-#### Addon Composer
+AddonPanelUI - is your component which appears on addon panel when you select appropriate tab
+> Note: the HOC automatically track the `active` state of addon and shows it only when it's necessary
 
-`src/store/addonComposer.js`
+register HOC will pass the follow props to the `AddonPanelUI` component:
 
-Allows to create custom addon components subscribed to the store. _It's under development now_
+```js
+<AddonPanelUI
+  {...actions} // generated actions
+  {...selectors} // selected pieces of store
+  api={api} // storybook API object
+  active={active} // you don't need to do anything with it
+  store={store} // entire store. prefer to use selectors
+  kind={kind} // current story kind
+  story={story} // current story
+  ADDON_ID={ADDON_ID}
+  PANEL_ID={PANEL_ID}
+  PANEL_Title={PANEL_Title} // Title on the addon panel
+  rect={rect} // dimensions of panel area
+/>
 
----
+```
+
+As soon as you change the store via actions both the `AddonPanelUI` and `storyDecorator` will be re-rendered with the new data.
+
+Same if the data will come from the story - it will be updated
+
+After initialization HOC will wait for init data from story and only after it will render UI
 
 
-🙋 any contributions will be appreciated! 🎆🎆🎆
+### Create stories side decorator
 
-### Credits
+HOC to create decorator and connect it to the addon store.
 
-Created in [smARTLight](https://github.com/sm-react) by [UsulPro](https://twitter.com/UsulPro)
+```js
+// in your addon `decorator.js`
+import { createDecorator } from '@storybook/addon-devkit'
 
-Scaffolded by [Storybook Boilerplate Project](https://github.com/sm-react/react-theming#storybook-boilerplate-project)
+export const withMyAddon = createDecorator({
+    ...selectors,
+  },
+  ({ global, local }) => ({
+    ...globalActions,
+    ...localActions,
+  })
+)(DecoratorUI, { isGlobal });
+
+```
+
+so then you can use your decorator this way:
+
+```js
+// stories.js
+
+import React from 'react';
+import { storiesOf, addDecorator, addParameters } from '@storybook/react';
+import { withMyAddon, myAddonParams } from 'my-addon';
+
+// add decorator globally
+addDecorator(withMyAddon({ ...initData }))
+addParameters(myAddonParams({ ...globalParams }))
+
+storiesOf('My UI Kit', module)
+  // ...or add decorator locally
+  .addDecorator(withMyAddon({ ...initData }))
+  .add(
+    'Awesome',
+    () => <Button>Make Awesome</Button>,
+    myAddonParams({ ...localParams })
+  )
+
+```
+
+`DecoratorUI` could look like this:
+
+```js
+
+const DecoratorUI = ({ context, getStory, selectedData }) => (
+  <div>
+    <h1>Title: {selectedData}</h1>
+    {getStory(context)}
+  </div>
+);
+```
+
+When `isGlobal = true` decorator will consider all passing data as global
+
+>Note: addon parameters will be merged with init data and available both for decorator and panel selectors
+
+
+### Pass parameters to addon
+
+Creates functions for passing parameters to your addon
+See usage above
+
+```js
+import { setParameters } from '@storybook/addon-devkit'
+
+export const myAddonParams = setParameters()
+
+```
+
+### Addon config
+
+In order to create addon you need to specify some unique parameters like event name, addon title, parameters key and others. They should be same on manager and preview sides. If you don't specify them addon-devkit will use the default ones.
+To specify your own use `setConfig`:
+
+```js
+import { setConfig } from '@storybook/addon-devkit';
+
+setConfig({
+  addId: 'dev_adk',
+  panelTitle: 'ADK DEV'
+});
+
+```
+You should run it **before** using `register`, `setParameters` and `createDecorator`
+
+>Note: don't remember to use setConfig both in on manager and preview sides with the same parameters
+
+
+### Addon panel UI components
+
+Components to organize UI in a row when panel in bottom position and in column when it on the right side
+
+```js
+import { Layout, Block, register } from '@storybook/addon-devkit';
+import { styled } from '@storybook/theming';
+import './config'
+
+const LayoutBlock = styled(Layout)`
+  ...styles
+`
+
+const AddonBlock = styled(Block)`
+  ...styles
+`
+
+const AddonPanel = () => (
+  <LayoutBlock>
+    <AddonBlock size={200}>
+      {UI1}
+    </AddonBlock>
+    <AddonBlock>
+      {UI2}
+    </AddonBlock>
+    <AddonBlock>
+      {UI3}
+    </AddonBlock>
+  </LayoutBlock>
+)
+
+register()(AddonPanel)
+
+```
+
+<Layout> has `display: flex` with `flex-direction: row` when bottom and `flex-direction: column` in right side.
+
+You can specify the size of <Block>. In case of horizontal layout it will be the width, in case of vertical - height of element.
+
+Otherwise it will have `flex-grow: 1`
+
+## Credits
+
+<div align="left" style="height: 16px;">Created with ❤︎ to <b>React</b> and <b>Storybook</b> by <a href="https://twitter.com/UsulPro">@usulpro</a>  [<a href="https://github.com/react-theming">React Theming</a>]
+</div>

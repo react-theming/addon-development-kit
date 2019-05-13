@@ -1,0 +1,9 @@
+{
+  "watch": [
+    "./src/",
+    "./dev/",
+    "./.storybook"
+  ],
+  "ext": "js"
+
+}
