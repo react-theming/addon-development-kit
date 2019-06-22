@@ -4,6 +4,9 @@
     "./dev/",
     "./.storybook"
   ],
-  "ext": "js"
+  "ext": "js",
+  "ignore": [
+    "__tests__/**/"
+  ]
 
 }

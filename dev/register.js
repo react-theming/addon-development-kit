@@ -22,11 +22,12 @@ const AddonBlock = styled(Block)`
 
 const AddonPanel = ({
   api,
-  data,
   kind,
   indInc,
   indDec,
   update,
+  theme,
+  data,
 }) => {
   return (
     <LayoutBlock style={{ padding: 0 }}>
@@ -55,7 +56,8 @@ register(
   {
     themeInd: store => store.currentTheme,
     themeList: store => store.themes,
-    theme: store => store.themes[store.currentTheme]
+    theme: store => store.themes[store.currentTheme],
+    data: store => store
   },
   ({ global, local }) => ({
     indInc: global(store => ({
