@@ -7,7 +7,7 @@ let EVENT_ID_DATA = `${ADDON_ID}/event/data`;
 let EVENT_ID_BACK = `${ADDON_ID}/event/back`;
 
 export const setConfig = ({
-  addId,
+  addonId,
   panelId,
   panelTitle,
   paramKey,
@@ -15,7 +15,7 @@ export const setConfig = ({
   eventData,
   eventBack,
 }) => {
-  ADDON_ID = addId || ADDON_ID;
+  ADDON_ID = addonId || ADDON_ID;
   PANEL_ID = `${ADDON_ID}/panel`;
   PANEL_Title = `${ADDON_ID}/addon`;
   PARAM_Key = `${ADDON_ID}/parameters`;
