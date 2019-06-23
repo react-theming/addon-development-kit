@@ -20,11 +20,13 @@ export default class ChannelStore {
     this.initData = initData;
     this.isPanel = isPanel;
     this.id = storyId;
+
+    this.store = {
+      [GLOBAL]: { init: this.initData || {}, over: {} },
+    };
   }
 
-  store = {
-    [GLOBAL]: { init: this.initData || {}, over: {} },
-  };
+
   selectorId = null;
 
   subscriber = () => {};
@@ -138,6 +140,7 @@ export default class ChannelStore {
   };
 
   createGlobalAction = reducer => this._createAction(reducer, () => GLOBAL);
+
   createLocalAction = reducer =>
     this._createAction(reducer, () => this.selectorId || this.id);
 
@@ -154,6 +157,6 @@ export default class ChannelStore {
 let singleStore;
 
 export const getSingleStore = (...args) => {
-  singleStore = singleStore || new ChannelStore(...args)
+  singleStore = singleStore || new ChannelStore(...args);
   return singleStore;
 };
