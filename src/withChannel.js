@@ -123,7 +123,6 @@ const withChannel = ({
       const { data, isReceived, selectors } = this.state;
 
       if (active === false) return null;
-      if (!isReceived) return null;
 
       return (
         <WrappedComponent
@@ -134,6 +133,7 @@ const withChannel = ({
           parameters={parameters}
           selectors={selectors}
           actions={this.actions}
+          isFirstDataReceived={isReceived}
           {...props}
         />
       );
