@@ -1,6 +1,6 @@
 {
   "name": "@storybook/addon-devkit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Storybook Addon Development Kit",
   "author": {
     "name": "Oleg Proskurin",
@@ -16,7 +16,7 @@
     "build-storybook": "build-storybook -s public",
     "dev": "node .scripts/npm-prepare.js --watch",
     "prepare-dev": "babel dev --out-dir dev-dist --verbose",
-    "prepare": "node .scripts/npm-prepare.js",
+    "prepare": "package-prepare",
     "postpublish": "node .scripts/npm-postpublish.js"
   },
   "dependencies": {
@@ -36,6 +36,7 @@
     "@storybook/addon-backgrounds": "^5.1.9",
     "@storybook/addon-links": "^5.1.9",
     "@storybook/react": "^5.1.9",
+    "@usulpro/package-prepare": "^1.1.4",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.7.1",
     "babel-loader": "^8.0.2",
