@@ -74,7 +74,7 @@ class PanelHOC extends React.Component {
   }
   render() {
     const Panel = this.props.component;
-    const { api, active, data, setData, config } = this.props;
+    const { api, active, data, setData, config, isFirstDataReceived } = this.props;
     const { ADDON_ID, PANEL_ID, PANEL_Title } = config;
     const { kind, story } = this.state;
 
@@ -104,6 +104,7 @@ class PanelHOC extends React.Component {
                   rect={dim}
                   Layout={Layout}
                   Block={Block}
+                  isFirstDataReceived={isFirstDataReceived}
                 />
               </LayoutProvider>
             </div>
