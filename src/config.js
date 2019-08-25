@@ -1,13 +1,13 @@
-export let ADDON_ID = 'adk';
-export let PANEL_ID = `${ADDON_ID}/panel`;
-export let PANEL_Title = `${ADDON_ID}/addon`;
-export let PARAM_Key = `${ADDON_ID}/parameters`;
-export let EVENT_ID_INIT = `${ADDON_ID}/event/init`;
-export let EVENT_ID_DATA = `${ADDON_ID}/event/data`;
-export let EVENT_ID_BACK = `${ADDON_ID}/event/back`;
+let ADDON_ID = 'adk';
+let PANEL_ID = `${ADDON_ID}/panel`;
+let PANEL_Title = `${ADDON_ID}/addon`;
+let PARAM_Key = `${ADDON_ID}/parameters`;
+let EVENT_ID_INIT = `${ADDON_ID}/event/init`;
+let EVENT_ID_DATA = `${ADDON_ID}/event/data`;
+let EVENT_ID_BACK = `${ADDON_ID}/event/back`;
 
 export const setConfig = ({
-  addId,
+  addonId,
   panelId,
   panelTitle,
   paramKey,
@@ -15,7 +15,7 @@ export const setConfig = ({
   eventData,
   eventBack,
 }) => {
-  ADDON_ID = addId || ADDON_ID;
+  ADDON_ID = addonId || ADDON_ID;
   PANEL_ID = `${ADDON_ID}/panel`;
   PANEL_Title = `${ADDON_ID}/addon`;
   PARAM_Key = `${ADDON_ID}/parameters`;
