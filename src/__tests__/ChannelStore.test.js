@@ -233,9 +233,9 @@ describe('ChannelStore Actions', () => {
     index: store.index + step,
   });
 
-  it('should create global action / call subscriber / send event', () => {
+  it('should create global action / call subscriber / send event', async () => {
     const incAction = store.createGlobalAction(reducer);
-    incAction(2);
+    await incAction(2);
     const newData = initWith({ index: 2 });
     const newStore = {
       global: {

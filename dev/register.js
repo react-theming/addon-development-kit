@@ -28,7 +28,8 @@ const AddonPanel = ({
   update,
   theme,
   data,
-  comment
+  comment,
+  request
 }) => {
   return (
     <LayoutBlock style={{ padding: 0 }}>
@@ -42,6 +43,7 @@ const AddonPanel = ({
           Update
         </button>
         <button onClick={() => comment()}> comment </button>
+        <button onClick={() => request()}> request </button>
       </AddonBlock>
       {/* <Block style={blockStyle}>
         <small>{JSON.stringify(api.getCurrentStoryData())}</small>
@@ -53,6 +55,10 @@ const AddonPanel = ({
     </LayoutBlock>
   );
 };
+
+const AsyncRequest = () => new Promise(resolve => {
+  setTimeout(() => resolve(), 3000);
+})
 
 register(
   {
@@ -75,6 +81,13 @@ register(
       ...store,
       comment: 'comment',
     })),
+    request: local(async store => {
+      await AsyncRequest();
+      return ({
+        ...store,
+        result: 'Request Success',
+      })
+    }),
   })
 )(AddonPanel);
 

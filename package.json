@@ -38,7 +38,7 @@
     "@storybook/react": "^5.1.9",
     "@usulpro/package-prepare": "^1.1.4",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.7.1",
+    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.2",
     "nodemon": "^1.18.9",
     "prettier": "^1.18.2",

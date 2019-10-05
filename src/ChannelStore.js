@@ -124,14 +124,14 @@ export default class ChannelStore {
   });
 
   _createAction = (reducer, getSubId) => {
-    return payload => {
+    return async payload => {
       const subId = getSubId();
       const subData = this.store[subId];
       const current = {
         ...subData.init,
         ...subData.over,
       };
-      const over = (reducer || this.defaultReducer)(current, payload);
+      const over = await (reducer || this.defaultReducer)(current, payload);
       subData.over = over;
 
       this.send();
