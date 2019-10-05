@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getSingleStore } from './ChannelStore';
+import { getSingleStore, getNewStore } from './ChannelStore';
 
 const getDisplayName = WrappedComponent =>
   WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -42,13 +42,13 @@ const withChannel = ({
       this.state = {
         data: initStateData,
         selectors: isReceived ? this.prepareSelectors(initStateData) : {},
-        isReceived,
-      };
+          isReceived,
+        };
 
-      this.store = getSingleStore({
-        EVENT_ID_INIT,
-        EVENT_ID_DATA,
-        EVENT_ID_BACK,
+        this.store = (panel ? getSingleStore : getNewStore)({
+          EVENT_ID_INIT,
+          EVENT_ID_DATA,
+          EVENT_ID_BACK,
         name: props.pointName,
         initData: this.state.data,
         isPanel: this.isPanel,

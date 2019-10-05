@@ -28,6 +28,7 @@ const AddonPanel = ({
   update,
   theme,
   data,
+  comment
 }) => {
   return (
     <LayoutBlock style={{ padding: 0 }}>
@@ -40,6 +41,7 @@ const AddonPanel = ({
         <button onClick={() => update({ themes: ['T1', 'T2', 'T3'] })}>
           Update
         </button>
+        <button onClick={() => comment()}> comment </button>
       </AddonBlock>
       {/* <Block style={blockStyle}>
         <small>{JSON.stringify(api.getCurrentStoryData())}</small>
@@ -69,6 +71,10 @@ register(
       currentTheme: store.currentTheme - 1,
     })),
     update: global(),
+    comment: local(store => ({
+      ...store,
+      comment: 'comment',
+    })),
   })
 )(AddonPanel);
 

@@ -160,3 +160,7 @@ export const getSingleStore = (...args) => {
   singleStore = singleStore || new ChannelStore(...args);
   return singleStore;
 };
+
+export const getNewStore =  (...args) => {
+  return new ChannelStore(...args);
+};
