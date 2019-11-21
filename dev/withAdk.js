@@ -13,5 +13,5 @@ const DecoratorUI = ({ context, getStory, theme, info }) => (
 export const withAdk = createDecorator({
   theme: store => store.themes[store.currentTheme],
   info: store => JSON.stringify(store, null, 2)
-})(DecoratorUI, { isGlobal: true });
+})(DecoratorUI, { isGlobal: true, priorityOfparams: false });
 export const adkParams = setParameters();

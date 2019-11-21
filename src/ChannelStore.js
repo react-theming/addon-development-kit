@@ -62,6 +62,7 @@ export default class ChannelStore {
     );
 
   onInitChannel = initData => {
+  console.log("TCL: ChannelStore -> onConnectedFn -> initData", initData)
     const { data, id } = initData;
     const selectorId = id || GLOBAL;
     const selectedData = { ...(this.store[selectorId] || {}) };

@@ -21,14 +21,13 @@ storiesOf('Storybook Addon Development Kit', module)
   .add(
     'Stories',
     () => {
-      console.log('Render Button 1');
       return (
         <div>
           <button>Button 1</button>
         </div>
       );
     },
-    adkParams({ currentTheme: 1 })
+    adkParams({ currentTheme: 33 })
   )
   .add(
     'Stories2',
