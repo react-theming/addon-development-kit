@@ -3,13 +3,9 @@ import withChannel from './withChannel';
 
 import { getConfig } from './config';
 
-const DecoratorHOC = ({ actions, selectors, Component, parameters, resetParameters, ...props }) => {
-  React.useEffect(() => {
-    console.log('Effect:\n', parameters);
-    resetParameters(parameters);
-  }, [parameters, resetParameters]);
-  return <Component {...actions} {...selectors} {...props} />
-};
+const DecoratorHOC = ({ actions, selectors, Component, ...props }) => (
+  <Component {...actions} {...selectors} {...props} />
+);
 
 export const createDecorator = (storeSelectors, createActions) => (
   Component,
@@ -25,8 +21,6 @@ export const createDecorator = (storeSelectors, createActions) => (
 
   const parameters = context.parameters && context.parameters[PARAM_Key];
   const storyId = isGlobal ? null : context.id;
-
-  // const [prms, setParams] =
 
   const WithChannel = withChannel({
     EVENT_ID_INIT,
