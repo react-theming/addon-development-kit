@@ -35,6 +35,7 @@ jobs:
         with:
           path: node_modules
           key: dependencies
+      - run: yarn
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
