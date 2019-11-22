@@ -14,7 +14,7 @@
     "start-storybook": "start-storybook -p 9001 --ci",
     "start": "nodemon --exec yarn start-storybook",
     "build-storybook": "build-storybook -s public",
-    "dev": "node .scripts/npm-prepare.js --watch",
+    "dev": "nodemon --exec yarn prepare",
     "prepare-dev": "babel dev --out-dir dev-dist --verbose",
     "prepare": "package-prepare",
     "postpublish": "node .scripts/npm-postpublish.js"
