@@ -30,6 +30,11 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: dependencies
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
