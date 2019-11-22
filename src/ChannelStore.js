@@ -66,7 +66,15 @@ export default class ChannelStore {
     const selectorId = id || GLOBAL;
     const selectedData = { ...(this.store[selectorId] || {}) };
     selectedData.init = data;
-    selectedData.over = selectedData.over || {};
+    /**
+     * Previous behavior didn't reset state on init event
+     * it caused that we didn't see changes after
+     * updating story parameters
+     * So i'm removing this, but if we need to make it optional
+     * this is how to revert it:
+     * electedData.over = selectedData.over || {};
+     */
+    selectedData.over = {};
     this.store[selectorId] = selectedData;
     this.selectorId = selectorId;
     this.subscriber();

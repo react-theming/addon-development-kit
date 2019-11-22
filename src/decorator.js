@@ -3,9 +3,9 @@ import withChannel from './withChannel';
 
 import { getConfig } from './config';
 
-const DecoratorHOC = ({ actions, selectors, Component, ...props }) => (
-  <Component {...actions} {...selectors} {...props} />
-);
+const DecoratorHOC = ({ actions, selectors, Component, parameters, resetParameters, ...props }) => {
+  return <Component {...actions} {...selectors} {...props} />
+};
 
 export const createDecorator = (storeSelectors, createActions) => (
   Component,

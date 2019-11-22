@@ -41,7 +41,7 @@ const withChannel = ({
 
         this.state = {
           data: initStateData,
-          selectors: isReceived ? this.prepareSelectors(initStateData) : {},
+          selectors: isReceived ? this.executeSelectors(initStateData) : {},
           isReceived,
         };
 
@@ -60,7 +60,7 @@ const withChannel = ({
 
       isPanel = this.props.panel || panel;
 
-      prepareSelectors = store => {
+      executeSelectors = store => {
         return Object.entries(storeSelectors)
           .map(([name, selector]) => ({
             [name]: tryToSelect(selector)(store),
@@ -93,14 +93,14 @@ const withChannel = ({
 
       componentWillUnmount() {
         this.debugLog('componentWillUnmount');
-      this.store.disconnect();
-    }
+        this.store.disconnect();
+      }
 
-    // debug = true;
-    debug = false;
+      // debug = true;
+      debug = false;
 
-    debugLog = message => {
-      if (!this.debug) {
+      debugLog = message => {
+        if (!this.debug) {
           return;
         }
         console.log(
@@ -114,15 +114,41 @@ const withChannel = ({
         this.setState({
           data,
           isReceived: true,
-          selectors: this.prepareSelectors(data),
+          selectors: this.executeSelectors(data),
         });
       };
 
+      resetParameters = parameters => {
+        const initStateData = {
+          ...initData,
+          ...this.props.initData,
+          ...parameters,
+        };
+        this.setState({
+          data: initStateData,
+          selectors: this.state.isReceived ? this.executeSelectors(initStateData) : {},
+        });
+        this.store.sendInit(initStateData);
+      }
+
       render() {
         const { pointName, initData, active, onData, ...props } = this.props;
-        const { data, isReceived, selectors } = this.state;
+        const { data, isReceived } = this.state;
 
         if (active === false) return null;
+
+        const initStateData = {
+            ...initData,
+            ...parameters,
+            ...data,
+          };
+
+        let selectors;
+        try {
+          selectors = this.executeSelectors(initStateData)
+        } catch (err) {
+          selectors = this.state.selectors;
+        }
 
         return (
           <WrappedComponent
@@ -134,6 +160,7 @@ const withChannel = ({
             selectors={selectors}
             actions={this.actions}
             isFirstDataReceived={isReceived}
+            resetParameters={this.resetParameters}
             {...props}
           />
         );
