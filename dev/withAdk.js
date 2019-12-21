@@ -10,8 +10,14 @@ const DecoratorUI = ({ context, getStory, theme, info }) => (
   </div>
 );
 
-export const withAdk = createDecorator({
-  theme: store => store.themes[store.currentTheme],
-  info: store => JSON.stringify(store, null, 2)
-})(DecoratorUI, { isGlobal: true });
+export const withAdk = createDecorator(
+  {
+    theme: store => store.themes[store.currentTheme],
+    info: store => JSON.stringify(store, null, 2),
+  },
+  {},
+  {
+    themeWithFn: (params, { theme }) => ({ fn: () => theme }),
+  }
+)(DecoratorUI, { isGlobal: true });
 export const adkParams = setParameters();

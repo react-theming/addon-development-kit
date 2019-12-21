@@ -3,14 +3,47 @@ import withChannel from './withChannel';
 
 import { getConfig } from './config';
 
-const DecoratorHOC = ({ actions, selectors, Component, parameters, resetParameters, ...props }) => {
-  return <Component {...actions} {...selectors} {...props} />
+const createHOC = paramSelectors => {
+  const DecoratorWrapper = ({
+    actions,
+    selectors,
+    Component,
+    parameters,
+    resetParameters,
+    ...props
+  }) => {
+    let params = {};
+    if (paramSelectors) {
+      try {
+        const entries = Object.entries(paramSelectors);
+        const paramResults = entries
+          .map(([name, fn]) => {
+            try {
+              return { [name]: fn(parameters, selectors) };
+            } catch (err) {
+              console.error(err);
+              return null;
+            }
+          })
+          .filter(Boolean);
+        params = paramResults.reduce((obj, item) => ({ ...obj, ...item }), {});
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    return <Component {...actions} {...selectors} {...params} {...props} />;
+  };
+  return DecoratorWrapper;
 };
 
-export const createDecorator = (storeSelectors, createActions) => (
-  Component,
-  { isGlobal = true } = {}
-) => initData => (getStory, context) => {
+export const createDecorator = (
+  storeSelectors,
+  createActions,
+  paramSelectors
+) => (Component, { isGlobal = true } = {}) => initData => (
+  getStory,
+  context
+) => {
   const {
     ADDON_ID,
     EVENT_ID_INIT,
@@ -33,7 +66,7 @@ export const createDecorator = (storeSelectors, createActions) => (
     storyId,
     storeSelectors,
     createActions,
-  })(DecoratorHOC);
+  })(createHOC(paramSelectors));
 
   return (
     <WithChannel getStory={getStory} context={context} Component={Component} />
