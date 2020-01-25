@@ -11,6 +11,7 @@ Simplifies the addons creation. Keeps in sync addon's data through the channel. 
 - Provides redux like approach to deal with your addon store via selectors and actions (but don't worry, the default action just simply override your data)
 - Allows to connect any amount of pannels, buttons and any other addon types to the single addon store
 - Offers UI container which automatically reflects the aspect ratio of addon panel. Extremely useful to create addon UI responsive for vertical and horizontal panel positions
+- Includes Typescript definitions
 
 ## Usage
 
