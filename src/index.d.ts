@@ -1,8 +1,13 @@
-type Store = {
-  [key: string]: any
-};
+import { types as addonTypes } from '@storybook/addons'
+import { API } from '@storybook/api'
 
-type Selector = (store: Store) => any;
+interface Dictionary<T = any> {
+  [key: string]: T
+}
+
+type AddonStore = Dictionary;
+
+type Selector = (store: AddonStore) => any;
 type ParamSelector = (parameters: {
   [key: string]: any
 }, selectors: {
@@ -11,18 +16,19 @@ type ParamSelector = (parameters: {
 
 type ActionDispatcher = (...args: any[]) => void | Promise<void>;
 type ActionGenerator = (
-  action: (store: Store, ...args: any[]) => Store | Promise<Store>
+  action: (store: AddonStore, ...args: any[]) => AddonStore | Promise<AddonStore>
 ) => ActionDispatcher;
-type Actions = ({ local: ActionGenerator, global: ActionGenerator }) => {
-  [key: string]: ActionDispatcher
-};
+type Actions = ({ local: ActionGenerator, global: ActionGenerator }) => Dictionary<ActionDispatcher>;
+
+type RegisterOptions = {
+  type?: addonTypes
+  initData?: Dictionary
+}
 
 export declare function register(
-  storeSelectors: {
-    [key: string]: Selector
-  },
-  createActions: Actions
-): (Component: React.ComponentType) => void;
+  storeSelectors?: Dictionary<Selector>,
+  createActions?: Actions
+): (Component: React.ComponentType, options: RegisterOptions) => void;
 
 
 interface StoryContext {
@@ -43,18 +49,40 @@ type DecoratorOptions = {
   isGlobal: boolean,
 }
 
-export declare function createDecorator(storeSelectors: {
-  [key: string]: Selector
-},
+export declare function createDecorator(storeSelectors?: Dictionary<Selector>,
   createActions: Actions,
-  paramSelectors: {
-    [key: string]: ParamSelector
-  }
+  paramSelectors?: Dictionary<
+    (parameters: Dictionary, selectors: Dictionary<() => any>) => any
+  >
 ): (Component: React.ComponentType, options: DecoratorOptions) => DecoratorFunction;
 
-type AddonParameters = {
-  [key: string]: any
-}
+type AddonParameters = Dictionary<any>
+
 export declare function setParameters(): <T extends AddonParameters>(T) => ({
-  addonKey: T
+  [ConfigValues.PARAM_Key]: T
 })
+
+type ConfigOptions = {
+  addonId?: string
+  panelId?: string
+  panelTitle?: string
+  paramKey?: string
+  eventInit?: string
+  eventData?: string
+  eventBack?: string
+}
+
+export declare function setConfig(config: ConfigOptions): void
+
+type ConfigValues = {
+  ADDON_ID: string
+  PANEL_ID: string
+  PANEL_Title: string
+  PARAM_Key: string
+  EVENT_ID_INIT: string
+  EVENT_ID_DATA: string
+  EVENT_ID_BACK: string
+}
+
+export declare function getConfig(): ConfigValues
+
