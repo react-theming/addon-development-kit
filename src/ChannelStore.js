@@ -1,4 +1,5 @@
 import addons from '@storybook/addons';
+import deepEqual from 'deep-equal';
 
 const GLOBAL = 'global';
 
@@ -25,7 +26,6 @@ export default class ChannelStore {
       [GLOBAL]: { init: this.initData || {}, over: {} },
     };
   }
-
 
   selectorId = null;
 
@@ -65,16 +65,46 @@ export default class ChannelStore {
     const { data, id } = initData;
     const selectorId = id || GLOBAL;
     const selectedData = { ...(this.store[selectorId] || {}) };
-    selectedData.init = data;
     /**
      * Previous behavior didn't reset state on init event
      * it caused that we didn't see changes after
      * updating story parameters
      * So i'm removing this, but if we need to make it optional
      * this is how to revert it:
-     * electedData.over = selectedData.over || {};
+     * selectedData.over = selectedData.over || {};
+     *
+     * Update:
+     * Now we check if coming initial data the same as we already have in the store
+     * this allow us to not reset changes while switching stories
+     *
+     * it works if stories don't contain parameters or changing data any other way
+     *
+     * Additional it's better if actions don't return whole store
+     * compare:
+     *
+     * // right way:
+     * store => ({
+     *   currentTheme: store.currentTheme + 1,
+     * })
+     *
+     * vs
+     *
+     * // wrong way:
+     * store => ({
+     *   ...store, // this cause an overriding of whole store
+     *   currentTheme: store.currentTheme + 1,
+     * })
+     *
+     * the better solution would be to granularly commit updates and store only changed values
+     *
      */
-    selectedData.over = {};
+    if (deepEqual(selectedData.init, data)) {
+      selectedData.over = selectedData.over || {};
+    } else {
+      selectedData.init = data;
+      selectedData.over = {};
+    }
+
     this.store[selectorId] = selectedData;
     this.selectorId = selectorId;
     this.subscriber();
@@ -169,6 +199,6 @@ export const getSingleStore = (...args) => {
   return singleStore;
 };
 
-export const getNewStore =  (...args) => {
+export const getNewStore = (...args) => {
   return new ChannelStore(...args);
 };

@@ -62,19 +62,19 @@ const AsyncRequest = () => new Promise(resolve => {
 
 register(
   {
-    themeInd: store => store.currentTheme,
+    themeInd: store => store.currentTheme || 0,
     themeList: store => store.themes,
     theme: store => store.themes[store.currentTheme],
     data: store => store
   },
   ({ global, local }) => ({
     indInc: global(store => ({
-      ...store,
-      currentTheme: store.currentTheme + 1,
+      // ...store,
+      currentTheme: (store.currentTheme || 0) + 1,
     })),
     indDec: global(store => ({
-      ...store,
-      currentTheme: store.currentTheme - 1,
+      // ...store,
+      currentTheme: (store.currentTheme || 0) - 1,
     })),
     update: global(),
     comment: local(store => ({

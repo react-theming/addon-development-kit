@@ -14,33 +14,33 @@ import { withAdk, adkParams } from '../dev/withAdk';
  *
  */
 
-addParameters(adkParams({ themes: ['theme1', 'theme2'], currentTheme: 0 }));
+addParameters(
+  adkParams({ themes: ['theme1-aa', 'theme2-bb', 't3', 't4', 't5'], currentTheme: 0 })
+);
 
 storiesOf('Storybook Addon Development Kit', module)
   .addDecorator(withAdk({ mainColor: 'green' }))
   .add(
     'Stories',
     () => {
-      console.log('Render Button 1');
       return (
         <div>
           <button>Button 1</button>
         </div>
       );
     },
-    adkParams({ currentTheme: 1 })
+    // adkParams({ currentTheme: 1 })
   )
   .add(
     'Stories2',
     () => {
-      console.log('Render Button 2');
       return (
         <div>
           <button>Button 2</button>
         </div>
       );
     },
-    adkParams({ currentTheme: 0 })
+    // adkParams({ currentTheme: 0 })
   );
 //   .add('Details', () => (
 //     <div>
