@@ -1,3 +1,6 @@
+[![npm version](https://badge.fury.io/js/%40storybook%2Faddon-devkit.svg)](https://badge.fury.io/js/%40storybook%2Faddon-devkit)
+[![addon-development-kit](https://img.shields.io/npm/dt/@storybookjs/addon-development-kit.svg)](https://github.com/storybookjs/addon-development-kit)
+
 # Storybook Addon Development Kit
 
 Simplifies the addons creation. Keeps in sync addon's data through the channel. Provides intelligent blocks for creating addon UI. Offer simple API for registering addons and creating decorators. It's a base to quickly build your custom brand new awesome addon
