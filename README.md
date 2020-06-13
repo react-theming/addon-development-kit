@@ -1,5 +1,5 @@
 [![npm version](https://badge.fury.io/js/%40storybook%2Faddon-devkit.svg)](https://badge.fury.io/js/%40storybook%2Faddon-devkit)
-[![addon-development-kit](https://img.shields.io/npm/dt/@storybookjs/addon-development-kit.svg)](https://github.com/storybookjs/addon-development-kit)
+![npm](https://img.shields.io/npm/dt/@storybook/addon-devkit)
 
 # Storybook Addon Development Kit
 
