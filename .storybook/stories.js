@@ -15,20 +15,23 @@ import { withAdk, adkParams } from '../dev/withAdk';
  */
 
 addParameters(
-  adkParams({ themes: ['theme1-aa', 'theme2-bb', 't3', 't4', 't5'], currentTheme: 0 })
+  adkParams({
+    themes: ['theme1-aa', 'theme2-bb', 't3', 't4', 't5'],
+    currentTheme: 0,
+  })
 );
 
 storiesOf('Storybook Addon Development Kit', module)
   .addDecorator(withAdk({ mainColor: 'green' }))
   .add(
     'Stories',
-    () => {
+    storyArgs => {
       return (
         <div>
           <button>Button 1</button>
         </div>
       );
-    },
+    }
     // adkParams({ currentTheme: 1 })
   )
   .add(
@@ -39,7 +42,7 @@ storiesOf('Storybook Addon Development Kit', module)
           <button>Button 2</button>
         </div>
       );
-    },
+    }
     // adkParams({ currentTheme: 0 })
   );
 //   .add('Details', () => (

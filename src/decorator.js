@@ -68,8 +68,31 @@ export const createDecorator = (
     createActions,
   })(createHOC(paramSelectors));
 
+  const getStoryAndInjectParams = ctx => {
+    const {
+      argTypes,
+      args,
+      globals,
+      hooks,
+      id,
+      kind,
+      loaded,
+      name,
+      parameters,
+      story,
+      viewMode,
+      ...additionalArgs
+    } = ctx || {};
+    Object.assign(context.args, additionalArgs);
+    return getStory(additionalArgs);
+  };
+
   return (
-    <WithChannel getStory={getStory} context={context} Component={Component} />
+    <WithChannel
+      getStory={getStoryAndInjectParams}
+      context={context}
+      Component={Component}
+    />
   );
 };
 

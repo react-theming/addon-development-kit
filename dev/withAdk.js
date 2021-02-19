@@ -6,7 +6,7 @@ const DecoratorUI = ({ context, getStory, theme, info }) => (
   <div>
     Theme: {theme} <br />
     Data: {info} <br />
-    {getStory(context)}
+    {getStory({ customAddonArgs: { result: 'foo' } })}
   </div>
 );
 
