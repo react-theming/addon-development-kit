@@ -1,4 +1,9 @@
-# Storybook Addon Development Kit
+[![npm version](https://badge.fury.io/js/%40storybook%2Faddon-devkit.svg)](https://badge.fury.io/js/%40storybook%2Faddon-devkit)
+![npm](https://img.shields.io/npm/dt/@storybook/addon-devkit)
+
+# Storybook Addon Development Kit (Deprecated)
+
+> The addon development kit is deprecated in favor of https://github.com/storybookjs/addon-kit, which is a simple Github repo template that uses the latest addon APIs.
 
 Simplifies the addons creation. Keeps in sync addon's data through the channel. Provides intelligent blocks for creating addon UI. Offer simple API for registering addons and creating decorators. It's a base to quickly build your custom brand new awesome addon
 
