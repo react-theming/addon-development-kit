@@ -83,7 +83,14 @@ export const createDecorator = (
       viewMode,
       ...additionalArgs
     } = ctx || {};
-    Object.assign(context.args, additionalArgs);
+    try {
+      if (!context.args) {
+        context.args = {};
+      }
+      Object.assign(context.args, additionalArgs);
+    } catch (err) {
+      console.error(err);
+    }
     return getStory(additionalArgs);
   };
 
