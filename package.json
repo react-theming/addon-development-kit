@@ -71,7 +71,9 @@
     "boilerplate",
     "npm",
     "development",
-    "addons"
+    "addons",
+    "storybook-addon",
+    "appearance"
   ],
   "license": "MIT",
   "bugs": {
@@ -83,5 +85,8 @@
     "@storybook/react": "^5.0.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
+  },
+  "storybook": {
+    "displayName": "Addon devkit"
   }
 }
