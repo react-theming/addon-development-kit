@@ -1,6 +1,6 @@
 {
   "name": "@storybook/addon-devkit",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Storybook Addon Development Kit",
   "author": {
     "name": "Oleg Proskurin",
@@ -81,10 +81,10 @@
   },
   "homepage": "https://github.com/storybookjs/addon-development-kit",
   "peerDependencies": {
-    "@storybook/addons": "^5.0.0 || ^6.0.0",
-    "@storybook/react": "^5.0.0 || ^6.0.0",
-    "react": "^16.0.0 || ^17.0.0",
-    "react-dom": "^16.0.0 || ^17.0.0",
+    "@storybook/addons": "*",
+    "@storybook/react": "*",
+    "react": "*",
+    "react-dom": "*"
   },
   "storybook": {
     "displayName": "Addon devkit"
